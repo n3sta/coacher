@@ -64,10 +64,12 @@
 
 <script>
 	import {get,post} from '../../helpers/api';
+	import store from '../../store';
 
 	export default {
 		data() {
 			return {
+				user: store.getters.user,
 				statistic: {
     				week: 0,
     				weekDone: 0,
@@ -86,15 +88,15 @@
 		},
 		methods: {
 			getStatistic() {
-                get(`/trainings/stats`, {user: localStorage.getItem('userId'), date: new Date()}).then((res) => {
+                get(`/trainings/stats`, {user: this.user.userId, date: new Date()}).then((res) => {
                     this.statistic = res.data;
                     this.calculate();
                 });
             },
             calculate() {
-                this.weekPercent = ((this.statistic.weekDone/this.statistic.week || 0)*100).toFixed(2);
-                this.monthPercent = ((this.statistic.monthDone/this.statistic.month || 0)*100).toFixed(2);
-                this.yearPercent = ((this.statistic.yearDone/this.statistic.year || 0)*100).toFixed(2);
+                this.weekPercent = ((this.statistic.weekDone/this.statistic.week || 0)*100).toFixed(2)*1;
+                this.monthPercent = ((this.statistic.monthDone/this.statistic.month || 0)*100).toFixed(2)*1;
+                this.yearPercent = ((this.statistic.yearDone/this.statistic.year || 0)*100).toFixed(2)*1;
             }
 		}
 	}

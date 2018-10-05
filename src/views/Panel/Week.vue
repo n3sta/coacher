@@ -38,7 +38,7 @@
 			this.getStatistic();
 		},
 		methods: {
-			            showModal(id) {
+            showModal(id) {
                 const event = this.events.filter(ev => ev._id === id)[0];
                 if (this.showList) {
                     this.show(event._id, event.createdAt);

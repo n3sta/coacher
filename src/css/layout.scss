@@ -39,6 +39,15 @@ $normal__font__size: 14px;
 $heading__font__size: 16px;
 $large__font__size: 26px;
 
+.calendar__toggle,
+.addPupil {
+	color: $black !important;
+}
+
+.v-content {
+	transition: none !important;
+}
+
 .adminTitle {
 	padding-right: 32px;
 }

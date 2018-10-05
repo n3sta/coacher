@@ -86,7 +86,6 @@
 </template>
 
 <script>
-    import Auth from '../../helpers/auth'
     import { get,post,put } from '../../helpers/api'
     import store from '../../store'
 
@@ -100,7 +99,7 @@
                     password: '',
                     password_confirmation: '',
                 },
-                user: Auth.state,
+                user: store.getters.user,
                 isProcessingEmail: false,
                 isProcessingPass: false,
             }

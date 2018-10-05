@@ -38,18 +38,15 @@
 <script>
     import Auth from './helpers/auth';
     import store from './store'
-    import { mapGetters } from 'vuex';
-    import { mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
     	created() {
-    		this.getTrainingTypes();
-    		this.getPupils();
-            Auth.initialize();
+            this.getUser();
     	},
         computed: mapGetters(['alert']),
         methods: {
-            ...mapActions(['setSnackbar', 'closeAlert', 'getTrainingTypes', 'getPupils']),
+            ...mapActions(['setSnackbar', 'closeAlert', 'getTrainingTypes', 'getPupils', 'getUser']),
             closeSnackbar() {
                 this.setSnackbar({hide: true})
             },

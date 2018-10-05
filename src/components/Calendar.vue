@@ -59,7 +59,7 @@
     import moment from 'moment';
     import PopUp from './PopUp';
     import { get,post,del } from '../helpers/api';
-    import Auth from '../helpers/auth';
+    import store from '../store';
     import calendarHelpers from '../helpers/calendar.js';
 
     export default {
@@ -75,7 +75,7 @@
                 months: ['Sty', 'Lut', 'Mar', 'Kwe', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
                 monthsLong: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
                 monthDays: [],
-                user: Auth,
+                user: store.getters.user,
                 events: [],
                 currDate: moment(),
                 eventsLoaded: false,
@@ -88,7 +88,7 @@
                 dragging: false,
                 showPopUp: false,
                 editId: 0,
-                calendarUser: Auth.state.userId
+                calendarUser: store.getters.user.userId
             }
         },
         components: {

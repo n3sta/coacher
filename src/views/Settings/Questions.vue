@@ -121,9 +121,8 @@
 </template>
 
 <script>
-    import Auth from '../../helpers/auth'
+    import store from '../../store'
     import { get, post, put, del } from '../../helpers/api'
-    import store from './../../store'
     import Sortable from 'sortablejs'
 
     export default {
@@ -142,7 +141,7 @@
                 isForm: false,
                 isDeleting: false,
                 edit: null,
-                user: Auth.state,
+                user: store.getters.user,
                 items: [],
                 options: [
                     {
