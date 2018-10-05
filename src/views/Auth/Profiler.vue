@@ -110,7 +110,7 @@
 </template>
 
 <script>
-    import Auth from '../../helpers/auth'
+    import store from '../../store'
     import { get, post } from '../../helpers/api'
 
     export default {
@@ -121,7 +121,7 @@
                 form: {},
                 menu: {},
                 questions: {},
-                user: Auth.state,
+                user: store.getters.user.token,
                 progress: 0
             }
         },

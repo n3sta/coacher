@@ -48,7 +48,6 @@
 
 <script>
     import trainingType from './components/trainingType'
-    import Auth from '../../helpers/auth'
     import { post, put, del } from '../../helpers/api'
     import store from '../../store'
 

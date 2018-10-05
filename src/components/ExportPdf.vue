@@ -114,7 +114,6 @@
 <script>
     import { pdf,post } from '../helpers/api'
     import store from './../store'
-    import Auth from '../helpers/auth'
 
     export default {
         props: {
@@ -155,7 +154,7 @@
         computed: {
             pupils() {
                 let pupils = [];
-                pupils.push({id: Auth.state.user_id, login: 'Mój plan treningowy', email: Auth.state.email});
+                pupils.push({id: store.getters.user.userId, login: 'Mój plan treningowy', email: store.getters.user.email});
                 for (let pupil of this.$store.state.pupils) {
                     pupils.push({id: pupil.id, login: pupil.login, email: pupil.email})
                 }

@@ -12,8 +12,8 @@
                             <v-icon>keyboard_arrow_right</v-icon>
                         </v-btn>
                     </div>
-                    <v-btn color="addPupil" @click="showList = true" v-show="!showList">Widok listy</v-btn>
-                        <v-btn color="addPupil" @click="showList = false" v-show="showList">Widok kalendarza</v-btn>
+                    <v-btn class="addPupil" @click="showList = true" v-show="!showList">Widok listy</v-btn>
+                    <v-btn class="addPupil" @click="showList = false" v-show="showList">Widok kalendarza</v-btn>
                     <v-divider></v-divider>
                     <v-list subheader v-if="user.coach == 1">
                         <v-subheader>Plany treningowe</v-subheader>
@@ -59,7 +59,7 @@
 
 <script>
     import moment from 'moment';
-    import Auth from '../../helpers/auth';
+    import store from '../../store';
     import calendarHelpers from '../../helpers/calendar.js';
     import Pupil from '../../components/Pupil';
     import ExportPdf from '../../components/ExportPdf';
@@ -73,8 +73,8 @@
                 showExport: false,
                 months: ['Sty', 'Lut', 'Mar', 'Kwe', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
                 currDate: moment(),
-                user: Auth.state,
-                calendarUser: Auth.state.userId,
+                user: store.getters.user,
+                calendarUser: store.getters.user.userId,
             }
         },
         mixins: [

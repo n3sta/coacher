@@ -10,17 +10,26 @@ export default new Router({
         {
             path: '/',
             name: 'panel',
-            component: () => import('./views/Panel/Index')
+            component: () => import('./views/Panel/Index'),
+            beforeEnter: (to, from, next) => {
+                guard(to, from, next)
+            },
         },
         {
             path: '/treningi',
             name: 'admin',
-            component: () => import('./views/Calendar/Index')
+            component: () => import('./views/Calendar/Index'),
+            beforeEnter: (to, from, next) => {
+                guard(to, from, next)
+            },
         },
         {
             path: '/ustawienia',
             name: 'settings',
-            component: () => import('./views/Settings/Index')
+            component: () => import('./views/Settings/Index'),
+            beforeEnter: (to, from, next) => {
+                guard(to, from, next)
+            },
         },
         {
             path: '/ustawienia/konto',
@@ -55,7 +64,18 @@ export default new Router({
         {
             path: '/ankieta',
             name: 'profiler',
-            component: () => import('./views/Auth/Profiler')
+            component: () => import('./views/Auth/Profiler'),
+            beforeEnter: (to, from, next) => {
+                guard(to, from, next)
+            },
         },
     ]
 });
+
+const guard = (to, from, next) => {
+    if (store.getters.user.token) {
+        next()
+    } else {
+        next('/logowanie');
+    }
+};

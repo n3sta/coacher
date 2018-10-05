@@ -4,12 +4,33 @@ import store from '../store';
 
 const instance = axios.create({
     baseURL: 'http://127.0.0.1:8081',
-    timeout: 1000,
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'x-access-token': localStorage.getItem('token')
+        'Content-Type': 'application/json'
     }
+});
+
+instance.interceptors.request.use((config) => {
+    config.headers['x-access-token'] = store.getters.user.token;
+    
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+instance.interceptors.response.use((response) => {
+    return response;
+}, (error) => {
+    if (error.response.status === 401) {
+        store.dispatch('logout');
+    }
+    if (error.response.status === 500) {
+        store.dispatch('setSnackbar', {
+            color: 'red', 
+            text: 'Błąd serwera. Prosimy spróbować później.'
+        });
+    }
+    return Promise.reject(error.response);
 });
 
 export function get(url, payload) {
@@ -50,18 +71,3 @@ export function pdf(url, payload) {
         responseType: 'blob',
     })
 }
-
-// instance.interceptors.response.use((response) => {
-//     return response;
-// }, (error) => {
-//     if (error.response.status === 401) {
-//         store.dispatch('logout');
-//     }
-//     if (error.response.status === 500) {
-//         store.dispatch('setSnackbar', {
-//             color: 'red', 
-//             text: 'Błąd serwera. Prosimy spróbować później.'
-//         });
-//     }
-//     return Promise.reject(error.response);
-// });

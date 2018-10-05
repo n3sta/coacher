@@ -12,7 +12,6 @@ export default {
 	        coach: req.body.coach
 	    }).save();
 
-
 	    return res.status(200).json({
             user: user,
             token: userHelpers.generateToken(user._id)

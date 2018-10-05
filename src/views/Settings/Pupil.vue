@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import Auth from '../../helpers/auth'
+    import store from '../../store'
     import { get } from '../../helpers/api'
 
     export default {
@@ -39,7 +39,7 @@
             return {
                 questions: {},
                 answers: {},
-                user: Auth.state,
+                user: store.getters.user,
             }
         },
         created() {

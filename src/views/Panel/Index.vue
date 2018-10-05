@@ -25,12 +25,12 @@
 	import Statistic from './Statistic';
 	import Calendar from '../../components/Calendar';
 	import {get,post} from '../../helpers/api';
-	import Auth from '../../helpers/auth';
+    import store from '../../store';
 
     export default {
     	data() {
     		return {
-    			user: Auth,
+    			user: store.getters.user,
     			notifications: [],
     			messages: [],
     			trainings: {}
@@ -47,7 +47,7 @@
     	methods: {
     		getNotifications() {
     			get(`/notifications`, {
-	                user: localStorage.getItem('userId')
+	                user: this.user.userId
 	            }).then((res) => {
 	                this.messages = res.data;
 	            });

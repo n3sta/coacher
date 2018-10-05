@@ -51,9 +51,8 @@
 </template>
 
 <script>
-    import Auth from '../../helpers/auth'
+    import store from '../../store'
     import { post, put, del } from '../../helpers/api'
-    import store from './../../store'
     import Pupil from './../../components/Pupil'
 
     export default {
@@ -69,7 +68,7 @@
                 showPupil: false,
                 isProcessing: false,
                 isDeleting: false,
-                user: Auth.state
+                user: store.getters.user
             }
         },
         components: {

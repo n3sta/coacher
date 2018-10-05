@@ -8,7 +8,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        loading: true,
+        user: {
+            token: localStorage.getItem('token'),
+            userId: null,
+            email: null,
+            coach: null
+        },
         pupils: {},
         trainingTypes: {},
         snackbar: {
@@ -28,11 +33,21 @@ export default new Vuex.Store({
     getters: {
         snackbar: state => state.snackbar,
         alert: state => state.alert,
+        user: state => state.user
     },
     mutations: {
+        setUser(state, data) {
+            Object.assign(state.user, data);
+            if (!localStorage.getItem('token')) {
+                localStorage.setItem('token', data.token);
+            }
+            localStorage.setItem('userId', data.userId);
+        },
         logout(state) {
-            Auth.remove();
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
             router.push({name: 'login'});
+            state.user = {};
         },
         getPupils (state, data) {
             state.pupils = data;
@@ -54,28 +69,50 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        logout (context) {
-            context.commit('logout');
+        logout ({ commit }) {
+            commit('logout');
         },
-        getPupils (context) {
+        setUser({ commit, dispatch }, data) {
+            commit('setUser', data);
+            dispatch('getStartData');
+        },
+        getUser({ commit, dispatch }) {
+            if (!localStorage.getItem('userId')) {
+                return false;
+            }
             get(`/users`, {
-                coachId: localStorage.getItem('userId')
+                _id: localStorage.getItem('userId')
             }).then((res) => {
-                context.commit('getPupils', res.data)
+                commit('setUser', {userId: res.data[0]._id, email: res.data[0].email, coach: res.data[0].coach});
+                dispatch('getStartData');
             });
         },
-        getTrainingTypes (context) {
-            get(`/trainingTypes`)
-                .then((res) => {
-                    context.commit('getTrainingTypes', res.data);
-                })
+        getStartData({ commit, dispatch, state }) {
+            dispatch('getTrainingTypes');
+            if (state.user.coach) {
+                dispatch('getPupils');   
+            }
         },
-        setSnackbar (context, data) {
-            context.commit('setSnackbar', data);
+        getPupils ({ commit, state }) {
+            get(`/users`, {
+                coachId: state.user.userId
+            }).then((res) => {
+                commit('getPupils', res.data);
+            });
         },
-        openAlert ({ context }, { title, body }) {
+        getTrainingTypes ({ commit, state }) {
+            get(`/trainingTypes`, {
+                userId: state.user.userId
+            }).then((res) => {
+                commit('getTrainingTypes', res.data);
+            });
+        },
+        setSnackbar ({ commit }, data) {
+            commit('setSnackbar', data);
+        },
+        openAlert ({ commit }, { title, body }) {
             return new Promise((resolve, reject) => {
-                context.commit('openAlert', {
+                commit('openAlert', {
                     show: true,
                     title,
                     body,
@@ -84,8 +121,8 @@ export default new Vuex.Store({
                 });
             });
         },
-        closeAlert({ context }) {
-            context.commit('closeAlert');
+        closeAlert({ commit }) {
+            commit('closeAlert');
         }
     }
 });
