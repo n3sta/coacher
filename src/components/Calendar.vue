@@ -1,64 +1,51 @@
 <template>
-    <div class="plan">
-        <div class="calendar" :class="{ 'calendar--list': showList }">
-            <div class="calendar-days" v-if="!showList">
-                <div class="calendar-days__day" v-for="(day, i) in daysNames">
-                    <h2 class="subheader">{{ day }}</h2>
-                </div>
+    <div>
+        <div class="calendar">
+            <div class="calendar__filters" v-if="!miniCalendar">
+                <v-dropdown :items="pupils" :id="'calendarUser'" @change="calendarUser = $event"></v-dropdown>
+                <div class="calendar__divider"></div>
+                <span class="calendar__month">{{ monthsLong[currDate.format('M')-1] }} {{ currDate.format('Y') }}</span>
+                <button type="button" class="button-icon"><span class="material-icons" aria-hidden="true">keyboard_arrow_left</span></button>
+                <button type="button" class="button-icon"><span class="material-icons" aria-hidden="true">keyboard_arrow_right</span></button>
             </div>
             <div class="calendar__week">
                 <div class="calendar__day" v-for="(day, dayIndex) in monthDays"
+                     @click="show(0, day.createdAt)"
                      :ref="`day${dayIndex}`"
+                     :key="dayIndex"
                      :class="{
                         'calendar__day--prev-month': isPrevMonth(day.createdAt),
                         'calendar__day--next-month': isNextMonth(day.createdAt),
                         'calendar__day--today': isToday(day.createdAt),
                         'calendar__day--no-event': isEvent(day.createdAt)
                      }"
-                     @click="show(0, day.createdAt)"
                 >
                     <div class="calendar__date">
-                        <span class="calendar__date--day">{{ getDay(day.createdAt) }}</span>
-                        <span class="calendar__date--month">{{ monthShortcut(day.createdAt) }}</span>
+                        <span v-if="dayIndex < 7">{{ daysNames[getWeekDay(day.createdAt)] }}, </span>{{ getDay(day.createdAt) }} {{ monthShortcut(day.createdAt) }}
+                    </div>
+                    <div class="calendar__events calendar__sortable" :data-date="day.createdAt">
+                        <transition-group name="slideDown">
+                            <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-id="event._id" @click.stop="show(event._id, day.createdAt)">
+                                <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.trainingType.name }}</v-button>
+                            </div>
+                        </transition-group>
                     </div>
                     <div class="calendar__tooltip">
                         <span>Kliknij, aby dodać</span>
                     </div>
-                    <div class="calendar__events calendar__sortable" :data-date="day.createdAt">
-                        <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-id="event._id">
-                            <v-btn flat :class="[event.done === true ? 'green' : 'grey']" @click.stop="show(event._id, day.createdAt)">
-                                    {{ event.trainingType.name }}
-                            </v-btn>       
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <div class="blank" v-if="monthEvents().length === 0 && !eventsLoaded && showList">
-            <h2 class="blank__title">Nie znaleziono treningów w tym miesiącu</h2>
-            <v-btn class="primary" @click="show(null, moment(currDate).format('YYYY-MM-DD'))">Dodaj trening</v-btn>
-        </div>
-        <div class="blank" v-if="eventsLoaded && showList">
-            <v-progress-circular color="primary" indeterminate :size="45" :width="7"></v-progress-circular>
-        </div>
-        <pop-up
-            v-if="showPopUp"
-            @save="getEvents"
-            @update="getEvents"
-            @close="close"
-            :_id="editId"
-            :date="editDate"
-            :user="calendarUser"
-            :canDone="!!(calendarUser === user.userId)"
-        ></pop-up>
     </div>
 </template>
 
 <script>
     import Sortable from 'sortablejs';
     import moment from 'moment';
-    import PopUp from './PopUp';
-    import { get,post,del } from '../helpers/api';
+    import button from './Button';
+    import dropdown from './Dropdown';
+    import select from './Select';
+    import { get, post } from '../helpers/api';
     import store from '../store';
     import calendarHelpers from '../helpers/calendar.js';
 
@@ -71,59 +58,57 @@
         },
         data() {
             return {
-                daysNames: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'],
+                daysNames: ['nd', 'pon', 'wt', 'śr', 'czw', 'pt', 'sb'],
                 months: ['Sty', 'Lut', 'Mar', 'Kwe', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
                 monthsLong: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
                 monthDays: [],
                 user: store.getters.user,
                 events: [],
                 currDate: moment(),
-                eventsLoaded: false,
-                showList: false,
-                editId: false,
-                editDate: false,
-                drawer: null,
-                currDateMenu: false,
-                mobile: false,
                 dragging: false,
-                showPopUp: false,
-                editId: 0,
-                calendarUser: store.getters.user.userId
+                calendarUser: store.getters.user.userId,
+                pupils: store.getters.pupils
             }
         },
         components: {
-            'pop-up': PopUp
+            'v-button': button,
+            'v-select': select,
+            'v-dropdown': dropdown,
         },
         mixins: [
             calendarHelpers
         ],
         watch: {
-            'currDate': function(val) {
+            'currDate': function() {
                 if (this.miniCalendar) {
                     this.drawMiniCalendar();
                 } else {
                     this.drawCalendar();
                 }
             },
+            'calendarUser': function() {
+                this.getEvents();
+            },
         },
         created() {
+            console.log(store.getters);
             if (this.miniCalendar) {
                 this.drawMiniCalendar();
             } else {
                 this.drawCalendar();
             }
-            this.checkWidth();
-            window.addEventListener('resize', this.checkWidth);
         },
         mounted() {
             const days = document.querySelectorAll('.calendar__day');
             for (let day of days) {
                 const tooltip = day.querySelector('.calendar__tooltip');
-                day.addEventListener('mouseenter', () => {
-                    tooltip.style.display = (tooltip.style.display === 'block' || this.dragging) ? 'none' : 'block';
+                day.addEventListener('mouseover', (e) => {
+                    tooltip.style.display = (!this.dragging) ? 'block' : 'none';
+                    tooltip.innerText = (e.target.tagName === "BUTTON") ? "Edytuj trening" : "Kliknij, aby dodać" ;
                 });
                 day.addEventListener('mouseleave', () => {
-                    tooltip.style.display = (tooltip.style.display === 'block' || this.dragging) ? 'none' : 'block';
+                    tooltip.style.display = 'none';
+                    tooltip.innerText = "Kliknij, aby dodać";
                 });
             }
             const lists = document.querySelectorAll('.calendar__sortable');
@@ -150,13 +135,13 @@
             dragSort({oldIndex, newIndex, item, to}) {
                 const id = item.getAttribute('data-id');
                 const date = to.getAttribute('data-date');
-                post(`api/changeSort/${id}`, {newer: newIndex > oldIndex, createdAt: date})
+                post(`api/trainings/${id}`, {newer: newIndex > oldIndex, createdAt: date})
                     .catch(() => {
-                        this.$store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
+                        store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
                         this.getEvents();
                     })
             },
-            dragEnd({from, to, item}) {
+            dragEnd({ to, item}) {
                 const id = item.getAttribute('data-id');
                 const date = to.getAttribute('data-date');
                 this.dragging = false;
@@ -165,22 +150,9 @@
                         this.getEvents();
                     })
                     .catch(() => {
-                        this.$store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
+                        store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
                         this.getEvents();
                     })
-            },
-            showModal(id) {
-                const event = this.events.filter(ev => ev._id === id)[0];
-                if (this.showList) {
-                    this.show(event._id, event.createdAt);
-                    return false;
-                }
-                this.$set(event, 'active', 1);
-            },
-            close() {
-                this.showPopUp = false;
-                this.editId = false;
-                this.editDate = false;
             },
             getEvents() {
                 const firstMonthDay = moment(this.currDate).startOf('month');
@@ -194,7 +166,6 @@
                         $lte: new Date(lastCalendarDay)
                     }
                 };
-                this.eventsLoaded = true;
                 this.events = [];
                 get('/trainings', params).then((res) => {
                     this.events = res.data;
@@ -203,7 +174,6 @@
             },
             drawMiniCalendar() {
                 const firstWeekDay = moment(this.currDate).startOf('week');
-                const lastWeekDay = moment(this.currDate).endOf('week');
                 for (let i = 0; i < 7; i++) {
                     const days = (i > 1) ? 'days' : 'day';
                     firstWeekDay.add(1, days);
@@ -226,30 +196,14 @@
                 }
                 this.getEvents(moment(this.currDate).format('YYYY-MM-DD'));
             },
-            show(id = null, date = new Date()) {    
-                this.editId = id;
-                this.editDate = moment(date).format('YYYY-MM-DD');
-                this.showPopUp = true;
-            },
-            checkWidth() {
-                if (window.innerWidth < 991) {
-                    this.showList = true;
-                    this.mobile = true;
-                } else {
-                    this.mobile = false;
-                }
+            show(_id, d = new Date()) {
+                store.dispatch('setTrainingDate', {
+                    createdAt: new Date(d),
+                    userId: this.calendarUser,
+                    _id: _id
+                });
+                this.$router.push({name: 'addTraining'})
             },
         },
     }
 </script>
-
-
-<style>
-    .list-enter-active, .list-leave-active {
-        transition: all 0.5s;
-    }
-    .list-enter, .list-leave-to {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-</style>

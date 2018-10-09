@@ -1,6 +1,6 @@
 import express from 'express';
-import usersController from '../controllers/usersController'
-import getFilters from '../middlewares/filters/users';
+import verifyToken from '../auth/index';
+import invitationsController from '../controllers/invitationsController';
 import errorHandler from '../middlewares/errors';
 
 let api = express.Router();
@@ -13,10 +13,10 @@ api.use((req, res, next) => {
     next();
 });
 
-api.get('/', getFilters, errorHandler.catchAsync(usersController.find));
+api.get('/', verifyToken, errorHandler.catchAsync(invitationsController.find));
 
-api.put('/:id', errorHandler.catchAsync(usersController.update));
+api.post('/', verifyToken, errorHandler.catchAsync(invitationsController.create));
 
-api.patch('/:id', errorHandler.catchAsync(usersController.patch));
+api.delete('/:id', verifyToken, errorHandler.catchAsync(invitationsController.delete));
 
 export default api;

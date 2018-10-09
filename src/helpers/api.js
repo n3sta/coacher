@@ -36,22 +36,30 @@ instance.interceptors.response.use((response) => {
 export function get(url, payload) {
     const query = (payload) ? `?${qs.stringify(payload)}` : '';
     return instance({
-    	method: 'GET',
-    	url: `${url}${query}`
+        method: 'GET',
+        url: `${url}${query}`
     })
 }
 
 export function post(url, payload) {
     return instance({
-    	method: 'POST',
+        method: 'POST',
         url: url,
-    	data: payload
+        data: payload
     })
 }
 
 export function put(url, payload) {
     return instance({
         method: 'PUT',
+        url: url,
+        data: payload
+    })
+}
+
+export function patch(url, payload) {
+    return instance({
+        method: 'PATCH',
         url: url,
         data: payload
     })

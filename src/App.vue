@@ -1,5 +1,32 @@
 <template>
-	<v-app>
+    <div class="wrapper">
+        <header class="header">
+            <h1 class="header__logo">TheCoacher.com</h1>
+        </header>
+        <main class="main">
+            <aside class="aside">
+                <nav class="nav">
+                    <ul class="nav__list">
+                        <li class="nav__item"><router-link :to="{ name: 'panel' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">home</span><span>Panel główny</span></router-link></li>
+                        <li class="nav__item"><router-link :to="{ name: 'admin' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">directions_run</span><span>Kalendarz</span></router-link></li>
+                        <li class="nav__item"><router-link :to="{ name: 'pupils' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">group</span><span>Zawodnicy</span></router-link></li>
+                        <li class="nav__item"><router-link :to="{ name: 'questions' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">contact_support</span><span>Ankieta</span></router-link></li>
+                        <hr class="nav__divider">
+                        <li class="nav__item"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">fiber_new</span><span>Powiadomienia</span></a></li>
+                        <li class="nav__item"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">message</span><span>Wiadomości</span></a></li>
+                        <hr class="nav__divider">
+                        <li class="nav__item"><router-link :to="{ name: 'account' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">person</span><span>Edytuj profil</span></router-link></li>
+                        <li class="nav__item"><router-link :to="{ name: 'settings' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">build</span><span>Ustawienia</span></router-link></li>
+                        <li class="nav__item" @click="$store.dispatch('logout')"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">exit_to_app</span><span>Wyloguj</span></a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <div class="content">
+                <router-view></router-view>
+            </div>
+        </main>
+    </div>
+	<!-- <v-app>
 		<v-content>
     		<v-toolbar color="blue darken-3" app :clipped-left="$vuetify.breakpoint.lgAndUp">
                 <v-toolbar-title class="adminTitle white--text" @click="$router.push({name: 'admin'})">TheCoacher</v-toolbar-title>
@@ -14,7 +41,6 @@
                 </v-toolbar-items>
             </v-toolbar>
 
-            <router-view></router-view>
         </v-content>
 		<v-snackbar :timeout="$store.state.snackbar.timeout" :color="$store.state.snackbar.color" v-model="$store.state.snackbar.show">
 			{{ $store.state.snackbar.text }}
@@ -32,18 +58,16 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-	</v-app>
+	</v-app> -->
 </template>
 
 <script>
-    import Auth from './helpers/auth';
-    import store from './store'
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
-    	created() {
+        created() {
             this.getUser();
-    	},
+        },
         computed: mapGetters(['alert']),
         methods: {
             ...mapActions(['setSnackbar', 'closeAlert', 'getTrainingTypes', 'getPupils', 'getUser']),

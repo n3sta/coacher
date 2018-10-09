@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
 export default {
-	stats(user, startDate, endDate, done) {
+	sum(user, startDate, endDate, done) {
 		let filters = {
 			user: ObjectId(user)
 		};
@@ -24,10 +24,10 @@ export default {
 				{
 					$group: {
 						_id: null,
-				        amount: {
-				            $sum: "$amount"
-				        }
-				    }
+						amount: {
+							$sum: "$amount"
+						}
+					}
 				}
 			]).then((entity) => {
 				resolve((entity[0]) ? entity[0].amount : 0);
@@ -35,5 +35,5 @@ export default {
 				reject(err);
 			})
 		})
-	}
+	},
 }

@@ -1,420 +1,122 @@
+@import 'reset.css';
+@import 'grid.css';
+@import 'vars.scss';
+@import 'components/helpers.scss';
 @import 'components/calendar.scss';
 @import 'components/animations.scss';
 
-$white: #FFFFFF;
-$black: #3C4154;
-$gray: #AFAFAF;
-$light__gray: #B1B1B1;
-$light__white: #EDF0F5;
-
-$green: #16A085;
-$green__hover: #FF7D9F;
-$green__active: #DE0039;
-
-$blue: #2051C2;
-$blue__hover: #FF7D9F;
-$blue__active: #1F2022;
-
-$red: #FF0000;
-
-$green: #52DC90;
-
-$background: #F2F2F2;
-$background__overlay: rgba(0,0,0,0.6);
-
-$text__black: #262626;
-$text__gray: #676A6C;
-
-$border__gray: #e5e6e7;
-$border__gray__light: #f6f7f8;
-
-$shadow__bottom: 1px 1px 15px 1px rgba(0,0,0,.05); 
-$shadow__around: 0 1px 4px rgba(0, 0, 0, 0.3);
-
-$transition__fast: ease-in-out 0.15s all;
-$transition__slow: ease-in-out 0.30s all;
-
-$small__font__size: 11px;
-$normal__font__size: 14px;
-$heading__font__size: 16px;
-$large__font__size: 26px;
-
-.calendar__toggle,
-.addPupil {
-	color: $black !important;
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	color: $text__black;
 }
 
-.v-content {
-	transition: none !important;
+.wrapper {
+	min-height: 100vh;
+	background-color: $background;
 }
 
-.adminTitle {
-	padding-right: 32px;
+.main {
+	display: flex;
 }
 
-.container.grid-list-md .layout .flex {
-	padding: 8px;
-}
-
-.v-toolbar__content button {
-	color: white !important;
-}
-
-.toolbar {
-	&__title {
-		padding-right: 20px;
-	}
-}
-
-.navigation-drawer {
-	& .list--subheader .radio {
-		padding: 3px 15px;
-		& label {
-			padding-left: 25px;
-		}
-		& .input-group__details {
-			display: none;
-		}
-	}
-	& .subheader {
-		font-size: 16px;
-		font-weight: 600;
-	}
-	& .addPupil {
-		width: calc(100% - 16px);
+.header {
+	background-color: $white;
+	height: 60px;
+	width: 100%;
+	padding: 0 15px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: 0px 1px 4px rgba(0,0,0,0.4);
+	&__logo {
+		font-size: 24px;
+		width: 270px;
 	}
 }
 
 .aside {
-	padding-bottom: 0;
-	& .input-group__details {
-		display: none !important;
-	}
-	& .input-group {
-		padding-top: 0;
-	}
-	& .list__tile {
-		height: 35px !important;
-	}
-}
-
-.stats {
-	& .list__tile__action {
-		color: rgba(0,0,0,.54);
-	}
-	& .list__tile__title {
-		font-weight: 400;
-		color: rgba(0,0,0,.54);
-	}
-}
-
-.checkbox,
-.radio {
-	& .icon {
-		top: 3px;
-	}
-}
-
-.input-group--disabled *:hover {
-	cursor: not-allowed;
-}
-
-.blank {
-	height: 100%;
-	padding: 24px;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	justify-content: center;
-	color: $gray;
-	& .headline {
-		margin-bottom: 25px;
-	}
-	&__title {
-		text-align: center;
-	}
-}
-
-.mainLoader {
-	position: absolute;
-	z-index: 99999999;
-	background-color: $background;
-}
-
-.calendarAddButton {
-	position: fixed !important;
-	bottom: 30px;
-	right: 30px;
-	& > div {
-		height: auto;
-	}
-}
-.panel-box {
-	width: 700px;
-	& .card {
-		padding: 0 24px 10px 24px;
-	}
-	& .card__actions {
-		padding: 0 20px 20px 24px;
-	}
-}
-
-.headline {
-	&--nowrap {
-		white-space: nowrap;
-	}
-}
-
-.dateInput {
-	margin: 1px 0 0;
-	& .v-input__slot {
-		margin: 0;
-		&::before,
-		&::after {
-			content: none;
-		}
-	}
-	& .input-group__input {
-		position: relative;
-		&::after {
-			content: '';
-			width: calc(100% - 8px);
-			border-bottom: 2px dotted #1565C0;
-			position: absolute;
-			top: 100%;
-			left: 12px;
-		}
-	}
-	& .v-text-field__details {
-		display: none;
-	}
-	& input {
-		font-size: 20px;
-		padding: 0;
-		width: 125px;
-		position: relative;
-		left: 10px;
-		color: #1565C0 !important;
-	}
-}
-
-.notificationsOverflow {
+	width: 255px;
+	padding: 32px 0;
 	overflow-y: auto;
-	max-height: 224px;
+	overflow-x: hidden;
+	min-height: calc(100vh - 60px);
 }
 
-.notificationUnread {
-	background-color: #FAFAFA;
-}
-
-.notificationUnread .subheading {
-	color: rgba(0,0,0,.54);
-}
-
-.notificationsList {
-	min-width: 350px;
-	padding-bottom: 0;
-}
-
-.notifications-box {
-	width: 700px;
-}
-
-.notifications-amount {
-	position: absolute;
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-	border-radius: 18px;
-	top: -5px;
-	right: -5px;
-	background-color: #F54D41;
-	font-size: 12px;
-}
-
-.calendar {
-	&__title--input {
-		display: none;
-	}
-}
-
-.calendar_date_box {
-	& > h2 {
-		height: 36px;
-		line-height: 36px !important;
-		padding: 0 6px;
-		transition: .3s cubic-bezier(.25,.8,.5,1);
-		cursor: pointer;
-		&:hover {
-			background-color: #3177C7;
+.nav {
+	&__item {
+		display: flex;
+		height: 46px;
+		& .nav__link--active {
+			color: $blue400;
 		}
 	}
-	& .picker {
-		position: absolute;
-		top: 100%;
-		color: $white;
-	}
-	& .date-picker-years li {
-		color: black;
-	}
-}
-
-.no-padding {
-	padding: 0 !important;
-}
-
-.theme--light .v-btn, .application .theme--light.v-btn {
-	color: white;
-}
-
-.addPupil {
-	width: calc(100% - 16px);
-}
-
-.v-card .container {
-	padding: 0;
-}
-
-.v-expansion-panel__body {
-	padding: 0 24px;
-}
-
-.v-expansion-panel__header .header__icon {
-	text-align: right;
-}
-
-pre {
-	font-family: Roboto,sans-serif;
-}
-
-.v-list__tile {
-	color: rgba(0,0,0,0.54);
-}
-
-.v-toolbar__title:not(:first-child) {
-	margin: 0 10px 0 15px;
-}
-
-.calendar_date_box {
-  & .v-picker {
-    position: absolute;
-  }
-}
-
-.bold {
-	font-weight: 600;
-}
-
-aside {
-	& .v-input--radio-group__input {
+	&__link {
+		width: 100%;
 		padding: 0 16px;
-	}
-	& .v-subheader {
-		font-size: 16px !important;
-	}
-}
-
-.settings-box {
-    text-align: center;
-    padding: 16px;
-    cursor: pointer;
-    transition: $transition__fast;
-    &:hover {
-    	box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
-    	& .settings-box .title {
-    		color: $blue;
-    	}
-    }
-    & .title {
-    	color: rgba(0,0,0,0.54);
-    }
-    & i {
-    	display: block;
-    	margin: 32px;
-    	font-size: 52px;
-    }
-}
-
-@media only screen and (max-width: 991px) {
-	.adminTitle {
-		display: none;
-	}
-	.mobileMenuText {
-		display: none;
-	}
-	.calendar {
-		&__title--text {
-			display: none;
-		}
-		&__title--input {
-			display: flex;
-		}
-		&__toggle {
-			display: none;
+		color: $text__black;
+		display: flex;
+		align-items: center;
+		font-weight: 500;
+		text-decoration: none;
+		transition: $transition;
+		&:hover {
+			background-color: $background__hover;
+            text-decoration: none;
 		}
 	}
-	.notifications-box {
+	&__icon {
+		width: 48px;
+		font-size: 24px;
+	}
+	&__divider {
+		margin: 16px;
+		height: 1px;
 		width: 100%;
-		.list__tile__sub-title, .list__tile__title {
-			white-space: normal;
-			height: auto;
-		}
-		.list--two-line .list__tile {
-			height: auto;
-			padding: 15px;
-		}
-		.notificationsList {
-			min-width: auto;
-		}
-	}
-	.calendarAddButton {
-		bottom: 15px;
-		right: 15px;
+		background-color: $text__gray;
 	}
 }
 
-@media only screen and (max-width: 599px) {
-	.container:not(.loginPage) {
-		padding: 0 !important;
-	}
-	.loginPage {
-		padding: 0 15px;
-	}
-	.mobileFull {
-		min-width: 100%;
-		margin: 0;
-		//min-height: 100vh;
-		& .card {
-			min-height: 100vh !important;
-		}
-		& .card__title {
-			box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-			& h2 {
-				font-size: 20px !important;
-			}
-			.input-group__input {
-				& input {
-					font-size: 20px !important;
-				}
-				&::after {
-					left: 10px;
-					width: calc(100% - 25px);
-					top: calc(100% - 3px);
-				}
-			}
-		}
+.content {
+	flex: 1 1 calc(100% - 255px);
+	padding: 32px;
+}
+
+.spacer {
+	flex-grow: 1;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px #fff inset;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+.login-link {
+	display: block;
+	margin: 32px;
+	text-align: center;
+	color: $text__black;
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
 	}
 }
 
-@media only screen and (max-width: 500px) {
-	.calendar_date_box .picker {
-		left: 0;
-		width: 100%;
-		&__body {
-			width: 100% !important;
-		}
-	}
-	.headline {
-		font-size: 20px !important;
-	}
+.text--green {
+    color: $green;
+}
+
+.text--red {
+	color: $red;
+}
+
+.text--blue {
+	color: $blue400;
+}
+
+.text--bold {
+	font-weight: 500;
 }

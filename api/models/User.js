@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+    name: {
+        firstName: {
+            type: String
+        },
+        lastName: {
+            type: String
+        }
+    },
     email: {
         type: String,
         trim: true,
@@ -13,7 +21,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     coach: {
-        type: Number,
+        type: Boolean,
         default: null
     },
     coachId: {

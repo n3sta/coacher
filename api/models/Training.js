@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import User from '../models/User';
-import TrainingType from '../models/TrainingType';
 
 const trainingSchema = new mongoose.Schema({
     user: {
@@ -25,7 +23,7 @@ const trainingSchema = new mongoose.Schema({
     },
     done: {
         type: Boolean,
-        default: 0
+        default: false
     },
     createdAt: {
         type: Date,
