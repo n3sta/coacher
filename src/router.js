@@ -6,9 +6,10 @@ Vue.use(Router);
 
 export default new Router({
     mode: 'history',
+    linkActiveClass: 'nav__link--active',
     routes: [
         {
-            path: '/',
+            path: '/panel',
             name: 'panel',
             component: () => import('./views/Panel/Index'),
             beforeEnter: (to, from, next) => {
@@ -24,6 +25,14 @@ export default new Router({
             },
         },
         {
+            path: '/trening',
+            name: 'addTraining',
+            component: () => import('./components/form'),
+            beforeEnter: (to, from, next) => {
+                guard(to, from, next)
+            },
+        },
+        {
             path: '/ustawienia',
             name: 'settings',
             component: () => import('./views/Settings/Index'),
@@ -32,22 +41,22 @@ export default new Router({
             },
         },
         {
-            path: '/ustawienia/konto',
+            path: '/konto',
             name: 'account',
             component: () => import('./views/Settings/Account')
         },               
         {
-            path: '/ustawienia/treningi',
+            path: '/treningi',
             name: 'trainings',
             component: () => import('./views/Settings/Trainings')
         },
         {
-            path: '/ustawienia/zawodnicy',
+            path: '/zawodnicy',
             name: 'pupils',
             component: () => import('./views/Settings/Pupils')
         },
         {
-            path: '/ustawienia/pytania',
+            path: '/ustawienia-ankiety',
             name: 'questions',
             component: () => import('./views/Settings/Questions')
         },
@@ -62,7 +71,7 @@ export default new Router({
             component: () => import('./views/Auth/Login')
         },
         {
-            path: '/ankieta',
+            path: '/ankieta/',
             name: 'profiler',
             component: () => import('./views/Auth/Profiler'),
             beforeEnter: (to, from, next) => {

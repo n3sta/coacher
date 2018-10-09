@@ -1,161 +1,109 @@
-$white: #FFFFFF;
-$black: #3C4154;
-$gray: #AFAFAF;
-$light__gray: #B1B1B1;
-$light__white: #EDF0F5;
+@import '../vars.scss';
 
-$green: #16A085;
-$green__hover: #FF7D9F;
-$green__active: #DE0039;
-
-$blue: #55A8FD;
-$blue__hover: #FF7D9F;
-$blue__active: #1F2022;
-
-$red: #FF0000;
-
-$green: #52DC90;
-
-$background: #F2F2F2;
-$background__overlay: rgba(0,0,0,0.6);
-
-$text__black: #262626;
-$text__gray: #676A6C;
-
-$border__gray: #e5e6e7;
-$border__gray__light: #f6f7f8;
-
-$shadow__bottom: 1px 1px 15px 1px rgba(0,0,0,.05);
-$shadow__around: 0 1px 4px rgba(0, 0, 0, 0.3);
-
-$transition__fast: ease-in-out 0.15s all;
-$transition__slow: ease-in-out 0.30s all;
-
-$small__font__size: 11px;
-$normal__font__size: 14px;
-$heading__font__size: 16px;
-$large__font__size: 26px;
-
-$facebook: #4267B2;
-$linkedin: #0077B5;
-$pinterest: #AD081B;
+$offset: 187;
+$duration: 1.4s;
 
 .spinner {
-  margin: 100px auto;
-  width: 70px;
-  text-align: center;
-  &__bounce {
-    width: 18px;
-    height: 18px;
-    background-color: $blue;
-    border-radius: 100%;
-    display: inline-block;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    &--1 {
-      animation-delay: -0.32s;
+    animation: rotator $duration linear infinite;
+}
+
+@keyframes rotator {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(270deg); }
+}
+
+.path {
+    stroke-dasharray: $offset;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    stroke: $blue400;
+    animation: dash $duration ease-in-out infinite;
+}
+
+@keyframes dash {
+    0% { stroke-dashoffset: $offset; }
+    50% {
+        stroke-dashoffset: $offset/4;
+        transform:rotate(135deg);
     }
-    &--2 {
-      animation-delay: -0.16s;
+    100% {
+        stroke-dashoffset: $offset;
+        transform:rotate(450deg);
     }
-  }
 }
 
-@keyframes sk-bouncedelay {
-  0%, 80%, 100% {
-    transform: scale(0);
-  }
-  40% {
-    transform: scale(1.0);
-  }
+.fadeIn-enter-active {
+    animation: fadeIn 0.2s;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
 
-
-
-.grow-up-enter-active {
-  animation: grow-up 0.25s;
+    to {
+        opacity: 1;
+    }
 }
 
-.grow-up-leave-active {
-  animation: grow-down 0.25s;
+.slideLeft-enter-active {
+    animation: slideLeft 0.25s;
 }
 
-@keyframes grow-down {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0); }
-}
-@keyframes grow-up {
-  0% { opacity: 0; visibility: hidden; transform: scale(0); }
-  100% { transform: scale(1); }
-}
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -15px, 0);
+    }
 
-
-
-
-.fade-enter-active {
-  animation: fade-in 0.25s;
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
 }
 
-.fade-leave-active {
-  animation: fade-out 0.25s;
+.slideDown-enter-active {
+    animation: slideLeft 0.25s;
 }
 
+@keyframes slideDown {
+    from {
+        transform: translate3d(0, -15px, 0);
+    }
 
-
-
-@keyframes fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+    to {
+        transform: translate3d(0, 0, 0);
+    }
 }
 
-@keyframes fade-out {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes checkbox-check{
+    0%{
+        width: 0;
+        height: 0;
+        border-color: $white;
+        transform: translate3d(0,0,0) rotate(45deg);
+    }
+    33%{
+        width: 8px;
+        height: 0;
+        transform: translate3d(0,0,0) rotate(45deg);
+    }
+    100%{
+        width: 8px;
+        height: 15px;
+        border-color: $white;
+        transform: translate3d(0,-12px,0) rotate(45deg);
+    }
 }
 
-
-
-
-.slide-enter-active {
-  animation: slide-up 0.5s;
+@keyframes shrink-bounce{
+    0%{
+        transform: scale(1);
+    }
+    33%{
+        transform: scale(.85);
+    }
+    100%{
+        transform: scale(1);
+    }
 }
-
-.slide-enter-leave {
-  animation: slide-up 0.5s;
-}
-
-@keyframes slide-up {
-  0% { opacity: 0; transform: translateY(30px) }
-  100% { opacity: 1; transform: translateY(0%) }
-}
-
-
-
-
-.list-enter-active, .list-leave-active {
-  transition: all 0.5s;
-}
-
-.list-enter, .list-leave-to {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
-
-.select-enter-active, .select-leave-active {
-  transition: all 0.5s;
-  z-index: -1;
-}
-
-.select-enter, .select-leave-to {
-  opacity: 0;
-  z-index: 1;
-  transform: translateY(-5px);
-}
-
-
-
-
-
-
-

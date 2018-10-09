@@ -1,30 +1,30 @@
 <template>
-	<v-app>
-		<v-container fluid grid-list-md>
-			<v-statistic></v-statistic>
-			<v-layout row wrap>
-				<v-flex xs12>
-					<v-card>
-						<v-card-title>
-							<h3 class="headline mb-0">Aktualne aktywności</h3>
-				        </v-card-title>
-				        <v-card-text>
-				        	<v-calendar 
-								:miniCalendar="1">
-							</v-calendar>
-				        </v-card-text>
-					</v-card>
-				</v-flex>
-			</v-layout>
-		</v-container>
-	</v-app>
+	<div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12">
+				<v-statistic></v-statistic>
+			</div>
+			<div class="col-sm-6 col-xs-12">
+				<v-nextStart></v-nextStart>
+			</div>
+		</div>
+		<div class="box">
+			<div class="box__title">
+				<span class="box__title-name">Ostatnie aktywności</span>
+			</div>
+			<div class="box__content">
+				<v-calendar :miniCalendar="1"></v-calendar>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
 	import moment from 'moment';
 	import Statistic from './Statistic';
+	import nextStart from './nextStart';
 	import Calendar from '../../components/Calendar';
-	import {get,post} from '../../helpers/api';
+	import { get } from '../../helpers/api';
     import store from '../../store';
 
     export default {
@@ -38,6 +38,7 @@
     	},
     	components: {
     		'v-statistic': Statistic,
+    		'v-nextStart': nextStart,
     		'v-calendar': Calendar
     	},
     	mounted() {

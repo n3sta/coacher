@@ -1,58 +1,34 @@
 <template>
-    <v-container class="loginPage" fluid fill-height>
-        <v-layout justify-center>
-            <v-flex xs12 sm8 md4>
-                <h1 class="display-1">TheCoacher</h1>
-                <v-form>
-                    <v-card class="elevation-12">
-                        <v-toolbar dark color="primary">
-                            <v-toolbar-title>Rejestracja</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                        </v-toolbar>
-                        <v-card-text>
-                            <v-form>
-                                <v-text-field
-                                        prepend-icon="email"
-                                        label="Adres e-mail"
-                                        type="email"
-                                        v-model="form.email"
-                                        data-vv-name="email"
-                                        :error-messages="errors.collect('email')"
-                                        v-validate="'required|email|uniqueEmail'">
-                                </v-text-field>
-                                <v-text-field
-                                        prepend-icon="lock"
-                                        label="Hasło"
-                                        type="password"
-                                        v-model="form.password"
-                                        data-vv-name="password"
-                                        name="password"
-                                        :error-messages="errors.collect('password')"
-                                        v-validate="'required:min:8'">
-                                </v-text-field>
-                                <v-checkbox
-                                        label="Jestem trenerem"
-                                        persistent-hint
-                                        hint="Konto trenera zezwala na układnie planów treningowych swoim zawodnikom."
-                                        v-model="form.coach">
-                                </v-checkbox>
-                            </v-form>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="primary" @click="register" :loading="isProcessing" :disabled="isProcessing">Zarejestruj</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-form>
-                <v-btn class="login" color="primary" flat @click="$router.push({name: 'login'})">Zaloguj się</v-btn>
-            </v-flex>
-        </v-layout>
-    </v-container>
+    <div>
+        <div class="box box--medium">
+            <div class="box__title">
+                <div class="box__title-name">Rejestracja</div>
+            </div>
+            <div class="box__content">
+                <form @submit.prevent="submit()">
+                    <div class="form__box">
+                        <label class="form__label" for="email">Adres e-mail</label>
+                        <input type="email" class="form__input" v-model="form.email" id="email">
+                    </div>
+                    <div class="form__box">
+                        <label class="form__label" for="password">Hasło</label>
+                        <input type="text" class="form__input" v-model="form.password" id="password">
+                    </div>
+                    <div class="form__buttons">
+                        <div class="spacer"></div>
+                        <v-button type="submit" :color="'blue'" :loading="isProcessing" :disabled="isProcessing">Zaloguj</v-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <router-link :to="{name: 'login'}" class="login-link">Zaloguj się</router-link>
+    </div>
 </template>
 
 <script>
-    import Auth from '../../helpers/auth'
+    import store from '../../store';
     import { post } from '../../helpers/api'
+    import button from '../../components/Button';
 
     export default {
         data() {
@@ -60,47 +36,24 @@
                 form: {
                     email: '',
                     password: '',
-                    coach: 0,
                 },
                 isProcessing: false,
             }
         },
+        components: {
+            'v-button': button
+        },
         methods: {
-            register() {
-                this.$validator.validateAll().then((result) => {
-                    if (!result) {
-                        return false;
-                    }
-                    this.isProcessing = true;
-                    post('/auth/register', this.form)
-                        .then((res) => {
-                            Auth.set(res.data.token, res.data.user._id, res.data.user.email, res.data.user.coach);
-                        })
-                        .catch(() => {
-                            this.isProcessing = false;
-                        })
-                });
+            submit() {
+                this.isProcessing = true;
+                post('/auth/register', this.form).then((res) => {
+                    store.dispatch('setUser', {token: res.data.token, _id: res.data.user._id, email: res.data.user.email, coach: res.data.user.coach});
+                    this.$router.push({name: 'panel'})
+                })
+                .catch(() => {
+                    this.isProcessing = false;
+                })
             },
         }
     }
 </script>
-
-<style>
-    .display-1 {
-        display: block;
-        text-align: center;
-        margin: 50px 0;
-        color: #cccccc;
-    }
-    .login {
-        display: flex;
-        margin: 30px auto 0;
-    }
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0 1000px #fff inset;
-        transition: background-color 5000s ease-in-out 0s;
-    }
-</style>

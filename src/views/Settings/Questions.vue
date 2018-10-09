@@ -209,7 +209,7 @@
                 this.isForm = true;
                 this.edit = false;
                 this.form = {
-                    user_id: Auth.state.user_id,
+                    // user_id: Auth.state.user_id,
                     question: '',
                     order: null,
                     required: 0,

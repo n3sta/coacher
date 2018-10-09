@@ -7,6 +7,7 @@ import userRoutes from "./api/routes/userRoutes";
 import trainingRoutes from "./api/routes/trainingRoutes";
 import trainingTypesRoutes from "./api/routes/trainingTypesRoutes";
 import notificationsRoutes from "./api/routes/notificationsRoutes";
+import invitationsRoutes from "./api/routes/invitationsRoutes";
 
 const hostname = '127.0.0.1';
 const port = 8081;
@@ -25,6 +26,7 @@ app.use('/users', userRoutes);
 app.use('/trainings', trainingRoutes);
 app.use('/trainingTypes', trainingTypesRoutes);
 app.use('/notifications', notificationsRoutes);
+app.use('/invitations', invitationsRoutes);
 
 app.listen(port, hostname, () => {
     console.log('Server running at http://'+ hostname + ':' + port + '/');

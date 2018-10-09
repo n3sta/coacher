@@ -1,108 +1,114 @@
 <template>
-    <v-container fluid grid-list-md>
-        <v-layout row wrap>
-            <v-flex xs12 sm6 class="no-padding">
-                <v-flex xs12>
-                    <v-form @submit.prevent="changeEmail()">
-                        <v-card>
-                            <v-card-title>
-                                <h2 class="headline">Zmiana e-maila</h2>
-                            </v-card-title>
-                            <v-card-text>
-                                <v-text-field
-                                        prepend-icon="email"
-                                        label="Nowy adres e-mail"
-                                        type="email"
-                                        persistent-hint
-                                        :hint="`Obecny adres e-mail: ${user.email}`"
-                                        v-model="form.email">
-                                </v-text-field>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn type="submit" color="primary">Zapisz</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-form>   
-                </v-flex>
-                <v-flex xs12>
-                    <v-form @submit.prevent="changePassword()">
-                        <v-card>
-                            <v-card-title>
-                                <h2 class="headline">Zmiana hasła</h2>
-                            </v-card-title>
-                            <v-card-text>
-                                <v-text-field
-                                        prepend-icon="lock"
-                                        label="Stare hasło"
-                                        type="password"
-                                        v-model="form.oldPassword">
-                                </v-text-field>
-                                <v-text-field
-                                        prepend-icon="lock"
-                                        label="Nowe hasło"
-                                        type="password"
-                                        v-model="form.password">
-                                </v-text-field>
-                                <v-text-field
-                                        prepend-icon="lock"
-                                        label="Powtórz nowe hasło"
-                                        type="password"
-                                        v-model="form.password_confirmation">
-                                </v-text-field>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="primary" @click="changePassword()" :loading="isProcessingPass" :disabled="isProcessingPass">Zapisz</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-form>   
-                </v-flex>
-            </v-flex>
-            <v-flex xs12 sm6 class="no-padding">
-                <v-flex xs12>
-                    <v-form @submit.prevent="changeCoach()" data-vv-scope="changeCoach">
-                        <v-card>
-                            <v-card-title>
-                                <h2 class="headline">Ustawienia konta trenerskiego</h2>
-                            </v-card-title>
-                            <v-card-text>
-                                <v-switch
-                                    :label="`Jestem trenerem`"
-                                    v-model="user.coach"
-                                    color="green"
-                                    true-value="1"
-                                ></v-switch>
-                                <div class="subheading">Dostępnych kont zawodników: 3</div>
-                                <div class="subheading">Premium ważne do: 2018-10-31</div>
-                                <div class="subheading">Wykupiony pakiet: <v-btn color="green">Zawodowiec</v-btn></div>
-                            </v-card-text>
-                        </v-card>
-                    </v-form>   
-                </v-flex>
-            </v-flex>
-        </v-layout>
-    </v-container>
+    <div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="box">
+                    <div class="box__title">
+                        <div class="box__title-name">Ustawienia konta</div>
+                    </div>
+                    <div class="box__content">
+                        <form @submit.prevent="submitUserData()">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form__box">
+                                        <label class="form__label" for="firstName">Imię</label>
+                                        <input type="text" class="form__input" id="firstName" v-model="form.name.firstName">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form__box">
+                                        <label class="form__label" for="lastName">Nazwisko</label>
+                                        <input type="text" class="form__input" id="lastName" v-model="form.name.lastName">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__box">
+                                <label class="form__label" for="email">Adres e-mail</label>
+                                <input type="email" class="form__input" id="email" v-model="form.email">
+                            </div>
+                            <div class="form__buttons">
+                                <div class="spacer"></div>
+                                <v-button type="submit" :color="'blue'" :loading="isSubmitting" :disabled="isSubmitting">Zapisz</v-button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box__title">
+                        <div class="box__title-name">Ustawienia hasła</div>
+                    </div>
+                    <div class="box__content">
+                        <form @submit.prevent="submitPassword()">
+                            <div class="form__box">
+                                <label class="form__label" for="oldPassword">Stare hasło</label>
+                                <input type="password" class="form__input" id="oldPassword" v-model="form.oldPassword">
+                            </div>
+                            <div class="form__box">
+                                <label class="form__label" for="newPassword">Nowe hasło</label>
+                                <input type="password" class="form__input" id="newPassword" v-model="form.password">
+                            </div>
+                            <div class="form__box">
+                                <label class="form__label" for="newPasswordConfirm">Powtórz nowe hasło</label>
+                                <input type="password" class="form__input" id="newPasswordConfirm" v-model="form.password_confirmation">
+                            </div>
+                            <div class="form__buttons">
+                                <div class="spacer"></div>
+                                <v-button type="submit" :color="'blue'" :loading="isSubmitting" :disabled="isSubmitting">Zapisz</v-button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="box">
+                    <div class="box__title">
+                        <div class="box__title-name">Ustawienia trenerskie</div>
+                    </div>
+                    <div class="box__content">
+                        <div class="form__box">
+                            <v-checkbox :id="'coach'" :checked="user.coach" v-model="user.coach" @change="changeCoach($event)">Jestem trenerem</v-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-    import { get,post,put } from '../../helpers/api'
+    import { patch } from '../../helpers/api'
     import store from '../../store'
+    import checkbox from '../../components/Checkbox'
+    import button from '../../components/Button'
 
     export default {
         data() {
             return {
+                isSubmitting: false,
                 form: {
-                    login: '',
                     email: '',
                     oldPassword: '',
                     password: '',
                     password_confirmation: '',
+                    name: {
+                        firstName: null,
+                        lastName: null
+                    },
                 },
                 user: store.getters.user,
-                isProcessingEmail: false,
-                isProcessingPass: false,
             }
+        },
+        computed: {
+            'form.name'() {
+                return {
+                    firstName: this.user.name.firstName,
+                    lastName: this.user.name.lastName
+                };
+            }
+        },
+        components: {
+            'v-checkbox': checkbox,
+            'v-button': button,
         },
         watch: {
             'user.coach': function() {
@@ -110,52 +116,17 @@
             }
         },
         methods: {
-            changeEmail() {
-                this.isProcessingEmail = true;
-                    put(`/users/${this.user.userId}`, {email: this.form.email})
-                        .then((res) => {
-                            if(res.data.status) {
-                                Auth.set(res.data.token, res.data.entity._id, res.data.entity.email, res.data.entity.coach);
-                                this.user.email = res.data.email;
-                                store.dispatch('setSnackbar', {color: 'green', text: 'Email został zmieniony'});
-                            } else {
-                                store.dispatch('setSnackbar', {color: 'red', text: 'Ten adres e-mail jest zarezerwowany.'});
-                            }
-                            this.isProcessingEmail = false;
-                        })
-                        .catch((err) => {
-                            this.isProcessingEmail = false;
-                            store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        })
+            submitUserData() {
+                patch(`/users/${this.user._id}`, this.form).then((res) => {
+                    store.dispatch('setUser', res.data);
+                });
             },
-            changePassword() {
-                this.isProcessingPass = true;
-                    put('/api/changePassword', {id: Auth.state.user_id, oldPassword: this.form.oldPassword, password: this.form.password})
-                        .then((res) => {
-                            if(res.data) {
-                                store.dispatch('setSnackbar', {color: 'green', text: 'Hasło zostało zmienione'});
-                                this.form.oldPassword = '';
-                                this.form.password = '';
-                                this.form.password_confirmation = '';
-                            } else {
-                                this.isLogin = false;
-                                store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                            }
-                            this.isProcessingPass = false;
-                        })
-                        .catch((err) => {
-                            this.isProcessingPass = false;
-                            store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        })
+            submitPassword() {
+                patch(`/users/${this.user._id}`, {password: this.form.password});
             },
-            changeCoach() {
-                put(`/users/${Auth.state.userId}`, {coach: this.user.coach*1}).then((res) => {
-                    if (res.data.coach) {
-                        store.dispatch('setSnackbar', {color: 'green', text: 'Konto trenerskie włączone.'});
-                        Auth.set(res.data.token, res.data.user._id, res.data.user.email, res.data.user.coach, 0);
-                    } else {
-                        store.dispatch('setSnackbar', {color: 'green', text: 'Konto trenerskie wyłączone.'});
-                    }
+            changeCoach(value) {
+                patch(`/users/${this.user._id}`, {coach: value}).then((res) => {
+                    store.dispatch('setUser', {coach: res.data.coach});
                 });
             },
         }

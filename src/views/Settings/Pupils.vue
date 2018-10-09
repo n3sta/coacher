@@ -1,107 +1,105 @@
 <template>
-    <v-container fluid grid-list-md>
-        <v-layout row wrap>
-            <v-flex xs12 sm6 offset-sm3>
-                <div class="panel-box">
-                    <v-card-title>
-                        <h2 class="headline">
-                            Zawodnicy
-                            <v-btn color="primary" @click="showPupil = true">Zaproś nowego zawodnika</v-btn>
-                        </h2>
-                    </v-card-title>
-                    <v-data-table
-                            :headers="headers"
-                            :items="items"
-                            hide-actions
-                            class="elevation-1"
-                    >
-                        <template slot="items" slot-scope="props">
-                            <td class="text-xs-left"><a @click="$router.push({ name: 'pupil', params: {id: props.item.id, login: props.item.login} })">{{ props.item.login }}</a></td>
-                            <td class="text-xs-left">{{ props.item.trainings.length }}</td>
-                            <td class="text-xs-left">{{ props.item.created_at }}</td>
-                            <td class="justify-center layout px-0">
-                                <v-tooltip top>
-                                    <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator">
-                                        <v-icon color="red">delete</v-icon>
-                                    </v-btn>
-                                    <span>Odepnij zawodnika</span>
-                                </v-tooltip>
-                            </td>
-                        </template>
-                    </v-data-table>
-                    <pupil
-                            v-if="showPupil"
-                            @close="showPupil = false"
-                            :user="user.user_id"
-                    ></pupil>
-                    <v-dialog v-model="isDeleting" max-width="300">
-                        <v-card>
-                            <v-card-title class="headline">Jesteś pewny?</v-card-title>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="grey darken-3" flat @click="isDeleting = false">Anuluj</v-btn>
-                                <v-btn color="red" :loading="isProcessing" :disabled="isProcessing" class="white--text" @click="remove()">Tak, usuń</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
+    <div>
+        <div class="box box--medium box--margin">
+            <div class="box__title">
+                <div class="box__title-name">Zawodnicy</div>
+            </div>
+            <div class="box__content">
+                <form @submit.prevent="submit()">
+                    <div class="form__box form__box--inline">
+                        <div class="form__box-helper">
+                            <label for="pupil" class="form__label">Zaproś nowego zawodnika</label>
+                            <input type="email" id="pupil" v-model="form.email" class="form__input">
+                        </div>
+                        <v-button type="submit" :color="'blue'" class="button--inline">Wyślij</v-button>
+                    </div>
+                </form>
+            </div>
+            <div class="box__content box__content--no-padding">
+                <div class="list">
+                    <div class="list__item" v-for="item in pupils" :key="item._id">
+                        <div class="list__item-content">
+                            <div class="list__avatar">{{ item.name.charAt(0) }}</div>
+                            <router-link :to="{name: 'pupil'}" class="list__name">{{ item.name }} {{ item.name.lastName }}</router-link>
+                        </div>
+                        <div class="list__buttons">
+                            <span class="material-icons text--red" aria-hidden="true" @click="deletePupil(item._id)">delete</span>
+                        </div>
+                    </div>
                 </div>
-            </v-flex>
-        </v-layout>
-    </v-container>
+            </div>
+        </div>
+
+        <div class="box box--medium">
+            <div class="box__title">
+                <div class="box__title-name">Zaproszenia oczekujące</div>
+            </div>
+            <div class="box__content box__content--no-padding">
+                <div class="list" v-if="invitations.length">
+                    <div class="list__item list__item--large" v-for="item in invitations" :key="item._id">
+                        <div class="list__item-content">
+                            <div class="list__name text--bold">{{ item.email }}</div>
+                        </div>
+                        <div class="list__buttons">
+                            <span class="text--red text--bold" @click="deleteInvitation(item._id)">Anuluj</span>
+                            <span> lub </span>
+                            <span class="text--blue text--bold">Wyślij ponownie</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blank" v-else>
+                    <span>Nie znaleziono oczekujących zaproszeń</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
     import store from '../../store'
-    import { post, put, del } from '../../helpers/api'
-    import Pupil from './../../components/Pupil'
+    import { get, post, del, patch } from '../../helpers/api'
+    import button from '../../components/Button'
 
     export default {
         data() {
             return {
-                headers: [
-                    { text: 'Login', value: 'login' },
-                    { text: 'Ilość treningów', value: 'quantity' },
-                    { text: 'Data dołączenia', value: 'created_at' },
-                    { text: 'Akcje', sortable: false, align: 'center' },
-                ],
-                form: {},
-                showPupil: false,
-                isProcessing: false,
-                isDeleting: false,
-                user: store.getters.user
+                form: {
+                    email: null,
+                },
+                invitations: null,
+                user: store.getters.user,
+                pupils: store.getters.pupils
             }
         },
         components: {
-            'pupil': Pupil,
+            'v-button': button,
         },
-        computed: {
-            items() {
-                return Object.keys(this.$store.state.pupils).map(key => this.$store.state.pupils[key])
-            },
+        created() {
+            this.pupils = [
+                {name: "Jozef Wybicki", _id: '1asd'},
+                {name: "Przemek Jończka", _id: '34234'},
+                {name: "Tomasz Zareba", _id: '343'},
+            ];
+            this.getInvitations();
         },
         methods: {
-            deleteItem(item) {
-                this.isDeleting = true;
-                this.form = item;
+            async getInvitations() {
+                const res = await get('/invitations', {coach: this.user._id});
+                this.invitations = res.data;
             },
-            remove() {
-                this.isProcessing = true;
-                post(`/api/removePupil/${this.form.id}`)
-                    .then((res) => {
-                        if(res.data) {
-                            store.dispatch('setSnackbar', {color: 'green', text: 'Zawodnik został odpięty.'});
-                            store.dispatch('getPupils');
-                            this.isDeleting = false;
-                        } else {
-                            store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        }
-                        this.isProcessing = false;
-                    })
-                    .catch((err) => {
-                        store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        this.isProcessing = false;
-                    })
+            async deletePupil(id) {
+                await patch(`/users/${id}`, {coachId: null});
+                store.dispatch('getPupils');
             },
+            async deleteInvitation(id) {
+                await del(`/invitations/${id}`);
+                this.getInvitations();
+            },
+            async submit() {
+                await post('/invitations', {email: this.form.email, coach: this.user._id});
+                this.getInvitations();
+                this.form.email = '';
+            }
         }
     }
 </script>

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { get,post } from './helpers/api.js'
-import Auth from './helpers/auth'
 import router from './router'
 
 Vue.use(Vuex);
@@ -9,8 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         user: {
+            _id: localStorage.getItem('_id'),
             token: localStorage.getItem('token'),
-            userId: null,
             email: null,
             coach: null
         },
@@ -29,11 +28,28 @@ export default new Vuex.Store({
             resolve: null,
             reject: null,
         },
+        trainingData: {
+            _id: null,
+            createdAt: null,
+            userId: null
+        },
+        stats: {
+            week: 0,
+            weekDone: 0,
+            month: 0,
+            monthDone: 0,
+            plan: 0,
+            planDone: 0,
+            planPercent: 0
+        }
     },
     getters: {
         snackbar: state => state.snackbar,
         alert: state => state.alert,
-        user: state => state.user
+        user: state => state.user,
+        trainingData: state => state.trainingData,
+        stats: state => state.stats,
+        pupils: state => state.pupils,
     },
     mutations: {
         setUser(state, data) {
@@ -41,16 +57,24 @@ export default new Vuex.Store({
             if (!localStorage.getItem('token')) {
                 localStorage.setItem('token', data.token);
             }
-            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('_id', data._id);
         },
         logout(state) {
             localStorage.removeItem('token');
-            localStorage.removeItem('userId');
+            localStorage.removeItem('_id');
             router.push({name: 'login'});
             state.user = {};
         },
         getPupils (state, data) {
-            state.pupils = data;
+            if (data.length) {
+                state.pupils = data;
+            } else {
+                state.pupils = [
+                    {name: 'Janek Jakiś', _id: '154353454354354354354354522323sdfwerw'},
+                    {name: 'Wojtek Silny', _id: '3432432432432434kjnkjfdngkjdfngkjfkgj'},
+                    {name: 'Kamyk pijany', _id: '5435435431223233v213v23v243243sdfwerw'},
+                ]
+            }
         },
         getTrainingTypes (state, data) {
             state.trainingTypes = data;
@@ -67,6 +91,12 @@ export default new Vuex.Store({
         closeAlert (state) {
             state.alert.show = false;
         },
+        setTrainingData (state, data) {
+            state.trainingData = data;
+        },
+        setStats (state, data) {
+            state.stats = data;
+        }
     },
     actions: {
         logout ({ commit }) {
@@ -77,17 +107,17 @@ export default new Vuex.Store({
             dispatch('getStartData');
         },
         getUser({ commit, dispatch }) {
-            if (!localStorage.getItem('userId')) {
+            if (!localStorage.getItem('_id')) {
                 return false;
             }
             get(`/users`, {
-                _id: localStorage.getItem('userId')
+                _id: localStorage.getItem('_id')
             }).then((res) => {
-                commit('setUser', {userId: res.data[0]._id, email: res.data[0].email, coach: res.data[0].coach});
+                commit('setUser', {_id: res.data[0]._id, email: res.data[0].email, coach: res.data[0].coach});
                 dispatch('getStartData');
             });
         },
-        getStartData({ commit, dispatch, state }) {
+        getStartData({ dispatch, state }) {
             dispatch('getTrainingTypes');
             if (state.user.coach) {
                 dispatch('getPupils');   
@@ -95,7 +125,7 @@ export default new Vuex.Store({
         },
         getPupils ({ commit, state }) {
             get(`/users`, {
-                coachId: state.user.userId
+                coachId: state.user._id
             }).then((res) => {
                 commit('getPupils', res.data);
             });
@@ -123,6 +153,12 @@ export default new Vuex.Store({
         },
         closeAlert({ commit }) {
             commit('closeAlert');
+        },
+        setTrainingDate({ commit }, data) {
+            commit('setTrainingData', data);
+        },
+        setStats({ commit }, data) {
+            commit('setStats', data);
         }
     }
 });

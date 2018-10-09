@@ -18,6 +18,10 @@ export default {
             const date = new Date(d);
             return date.getDate();
         },
+        getWeekDay(d) {
+            const date = moment(d);
+            return date.day();
+        },
         isToday(d) {
             const today = moment(new Date()).format('YYYY-MM-DD');
             return !!(today === d);
