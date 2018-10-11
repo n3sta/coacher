@@ -6,6 +6,16 @@
             </div>
             <div class="box__content">
                 <form @submit.prevent="submit()">
+                    <div class="row">
+                        <div class="form__box col-sm-6 col-xs-12">
+                            <label class="form__label" for="firstName">Imię</label>
+                            <input type="text" class="form__input" id="firstName" v-model="form.firstName">
+                        </div>
+                        <div class="form__box col-sm-6 col-xs-12">
+                            <label class="form__label" for="lastName">Nazwisko</label>
+                            <input type="text" class="form__input" id="lastName" v-model="form.lastName">
+                        </div>
+                    </div>
                     <div class="form__box">
                         <label class="form__label" for="email">Adres e-mail</label>
                         <input type="email" class="form__input" v-model="form.email" id="email">
@@ -47,7 +57,7 @@
             submit() {
                 this.isProcessing = true;
                 post('/auth/register', this.form).then((res) => {
-                    store.dispatch('setUser', {token: res.data.token, _id: res.data.user._id, email: res.data.user.email, coach: res.data.user.coach});
+                    store.dispatch('setUser', {token: res.data.token, user: res.data.user});
                     this.$router.push({name: 'panel'})
                 })
                 .catch(() => {

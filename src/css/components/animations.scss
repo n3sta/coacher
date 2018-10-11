@@ -47,10 +47,10 @@ $duration: 1.4s;
 }
 
 .slideLeft-enter-active {
-    animation: slideLeft 0.25s;
+    animation: slideLeft 0.15s;
 }
 
-@keyframes slideLeft {
+@keyframes slideDown {
     from {
         opacity: 0;
         transform: translate3d(0, -15px, 0);
@@ -62,18 +62,22 @@ $duration: 1.4s;
     }
 }
 
-.slideDown-enter-active {
-    animation: slideLeft 0.25s;
-}
-
-@keyframes slideDown {
+@keyframes slideUp {
     from {
-        transform: translate3d(0, -15px, 0);
+        opacity: 0;
     }
 
     to {
-        transform: translate3d(0, 0, 0);
+        opacity: 1;
     }
+}
+
+.slideDown-enter-active {
+    animation: slideDown 0.25s;
+}
+
+.slideDown-leave-active {
+    animation: slideUp 0;
 }
 
 @keyframes checkbox-check{

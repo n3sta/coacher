@@ -47,8 +47,8 @@
             submit() {
                 this.isProcessing = true;
                 post('/auth/login', this.form)
-                    .then(res => {
-                        store.dispatch('setUser', {token: res.data.token, _id: res.data.user._id, email: res.data.user.email, coach: res.data.user.coach});
+                    .then((res) => {
+                        store.dispatch('setUser', res.data);
                         this.$router.push({name: 'panel'})
                     })
                     .catch(() => {

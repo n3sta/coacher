@@ -5,8 +5,12 @@
                 <v-dropdown :items="pupils" :id="'calendarUser'" @change="calendarUser = $event"></v-dropdown>
                 <div class="calendar__divider"></div>
                 <span class="calendar__month">{{ monthsLong[currDate.format('M')-1] }} {{ currDate.format('Y') }}</span>
-                <button type="button" class="button-icon"><span class="material-icons" aria-hidden="true">keyboard_arrow_left</span></button>
-                <button type="button" class="button-icon"><span class="material-icons" aria-hidden="true">keyboard_arrow_right</span></button>
+                <button type="button" class="button-icon" @click="setPrevMonth()"><span class="material-icons" aria-hidden="true">keyboard_arrow_left</span></button>
+                <button type="button" class="button-icon" @click="setNextMonth()"><span class="material-icons" aria-hidden="true">keyboard_arrow_right</span></button>
+                <div class="calendar__divider"></div>
+                <v-button v-if="user.coach === true" :color="'blue'">
+                    Exportuj do PDF
+                </v-button>
             </div>
             <div class="calendar__week">
                 <div class="calendar__day" v-for="(day, dayIndex) in monthDays"
@@ -66,7 +70,7 @@
                 events: [],
                 currDate: moment(),
                 dragging: false,
-                calendarUser: store.getters.user.userId,
+                calendarUser: store.getters.user._id,
                 pupils: store.getters.pupils
             }
         },
@@ -91,7 +95,9 @@
             },
         },
         created() {
-            console.log(store.getters);
+            if (!this.pupils.filter(pupil => pupil._id === this.user._id).length) {
+                this.pupils.unshift({name: {firstName: this.user.name.firstName, lastName: this.user.name.lastName}, _id: this.user._id});
+            }
             if (this.miniCalendar) {
                 this.drawMiniCalendar();
             } else {

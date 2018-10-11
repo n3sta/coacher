@@ -6,7 +6,7 @@
             <span class="material-icons select__caret" aria-hidden="true">keyboard_arrow_down</span>
             <transition name="fadeIn">
                 <ul class="select__ul" v-if="active">
-                    <li :class="['select__li', (selectedId === item._id) ? 'select__li--active' : '']" v-for="item in items" :key="item._id" :id="item._id" @click="change(item._id, item.name)">{{ item.name }}</li>
+                    <li :class="['select__li', (value === item._id) ? 'select__li--active' : '']" v-for="item in items" :key="item._id" :id="item._id" @click="change(item._id, item.name)">{{ item.name }}</li>
                 </ul>
             </transition>
         </div>
@@ -24,27 +24,32 @@
             },
             items: {
                 type: Array
-            }
+            },
+            value: {
+                default: null
+            },
         },
         data() {
             return {
                 active: false,
-                selected: '',
-                selectedId: ''
+            }
+        },
+        computed: {
+            selected() {
+                const selected = this.items.filter(item => item._id === this.value)[0];
+                return (selected) ? selected.name : '';
             }
         },
         created() {
             document.addEventListener('click', this.documentClick);
         },
         destroyed() {
-            document.removeEventListener('click', this.documentClick)
+            document.removeEventListener('click', this.documentClick);
         },
         methods: {
-            change(id, name) {
+            change(id) {
                 this.active = false;
-                this.selected = name;
-                this.selectedId = id;
-                this.$parent.training.trainingType = id;
+                this.$emit('change', id);
             },
             documentClick(e) {
                 const select = this.$refs.select;

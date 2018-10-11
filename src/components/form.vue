@@ -8,7 +8,7 @@
                 <div class="box__content">
                     <div class="row">
                         <div class="form__box col-sm-6 col-xs-12">
-                            <v-select :items="trainingTypes" :label="'Typ treningu'" :id="'trainingType'" @change="training.trainingType = id"></v-select>
+                            <v-select :items="trainingTypes" :label="'Typ treningu'" :id="'trainingType'" :value="training.trainingType" @change="training.trainingType = id"></v-select>
                         </div>
                         <div class="form__box col-sm-6 col-xs-12">
                             <label class="form__label" for="amount">Suma kilometrów</label>
@@ -130,7 +130,6 @@
                     })
             },
             back() {
-                console.log(this.$router);
                 this.$router.go(-1);
             },
             canBeDone() {

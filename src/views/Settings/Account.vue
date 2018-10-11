@@ -12,19 +12,19 @@
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form__box">
                                         <label class="form__label" for="firstName">Imię</label>
-                                        <input type="text" class="form__input" id="firstName" v-model="form.name.firstName">
+                                        <input type="text" class="form__input" id="firstName" v-model="user.name.firstName">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form__box">
                                         <label class="form__label" for="lastName">Nazwisko</label>
-                                        <input type="text" class="form__input" id="lastName" v-model="form.name.lastName">
+                                        <input type="text" class="form__input" id="lastName" v-model="user.name.lastName">
                                     </div>
                                 </div>
                             </div>
                             <div class="form__box">
                                 <label class="form__label" for="email">Adres e-mail</label>
-                                <input type="email" class="form__input" id="email" v-model="form.email">
+                                <input type="email" class="form__input" id="email" v-model="user.email">
                             </div>
                             <div class="form__buttons">
                                 <div class="spacer"></div>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-    import { patch } from '../../helpers/api'
+    import { put } from '../../helpers/api'
     import store from '../../store'
     import checkbox from '../../components/Checkbox'
     import button from '../../components/Button'
@@ -86,24 +86,10 @@
             return {
                 isSubmitting: false,
                 form: {
-                    email: '',
-                    oldPassword: '',
                     password: '',
                     password_confirmation: '',
-                    name: {
-                        firstName: null,
-                        lastName: null
-                    },
                 },
                 user: store.getters.user,
-            }
-        },
-        computed: {
-            'form.name'() {
-                return {
-                    firstName: this.user.name.firstName,
-                    lastName: this.user.name.lastName
-                };
             }
         },
         components: {
@@ -116,18 +102,16 @@
             }
         },
         methods: {
-            submitUserData() {
-                patch(`/users/${this.user._id}`, this.form).then((res) => {
-                    store.dispatch('setUser', res.data);
-                });
+            async submitUserData() {
+                await put(`/users/${this.user._id}`, this.user);
+                store.dispatch('getUser');
             },
-            submitPassword() {
-                patch(`/users/${this.user._id}`, {password: this.form.password});
+            async submitPassword() {
+                await put(`/users/${this.user._id}`, {password: this.form.password});
             },
-            changeCoach(value) {
-                patch(`/users/${this.user._id}`, {coach: value}).then((res) => {
-                    store.dispatch('setUser', {coach: res.data.coach});
-                });
+            async changeCoach(value) {
+                await put(`/users/${this.user._id}`, {coach: value});
+                store.dispatch('getUser');
             },
         }
     }
