@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Vuelidate from 'vuelidate'
 
 import style from './css/layout.scss';
 
@@ -8,6 +9,7 @@ import router from './router'
 import store from './store'
 
 Vue.use(Vuex);
+Vue.use(Vuelidate);
 
 new Vue({
   router,

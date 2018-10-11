@@ -6,6 +6,10 @@ export default {
 	async register(req, res) {
 		const hashed = bcrypt.hashSync(req.body.password, 8);
 	    const user = await new User({
+            name: {
+                firstName: req.body.name.firstName,
+                lastName: req.body.name.lastName
+            },
 	        email: req.body.email,
 	        password: hashed,
 	        coach: req.body.coach

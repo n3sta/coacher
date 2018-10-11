@@ -10,6 +10,10 @@
                         <div class="form__box-helper">
                             <label for="pupil" class="form__label">Zaproś nowego zawodnika</label>
                             <input type="email" id="pupil" v-model="form.email" class="form__input">
+                            <div v-if="$v.form.email.$error">
+                                <div class="form__error" v-if="!$v.form.email.required">To pole jest wymagane.</div>
+                                <div class="form__error" v-if="!$v.form.email.email">Nieprawidłowy format e-mail.</div>
+                            </div>
                         </div>
                         <v-button type="submit" :color="'blue'" class="button--inline">Wyślij</v-button>
                     </div>
@@ -55,6 +59,7 @@
 </template>
 
 <script>
+    import { required, email } from 'vuelidate/lib/validators'
     import store from '../../store'
     import { get, post, del, patch } from '../../helpers/api'
     import button from '../../components/Button'
@@ -91,9 +96,22 @@
                 this.getInvitations();
             },
             async submit() {
+                this.$v.$touch();
+                if (this.$v.$invalid) {
+                    return false;
+                }
                 await post('/invitations', {email: this.form.email, coach: this.user._id});
                 this.getInvitations();
                 this.form.email = '';
+                this.$v.$reset();
+            }
+        },
+        validations: {
+            form: {
+                email: {
+                    required,
+                    email
+                },
             }
         }
     }

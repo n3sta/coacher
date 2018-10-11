@@ -14,17 +14,9 @@ export default {
 		return res.status(200).json(trainings);
 	},
 	async create(req, res) {
-		const training = await new Training({
-			content: req.body.content,
-			note: req.body.note,
-			amount: req.body.amount,
-			done: req.body.done,
-			user: req.body.user,
-			trainingType: req.body.trainingType,
-			createdAt: req.body.createdAt
-		}).save();
+		const training = await new Training(req.body).save();
 
-		return res.status(200).json(training)
+		return res.status(200).json(training);
 	},
 	async update(req, res) {
 		const training = await Training.findOneAndUpdate({_id: req.params.id}, req.body);

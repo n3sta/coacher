@@ -12,4 +12,4 @@ const trainingTypeSchema = new mongoose.Schema({
     
 });
 
-module.exports = mongoose.model('TrainingType', trainingTypeSchema);
+export default mongoose.model('TrainingType', trainingTypeSchema);
