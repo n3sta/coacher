@@ -7,14 +7,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        token: localStorage.getItem('token'),
         user: {
             _id: localStorage.getItem('_id'),
-            token: localStorage.getItem('token'),
             email: null,
             coach: null
         },
-        pupils: {},
-        trainingTypes: {},
+        pupils: [],
+        trainingTypes: [],
         snackbar: {
             show: false,
             color: '',
@@ -41,38 +41,45 @@ export default new Vuex.Store({
             plan: 0,
             planDone: 0,
             planPercent: 0
-        }
+        },
+        types: [
+            {name: 'Pole tekstowe', _id: 1},
+            {name: 'Lista rozwijalna', _id: 2},
+            {name: 'Pole wyboru', _id: 3},
+        ]
     },
     getters: {
         snackbar: state => state.snackbar,
         alert: state => state.alert,
         user: state => state.user,
+        token: state => state.token,
         trainingData: state => state.trainingData,
         stats: state => state.stats,
         pupils: state => state.pupils,
+        types: state => state.types,
     },
     mutations: {
         setUser(state, data) {
-            Object.assign(state.user, data);
-            if (!localStorage.getItem('token')) {
-                localStorage.setItem('token', data.token);
-            }
-            localStorage.setItem('_id', data._id);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('_id', data.user._id);
+            state.user = data.user;
+            state.token = data.token;
         },
         logout(state) {
             localStorage.removeItem('token');
             localStorage.removeItem('_id');
-            router.push({name: 'login'});
             state.user = {};
+            state.token = null;
+            router.push({name: 'login'});
         },
         getPupils (state, data) {
             if (data.length) {
                 state.pupils = data;
             } else {
                 state.pupils = [
-                    {name: 'Janek Jakiś', _id: '154353454354354354354354522323sdfwerw'},
-                    {name: 'Wojtek Silny', _id: '3432432432432434kjnkjfdngkjdfngkjfkgj'},
-                    {name: 'Kamyk pijany', _id: '5435435431223233v213v23v243243sdfwerw'},
+                    {name: {firstName: 'Janek', lastName: 'Mądry'}, _id: '154353454354354354354354522323sdfwerw'},
+                    {name: {firstName: 'Zbyszko', lastName: 'Szybki'}, _id: '3432432432432434kjnkjfdngkjdfngkjfkgj'},
+                    {name: {firstName: 'Bartek', lastName: 'Silny'}, _id: '5435435431223233v213v23v243243sdfwerw'},
                 ]
             }
         },
@@ -110,18 +117,14 @@ export default new Vuex.Store({
             if (!localStorage.getItem('_id')) {
                 return false;
             }
-            get(`/users`, {
-                _id: localStorage.getItem('_id')
-            }).then((res) => {
-                commit('setUser', {_id: res.data[0]._id, email: res.data[0].email, coach: res.data[0].coach});
+            get(`/auth/logged/${localStorage.getItem('_id')}`).then((res) => {
+                commit('setUser', res.data);
                 dispatch('getStartData');
             });
         },
-        getStartData({ dispatch, state }) {
+        getStartData({ dispatch }) {
             dispatch('getTrainingTypes');
-            if (state.user.coach) {
-                dispatch('getPupils');   
-            }
+            dispatch('getPupils');
         },
         getPupils ({ commit, state }) {
             get(`/users`, {
@@ -132,7 +135,7 @@ export default new Vuex.Store({
         },
         getTrainingTypes ({ commit, state }) {
             get(`/trainingTypes`, {
-                userId: state.user.userId
+                userId: state.user._id
             }).then((res) => {
                 commit('getTrainingTypes', res.data);
             });

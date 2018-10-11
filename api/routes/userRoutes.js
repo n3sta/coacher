@@ -15,6 +15,8 @@ api.use((req, res, next) => {
 
 api.get('/', getFilters, errorHandler.catchAsync(usersController.find));
 
+api.get('/:id', getFilters, errorHandler.catchAsync(usersController.findOne));
+
 api.put('/:id', errorHandler.catchAsync(usersController.update));
 
 api.patch('/:id', errorHandler.catchAsync(usersController.patch));

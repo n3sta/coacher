@@ -3,7 +3,7 @@ import qs from 'qs';
 import store from '../store';
 
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8081',
+    baseURL: 'http://127.0.0.1:8082',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -11,7 +11,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-    config.headers['x-access-token'] = store.getters.user.token;
+    config.headers['x-access-token'] = store.getters.token;
     
     return config;
 }, (error) => {

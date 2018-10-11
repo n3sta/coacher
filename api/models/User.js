@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
     name: {
         firstName: {
-            type: String
+            type: String,
+            default: null
         },
         lastName: {
-            type: String
+            type: String,
+            default: null
         }
     },
     email: {
@@ -18,7 +20,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     coach: {
         type: Boolean,
@@ -34,11 +37,13 @@ const userSchema = new mongoose.Schema({
     },
     updatedAt: {
         type: Date,
-        default: new Date()
+        default: new Date(),
+        select: false
     },
     deletedAt: {
         type: Date,
-        default: null
+        default: null,
+        select: false
     },
 });
 

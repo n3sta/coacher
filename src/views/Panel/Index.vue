@@ -42,20 +42,12 @@
     		'v-calendar': Calendar
     	},
     	mounted() {
-    		this.getNotifications();
     		this.getLastTraining();
     	},
     	methods: {
-    		getNotifications() {
-    			get(`/notifications`, {
-	                user: this.user.userId
-	            }).then((res) => {
-	                this.messages = res.data;
-	            });
-    		},
     		getLastTraining() {
     			get('/trainings', {
-    				user: this.user.userId,
+    				user: this.user._id,
     				createdAt: {
     					$gte: new Date(moment().startOf('day')),
     					$lte: new Date(moment().endOf('day'))

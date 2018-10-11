@@ -78,11 +78,20 @@ export default new Router({
                 guard(to, from, next)
             },
         },
+        {
+            path: '/ustawienia-ankiety/pytanie/:id',
+            name: 'addQuestion',
+            props: true,
+            component: () => import('./views/Settings/addQuestion'),
+            beforeEnter: (to, from, next) => {
+                guard(to, from, next)
+            },
+        },
     ]
 });
 
 const guard = (to, from, next) => {
-    if (store.getters.user.token) {
+    if (store.getters.token) {
         next()
     } else {
         next('/logowanie');

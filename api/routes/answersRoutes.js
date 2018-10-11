@@ -1,5 +1,6 @@
 import express from 'express';
-import authController from '../controllers/authController';
+import verifyToken from '../auth/index';
+import answersController from '../controllers/answersController';
 import errorHandler from '../middlewares/errors';
 
 let api = express.Router();
@@ -12,10 +13,10 @@ api.use((req, res, next) => {
     next();
 });
 
-api.get('/logged/:id', errorHandler.catchAsync(authController.logged));
+api.get('/', verifyToken, errorHandler.catchAsync(answersController.find));
 
-api.post('/register', errorHandler.catchAsync(authController.register));
+api.post('/', verifyToken, errorHandler.catchAsync(answersController.create));
 
-api.post('/login', errorHandler.catchAsync(authController.login));
+api.put('/:id', verifyToken, errorHandler.catchAsync(answersController.update));
 
 export default api;

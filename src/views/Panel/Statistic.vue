@@ -68,7 +68,7 @@
 		},
 		methods: {
 			getStatistic() {
-                get(`/trainings/stats`, {user: this.user.userId, date: new Date()}).then((res) => {
+                get(`/trainings/stats`, {user: this.user._id, date: new Date()}).then((res) => {
                     this.stats = res.data;
                     res.data.planPercent = this.calculate();
                     store.dispatch('setStats', res.data);

@@ -15,12 +15,12 @@
                     </div>
                 </form>
             </div>
-            <div class="box__content box__content--no-padding">
+            <div class="box__content box__content--no-padding" v-if="pupils.length">
                 <div class="list">
                     <div class="list__item" v-for="item in pupils" :key="item._id">
                         <div class="list__item-content">
-                            <div class="list__avatar">{{ item.name.charAt(0) }}</div>
-                            <router-link :to="{name: 'pupil'}" class="list__name">{{ item.name }} {{ item.name.lastName }}</router-link>
+                            <div class="list__avatar">{{ item.name.firstName.charAt(0) }}{{ item.name.lastName.charAt(0) }}</div>
+                            <router-link :to="{name: 'pupil'}" class="list__name">{{ item.name.firstName }} {{ item.name.lastName }}</router-link>
                         </div>
                         <div class="list__buttons">
                             <span class="material-icons text--red" aria-hidden="true" @click="deletePupil(item._id)">delete</span>
@@ -29,7 +29,6 @@
                 </div>
             </div>
         </div>
-
         <div class="box box--medium">
             <div class="box__title">
                 <div class="box__title-name">Zaproszenia oczekujące</div>
@@ -64,22 +63,18 @@
         data() {
             return {
                 form: {
-                    email: null,
+                    email: '',
                 },
-                invitations: null,
+                invitations: [],
                 user: store.getters.user,
-                pupils: store.getters.pupils
+                pupils: []
             }
         },
         components: {
             'v-button': button,
         },
         created() {
-            this.pupils = [
-                {name: "Jozef Wybicki", _id: '1asd'},
-                {name: "Przemek Jończka", _id: '34234'},
-                {name: "Tomasz Zareba", _id: '343'},
-            ];
+            this.pupils = store.getters.pupils;
             this.getInvitations();
         },
         methods: {
