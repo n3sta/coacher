@@ -3,20 +3,24 @@ import mongoose from 'mongoose';
 const questionSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     question: {
-        type: 'String'
+        type: 'String',
+        required: true,
     },
     order: {
         type: 'Number',
         default: 0
     },
     type: {
-        type: 'Number'
+        type: 'Number',
+        required: true
     },
     options: {
-        type: 'Array'
+        type: 'Array',
+        default: []
     }
 });
 

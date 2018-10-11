@@ -69,6 +69,32 @@
         & > .form__box-helper {
             flex-grow: 1;
         }
+        &--error {
+            & .form__error {
+                display: block;
+            }
+        }
+        & .mx-input {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            border: 1px solid $border;
+            width: 100%;
+            padding: 6px 9px;
+            -webkit-appearance: none;
+            transition: $transition;
+            border-radius: 0;
+            color: $text__black;
+            box-shadow: none;
+        }
+
+        & .mx-datepicker {
+            color: $text__black;
+        }
+        & .mx-input-icon {
+            margin-top: 1px;
+            font-size: 18px;
+            color: $red;
+        }
     }
     &__label {
         display: block;
@@ -83,12 +109,8 @@
         border: 1px solid $border;
         width: 100%;
         padding: 6px 9px;
-        background-color: #FAFAFA;
         -webkit-appearance: none;
         transition: $transition;
-        &:focus {
-            background-color: $white;
-        }
     }
     &__textarea {
         resize: none;
@@ -103,6 +125,12 @@
         & .button {
             margin: 0 8px;
         }
+    }
+    &__error {
+        //display: none;
+        color: $red;
+        margin-top: 5px;
+        font-size: 13px;
     }
 }
 
@@ -229,6 +257,15 @@
             &:hover .checkbox__span {
                 background: rgba(255,255,255,.1);
             }
+            &--disabled {
+                cursor: not-allowed;
+                & span {
+                    cursor: not-allowed !important;
+                }
+                & i {
+                    color: $text__gray !important;
+                }
+            }
             & .checkbox__ins {
                 position: absolute;
                 display: block;
@@ -254,23 +291,23 @@
                 border: 2px solid #9E9E9E;
                 border-radius: 2px;
                 cursor: pointer;
-                transition: all 250ms cubic-bezier(.4,.0,.23,1);
+                transition: all 150ms cubic-bezier(.4,.0,.23,1);
             }
         }
         &:checked {
             & + .checkbox__label .checkbox__span {
                 border: 11px solid $blue400;
-                animation: shrink-bounce 200ms cubic-bezier(.4,.0,.23,1);
                 &::before {
                     content: "";
                     position: absolute;
-                    top: 12px;
-                    left: 3px;
+                    top: 3px;
+                    left: 7px;
                     border-right: 3px solid transparent;
                     border-bottom: 3px solid transparent;
+                    width: 8px;
+                    height: 15px;
+                    border-color: $white;
                     transform: rotate(45deg);
-                    transform-origin: 0% 100%;
-                    animation: checkbox-check 150ms 250ms cubic-bezier(.4,.0,.23,1) forwards;
                 }
             }
         }
@@ -417,8 +454,25 @@
         color: $white;
         text-transform: uppercase;
     }
+    &__buttons {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .blank {
     padding: 16px;
 }
+
+.mx-calendar .mx-calendar-content .cell.actived {
+    background-color: $blue400;
+}
+
+.mx-calendar .mx-calendar-content .cell:hover {
+    background-color: $background;
+}
+
+.mx-calendar .mx-panel-date td.today {
+    font-weight: 600;
+}
+

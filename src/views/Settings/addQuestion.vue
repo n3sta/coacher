@@ -9,9 +9,16 @@
                     <div class="form__box">
                         <label class="form__label" for="name">Pytanie</label>
                         <input type="text" class="form__input" v-model="form.question" id="name">
+                        <div v-if="$v.form.question.$error">
+                            <div class="form__error" v-if="!$v.form.question.required">To pole jest wymagane.</div>
+                            <div class="form__error" v-if="!$v.form.question.minLength">To pole musi mieć co najmniej {{ $v.form.question.$params.minLength.min }} znaki</div>
+                        </div>
                     </div>
                     <div class="form__box">
                         <v-select :items="types" :label="'Typ pola'" :id="'type'" :value="form.type" @change="form.type = $event"></v-select>
+                        <div v-if="$v.form.type.$error">
+                            <div class="form__error" v-if="!$v.form.type.required">To pole jest wymagane.</div>
+                        </div>
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
@@ -27,6 +34,7 @@
 </template>
 
 <script>
+    import { required, minLength } from 'vuelidate/lib/validators'
     import moment from 'moment';
     import { get,post,del,put } from '../../helpers/api'
     import store from '../../store'
@@ -70,6 +78,10 @@
                 this.form = res.data;
             },
             async submit() {
+                this.$v.$touch();
+                if (this.$v.$invalid) {
+                    return false;
+                }
                 if (this.id) {
                     await put(`/questions/${this.id}`, this.form)
                 } else {
@@ -83,6 +95,17 @@
             },
             back() {
                 this.$router.go(-1);
+            }
+        },
+        validations: {
+            form: {
+                question: {
+                    required,
+                    minLength: minLength(3)
+                },
+                type: {
+                    required
+                },
             }
         }
     }

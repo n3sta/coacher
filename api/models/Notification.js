@@ -5,19 +5,22 @@ import Training from '../models/Training';
 const notificationSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     training: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Training'
+        ref: 'Training',
+        required: true
     },
     pupil: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     type: {
         type: Number,
     }
 });
 
-module.exports = mongoose.model('Notification', notificationSchema);
+export default mongoose.model('Notification', notificationSchema);

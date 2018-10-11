@@ -1,14 +1,21 @@
 import mongoose from 'mongoose';
 
+const validateEmail = function(email) {
+    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email)
+};
+
 const userSchema = new mongoose.Schema({
     name: {
         firstName: {
             type: String,
-            default: null
+            trim: true,
+            required: true
         },
         lastName: {
             type: String,
-            default: null
+            trim: true,
+            required: true
         }
     },
     email: {
@@ -17,6 +24,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         required: true,
         unique: true,
+        validate: [validateEmail, 'Wypełnij adres e-mail.']
     },
     password: {
         type: String,
@@ -47,18 +55,4 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const validateEmail = (email) => {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
-};
-
-// userSchema.pre('save', (next) => {
-//     const user = this;
-//     bcrypt.hash(user.password, 10, (err, hash) => {
-//         if (err) return next(err);
-//
-//         user.password = hash;
-//         next();
-//     })
-// });
-
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);

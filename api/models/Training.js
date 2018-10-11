@@ -1,4 +1,9 @@
 import mongoose from 'mongoose';
+import moment from "moment/moment";
+
+const canBeDone = (date) => {
+    return moment(date).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD')
+};
 
 const trainingSchema = new mongoose.Schema({
     user: {
@@ -19,6 +24,8 @@ const trainingSchema = new mongoose.Schema({
     },
     amount: {
         type: Number,
+        min: 0,
+        max: 256,
         required: true
     },
     done: {
@@ -39,4 +46,20 @@ const trainingSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Training', trainingSchema);
+trainingSchema.pre('save', function(next) {
+    if (canBeDone(this.createdAt)) {
+        this.done = false;
+    }
+    next();
+});
+
+trainingSchema.pre('findOneAndUpdate', function(next) {
+    if (canBeDone(this.createdAt)) {
+        this.findOneAndUpdate({}, {done: false});
+    }
+    next();
+});
+
+const Training = mongoose.model('Training', trainingSchema);
+
+export default Training;
