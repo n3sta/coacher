@@ -8,13 +8,13 @@
                 </div>
             </div>
             <div class="box__content">
-                <span>Ułóż pytania do ankiety. Rejestrujący się zawodnik odpowie na Twoje pytania dzięki czemu uzyskasz na jego temat istotne informacje. Przeciągając za <span class="material-icons" aria-hidden="true" style="position: relative; top: 7px;">dehaze</span> możesz zmieniać kolejność pytań.</span>
+                <span>Ułóż pytania do ankiety. Rejestrujący się zawodnik odpowie na Twoje pytania dzięki czemu uzyskasz na jego temat istotne informacje. Przeciągając za <span class="material-icons" aria-hidden="true" style="position: relative; top: 7px; line-height: 0;">dehaze</span> możesz zmieniać kolejność pytań.</span>
             </div>
             <div class="box__content box__content--no-padding" v-if="questions.length">
                 <div class="list" ref="list">
                     <div class="list__item" v-for="item in questions" :key="item._id">
-                        <div class="list__item-content">
-                            <button type="button" class="button-icon list__item-drag"><span class="material-icons" aria-hidden="true">dehaze</span></button>
+                        <div class="list__item-content" :id="item._id">
+                            <button type="button" class="button-icon list__item-drag"><span class="material-icons" aria-hidden="true">dehaze</span> {{item.order}}</button>
                             <a @click="$router.push({name: 'addQuestion', params: {id: item._id}})" class="list__name">{{ item.question }} ({{ getTypeName(item.type) }})</a>
                         </div>
                         <div class="list__buttons">
@@ -41,6 +41,7 @@
                 user: store.getters.user,
                 questions: [],
                 types: store.state.types,
+                old: null
             }
         },
         created() {
@@ -49,16 +50,20 @@
         mounted() {
             setTimeout(() => {
                 new Sortable(this.$refs.list, {
-                        draggable: '.list__item',
-                        handle: '.list__item-drag',
-                        onEnd: this.reorder
-                    }
-                );
+                    draggable: '.list__item',
+                    handle: '.list__item-drag',
+                    onEnd: this.reorder,
+                    onStart: this.startOrder
+                });
             },1000)
         },
         methods: {
-            async reorder({oldIndex, newIndex}) {
-                await put(`/questions/change/reorder`, {oldIndex: oldIndex, newIndex: newIndex});
+            async reorder({ newIndex }) {
+                const newQ = this.questions[newIndex]._id;
+                await put(`/questions/change/reorder`, {old: this.old, new: newQ});
+            },
+            startOrder({ oldIndex }) {
+                this.old = this.questions[oldIndex]._id;
             },
             getTypeName(typeId) {
                 const type = this.types.filter(type => type._id === typeId)[0];

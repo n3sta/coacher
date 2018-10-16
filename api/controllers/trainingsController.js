@@ -52,5 +52,5 @@ export default {
 				planDone: entity[5]
 			});
 		})		
-	}
+	},
 }

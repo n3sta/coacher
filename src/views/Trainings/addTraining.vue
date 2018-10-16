@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-sm-6 col-xs-12">
                             <div class="form__box">
-                                <v-input :type="'number'" :for="'amount'" :value="training.amount" @input="$v.training.amount.$touch()">Suma kilometrów</v-input>
+                                <v-input :type="'number'" :for="'amount'" v-model="training.amount" :value="training.amount" @change="training.amount = $event" @input="$v.training.amount.$touch()">Suma kilometrów</v-input>
                                 <div v-if="$v.training.amount.$error">
                                     <div class="form__error" v-if="!$v.training.amount.required">To pole jest wymagane.</div>
                                     <div class="form__error" v-if="!$v.training.amount.numeric">To pole może zawierać tylko liczby.</div>
@@ -27,20 +27,18 @@
                         </div>
                     </div>
                     <div class="form__box">
-                        <textarea class="form__textarea" v-model="training.content" id="content" rows="3" @input="$v.form.content.$touch()"></textarea>
-                        <label class="form__label" for="content">Przebieg treningu</label>
+                        <v-textarea :value="training.content" :id="'content'" @input="training.content = $event" @keyup="$v.training.content.$touch()">Przebieg treningu</v-textarea>
                         <div v-if="$v.training.content.$error">
                             <div class="form__error" v-if="!$v.training.content.required">To pole jest wymagane.</div>
                             <div class="form__error" v-if="!$v.training.content.minLength">To pole musi mieć co najmniej {{ $v.training.content.$params.minLength.min }} znaki</div>
                         </div>
                     </div>
                     <div class="form__box">
-                        <textarea class="form__textarea" v-model="training.note" id="note" rows="3"></textarea>
-                        <label class="form__label" for="note">Komentarz</label>
+                        <v-textarea :value="training.note" :id="'note'" @input="training.note = $event">Komentarz</v-textarea>
                     </div>
                     <div class="form__box">
                         <v-datepicker :value="training.createdAt" @change="training.createdAt = $event"></v-datepicker>
-                        <label class="form__label" for="note">Data treningu</label>
+                        <label class="form__label" :data-filled="Boolean(training.createdAt)">Data treningu</label>
                         <div v-if="$v.training.createdAt.$error">
                             <div class="form__error" v-if="!$v.training.createdAt.required">To pole jest wymagane.</div>
                         </div>
@@ -132,7 +130,7 @@
                 if (this.id) {
                     put(`/trainings/${this.id}`, this.training)
                         .then(() => {
-                            store.dispatch('setSnackbar', {color: 'green', text: 'Trening został zaktualizowany'});
+                            store.commit('setSnackbar', {class: 'success', text: 'Trening został zaktualizowany'});
                             this.back();
                         })
                         .catch(() => {
@@ -141,7 +139,7 @@
                 } else {
                     post(`/trainings`, this.training)
                         .then(() => {
-                            store.dispatch('setSnackbar', {color: 'green', text: 'Trening został dodany'});
+                            store.commit('setSnackbar', {class: 'success', text: 'Trening został dodany'});
                             this.back();
                         })
                         .catch(() => {
@@ -152,7 +150,7 @@
             remove() {
                 del(`/trainings/${this.id}`)
                     .then(() => {
-                        store.dispatch('setSnackbar', {color: 'green', text: 'Trening został usunięty'});
+                        store.commit('setSnackbar', {class: 'success', text: 'Trening został usunięty'});
                         this.back();
                     })
             },

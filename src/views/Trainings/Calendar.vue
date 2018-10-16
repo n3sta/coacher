@@ -29,7 +29,7 @@
                     </div>
                     <div class="calendar__events calendar__sortable" :data-date="day.createdAt">
                         <transition-group name="slideDown">
-                            <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-id="event._id" @click.stop="show(event._id, day.createdAt)">
+                            <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-date="day.createdAt" :data-id="event._id" @click.stop="show(event._id, day.createdAt)">
                                 <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.trainingType.name }}</v-button>
                             </div>
                         </transition-group>
@@ -46,7 +46,7 @@
 <script>
     import Sortable from 'sortablejs';
     import moment from 'moment';
-    import { get, post } from '../../helpers/api';
+    import { get, post, put } from '../../helpers/api';
     import store from '../../store';
     import calendarHelpers from '../../helpers/calendar.js';
 
@@ -122,35 +122,21 @@
                     handler: '.calendar__event',
                     onStart: this.dragStart,
                     onAdd: this.dragEnd,
-                    onSort: this.dragSort
                 })
             }
         },
         methods: {
+            async dragEnd({ to, item}) {
+                item = item.querySelector('.calendar__event');
+                const id = item.getAttribute('data-id');
+                const date = new Date(to.getAttribute('data-date'));
+                this.dragging = false;
+                if (id && date) {
+                    await put(`/trainings/${id}`, {createdAt: date});
+                }
+            },
             dragStart() {
                 this.dragging = true;
-            },
-            dragSort({oldIndex, newIndex, item, to}) {
-                const id = item.getAttribute('data-id');
-                const date = to.getAttribute('data-date');
-                post(`api/trainings/${id}`, {newer: newIndex > oldIndex, createdAt: date})
-                    .catch(() => {
-                        store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        this.getEvents();
-                    })
-            },
-            dragEnd({ to, item}) {
-                const id = item.getAttribute('data-id');
-                const date = to.getAttribute('data-date');
-                this.dragging = false;
-                post(`api/changeDate/${id}`, {createdAt: date})
-                    .then(() => {
-                        this.getEvents();
-                    })
-                    .catch(() => {
-                        store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        this.getEvents();
-                    })
             },
             getEvents() {
                 const firstMonthDay = moment(this.currDate).startOf('month');
@@ -195,7 +181,7 @@
                 this.getEvents(moment(this.currDate).format('YYYY-MM-DD'));
             },
             show(_id, d = new Date()) {
-                store.dispatch('setTrainingDate', {
+                store.commit('setTrainingData', {
                     createdAt: new Date(d),
                     userId: this.calendarUser,
                     _id: _id

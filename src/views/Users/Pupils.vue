@@ -8,7 +8,7 @@
                 <form @submit.prevent="submit()">
                     <div class="form__box">
                         <div class="form__box-helper">
-                            <v-input :type="'email'" :id="'pupil'" :value="form.email" @change="form.email = $event" @input="$v.form.email.$touch()">Email nowego zawodnika</v-input>
+                            <v-input :type="'email'" :id="'pupil'" :value="form.email" @input="form.email = $event" @keyup="$v.form.email.$touch()">Email nowego zawodnika</v-input>
                             <div v-if="$v.form.email.$error">
                                 <div class="form__error" v-if="!$v.form.email.required">To pole jest wymagane.</div>
                                 <div class="form__error" v-if="!$v.form.email.email">Nieprawidłowy format e-mail.</div>
@@ -73,11 +73,11 @@
                 },
                 invitations: [],
                 user: store.getters.user,
-                pupils: []
+                pupils: store.getters.pupils
             }
         },
         created() {
-            this.pupils = store.getters.pupils;
+            console.log('getPupils')
             this.getInvitations();
         },
         methods: {

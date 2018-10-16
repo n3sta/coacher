@@ -11,8 +11,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form__box">
-                                        <label class="form__label" for="firstName">Imię</label>
-                                        <input type="text" class="form__input" id="firstName" v-model="user.name.firstName" @input="$v.user.name.firstName.$touch()">
+                                        <v-input :id="'firstName'" v-model="user.name.firstName" @input="user.name.firstName = $event" @keyup="$v.user.name.firstName.$touch()">Imię</v-input>
                                         <div v-if="$v.user.name.firstName.$error">
                                             <div class="form__error" v-if="!$v.user.name.firstName.required">To pole jest wymagane.</div>
                                             <div class="form__error" v-if="!$v.user.name.firstName.minLength">To pole musi mieć co najmniej {{ $v.user.name.firstName.$params.minLength.min }} znaki.</div>
@@ -21,8 +20,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form__box">
-                                        <label class="form__label" for="lastName">Nazwisko</label>
-                                        <input type="text" class="form__input" id="lastName" v-model="user.name.lastName" @input="$v.user.name.lastName.$touch()">
+                                        <v-input :id="'lastName'" v-model="user.name.lastName" @input="user.name.lastName = $event" @keyup="$v.user.name.lastName.$touch()">Nazwisko</v-input>
                                         <div v-if="$v.user.name.lastName.$error">
                                             <div class="form__error" v-if="!$v.user.name.lastName.required">To pole jest wymagane.</div>
                                             <div class="form__error" v-if="!$v.user.name.lastName.minLength">To pole musi mieć co najmniej {{ $v.user.name.lastName.$params.minLength.min }} znaki.</div>
@@ -31,8 +29,7 @@
                                 </div>
                             </div>
                             <div class="form__box">
-                                <label class="form__label" for="email">Adres e-mail</label>
-                                <input type="email" class="form__input" id="email" v-model="user.email" @input="$v.user.email.$touch()">
+                                <v-input :type="'email'" :id="'lastName'" v-model="user.email" @input="user.email = $event" @keyup="$v.user.email.$touch()">Adres e-mail</v-input>
                                 <div v-if="$v.user.email.$error">
                                     <div class="form__error" v-if="!$v.user.email.required">To pole jest wymagane.</div>
                                     <div class="form__error" v-if="!$v.user.email.email">Nieprawidłowy format e-mail.</div>
@@ -52,24 +49,21 @@
                     <div class="box__content">
                         <form @submit.prevent="submitPassword()">
                             <div class="form__box">
-                                <label class="form__label" for="oldPassword">Stare hasło</label>
-                                <input type="password" class="form__input" id="oldPassword" v-model="form.oldPassword" @input="delayTouch($v.form.oldPassword)">
+                                <v-input :type="'password'" :id="'oldPassword'" v-model="form.oldPassword" @input="form.oldPassword = $event" @keyup="delayTouch($v.form.oldPassword.$touch())">Stare hasło</v-input>
                                 <div v-if="$v.form.oldPassword.$error">
                                     <div class="form__error" v-if="!$v.form.oldPassword.required">To pole jest wymagane.</div>
                                     <div class="form__error" v-if="!$v.form.oldPassword.correct">Nieprawidłowe hasło.</div>
                                 </div>
                             </div>
                             <div class="form__box">
-                                <label class="form__label" for="newPassword">Nowe hasło</label>
-                                <input type="password" class="form__input" id="newPassword" v-model="form.password" @input="$v.form.password.$touch()">
+                                <v-input :type="'password'" :id="'newPassword'" v-model="form.password" @input="form.password = $event" @keyup="$v.form.password.$touch()">Nowe hasło</v-input>
                                 <div v-if="$v.form.password.$error">
                                     <div class="form__error" v-if="!$v.form.password.required">To pole jest wymagane.</div>
                                     <div class="form__error" v-if="!$v.form.password.minLength">To pole musi mieć co najmniej {{ $v.form.password.$params.minLength.min }} znaków.</div>
                                 </div>
                             </div>
                             <div class="form__box">
-                                <label class="form__label" for="newPasswordConfirm">Powtórz nowe hasło</label>
-                                <input type="password" class="form__input" id="newPasswordConfirm" v-model="form.confirm" @input="$v.form.confirm.$touch()">
+                                <v-input :type="'password'" :id="'newPasswordConfirm'" v-model="form.confirm" @input="form.confirm = $event" @keyup="$v.form.confirm.$touch()">Powtórz nowe hasło</v-input>
                                 <div v-if="$v.form.confirm.$error">
                                     <div class="form__error" v-if="!$v.form.confirm.sameAsPassword">Wpisane hasła różnią się od siebie.</div>
                                 </div>
@@ -124,7 +118,7 @@
         },
         methods: {
             async submitUserData() {
-                this.$v.$touch();
+                this.$v.user.$touch();
                 if (this.$v.user.$invalid) {
                     return false;
                 }
@@ -132,7 +126,7 @@
                 store.dispatch('getUser');
             },
             async submitPassword() {
-                this.$v.$touch();
+                this.$v.form.$touch();
                 if (this.$v.form.$invalid) {
                     return false;
                 }

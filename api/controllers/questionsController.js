@@ -27,8 +27,15 @@ export default {
         return res.status(200).json(question);
     },
     async reorder(req, res) {
-        const oldIndex = req.body.oldIndex*1;
-        const newIndex = req.body.newIndex*1;
+        const resOld = await Question.findOne({_id: req.body.old});
+        const resNew = await Question.findOne({_id: req.body.new});
+        let order = 0;
+
+        if (!oldIndex || !newIndex) {
+            return res.status(400).json(false);
+        }
+        const oldIndex = resOld.order;
+        const newIndex = resNew.order;
 
         if (oldIndex > newIndex) {
             await Question.update(
@@ -36,15 +43,17 @@ export default {
                 {$inc: {order: 1}},
                 {multi: true}
             ).exec();
-            await Question.findOneAndUpdate({userId: req.userId, order: oldIndex + 1}, {order: newIndex});
+            order = oldIndex + 1;
         } else if (oldIndex < newIndex) {
             await Question.update(
                 {userId: req.userId, order: {$lte: newIndex, $gte: oldIndex}},
                 {$inc: {order: -1}},
                 {multi: true}
             ).exec();
-            await Question.findOneAndUpdate({userId: req.userId, order: oldIndex - 1}, {order: newIndex});
+            order = oldIndex - 1;
         }
+
+        await Question.findOneAndUpdate({userId: req.userId, order: order}, {order: newIndex});
 
         return res.status(200).json(true);
     }
