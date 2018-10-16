@@ -1,6 +1,6 @@
 <template>
     <v-modal :show="show" @close="close()">
-        <div class="box">
+        <div class="box modal__box">
             <div class="box__title">
                 <div class="box__title-name">Opcje listy rozwijalnej</div>
             </div>
@@ -9,13 +9,14 @@
             </div>
             <div class="box__content">
                 <form @submit.prevent="addOption()">
-                    <div class="form__box form__box--inline">
-                        <div class="form__box-helper">
-                            <v-input :id="'option'" :value="option" @input="$v.option.$touch()" ref="option">Opcja wyboru</v-input>
-                            <div v-if="$v.option.$error">
-                                <div class="form__error" v-if="!$v.option.required">To pole jest wymagane.</div>
-                            </div>
+                    <div class="form__box">
+                        <v-input :id="'option'" :value="option" @input="option = $event" @keyup="$v.option.$touch()" ref="option">Opcja wyboru</v-input>
+                        <div v-if="$v.option.$error">
+                            <div class="form__error" v-if="!$v.option.required">To pole jest wymagane.</div>
                         </div>
+                    </div>
+                    <div class="form__buttons">
+                        <div class="spacer"></div>
                         <v-button type="submit" :color="'blue'" class="button--inline">Dodaj opcję</v-button>
                     </div>
                 </form>

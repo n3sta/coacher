@@ -16,7 +16,6 @@
                 type: String
             },
             value: {
-                type: String,
                 default: null
             }
         },

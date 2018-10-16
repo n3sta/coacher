@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        loading: true,
         token: localStorage.getItem('token'),
         user: {
             _id: localStorage.getItem('_id'),
@@ -17,9 +18,9 @@ export default new Vuex.Store({
         trainingTypes: [],
         snackbar: {
             show: false,
-            color: '',
             text: '',
-            timeout: 0,
+            class: '',
+            timeout: null
         },
         alert: {
             show: false,
@@ -60,8 +61,12 @@ export default new Vuex.Store({
         stats: state => state.stats,
         pupils: state => state.pupils,
         types: state => state.types,
+        loading: state => state.loading,
     },
     mutations: {
+        setLoading(state) {
+            state.loading = false
+        },
         setUser(state, data) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('_id', data.user._id);
@@ -90,10 +95,19 @@ export default new Vuex.Store({
             state.trainingTypes = data;
         },
         setSnackbar (state, data) {
-            state.snackbar.color = data.color;
+            state.snackbar.class = data.class;
             state.snackbar.text = data.text;
-            state.snackbar.timeout = data.timeout || 5000;
-            state.snackbar.show = !data.hide;
+            state.snackbar.show = true;
+            clearTimeout(state.snackbar.timeout);
+            delete state.snackbar.timeout;
+            state.snackbar.timeout = setTimeout(() => {
+                state.snackbar.show = false;
+            }, 5000);
+        },
+        closeSnackbar (state) {
+            state.snackbar.show = false;
+            clearTimeout(state.snackbar.timeout);
+            delete state.snackbar.timeout;
         },
         openAlert (state, data) {
             Object.assign(state.alert, data)
@@ -109,62 +123,54 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        logout ({ commit }) {
-            commit('logout');
+        async getPupils ({ commit, state }) {
+            const res = await get(`/users`, {
+                coachId: state.user._id
+            });
+            commit('getPupils', res.data);
+        },
+        async getTrainingTypes ({ commit, state }) {
+            const res = await get(`/trainingTypes`, {
+                userId: state.user._id
+            });
+            commit('getTrainingTypes', res.data);
+        },
+        async getUser({ commit, dispatch }) {
+            if (!localStorage.getItem('_id')) {
+                return false;
+            }
+            const res = await get(`/auth/logged/${localStorage.getItem('_id')}`);
+            commit('setUser', res.data);
+            dispatch('getStartData');
         },
         setUser({ commit, dispatch }, data) {
             commit('setUser', data);
             dispatch('getStartData');
         },
-        getUser({ commit, dispatch }) {
-            if (!localStorage.getItem('_id')) {
-                return false;
-            }
-            get(`/auth/logged/${localStorage.getItem('_id')}`).then((res) => {
-                commit('setUser', res.data);
-                dispatch('getStartData');
+        getStartData({ commit, dispatch }) {
+            const getTrainingTypes = () => {
+                return new Promise((resolve) => {
+                    resolve(dispatch('getTrainingTypes'));
+                });
+            };
+            const getPupils = () => {
+                return new Promise((resolve) => {
+                    resolve(dispatch('getPupils'));
+                });
+            };
+            Promise.all([getTrainingTypes(), getPupils()]).then(() => {
+                commit('setLoading');
             });
-        },
-        getStartData({ dispatch }) {
-            dispatch('getTrainingTypes');
-            dispatch('getPupils');
-        },
-        getPupils ({ commit, state }) {
-            get(`/users`, {
-                coachId: state.user._id
-            }).then((res) => {
-                commit('getPupils', res.data);
-            });
-        },
-        getTrainingTypes ({ commit, state }) {
-            get(`/trainingTypes`, {
-                userId: state.user._id
-            }).then((res) => {
-                commit('getTrainingTypes', res.data);
-            });
-        },
-        setSnackbar ({ commit }, data) {
-            commit('setSnackbar', data);
         },
         openAlert ({ commit }, { title, body }) {
             return new Promise((resolve, reject) => {
                 commit('openAlert', {
-                    show: true,
-                    title,
-                    body,
-                    resolve,
-                    reject
+                    show: true, title, body, resolve, reject
                 });
             });
         },
         closeAlert({ commit }) {
             commit('closeAlert');
         },
-        setTrainingDate({ commit }, data) {
-            commit('setTrainingData', data);
-        },
-        setStats({ commit }, data) {
-            commit('setStats', data);
-        }
     }
 });

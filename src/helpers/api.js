@@ -12,7 +12,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
     config.headers['x-access-token'] = store.getters.token;
-    
     return config;
 }, (error) => {
     return Promise.reject(error);
@@ -22,10 +21,10 @@ instance.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     if (error.response.status === 401) {
-        store.dispatch('logout');
+        store.commit('logout');
     }
     if (error.response.status === 500) {
-        store.dispatch('setSnackbar', {
+        store.commit('setSnackbar', {
             color: 'red', 
             text: 'Błąd serwera. Prosimy spróbować później.'
         });
