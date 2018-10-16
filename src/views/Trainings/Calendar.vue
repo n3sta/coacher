@@ -46,12 +46,9 @@
 <script>
     import Sortable from 'sortablejs';
     import moment from 'moment';
-    import button from './Button';
-    import dropdown from './Dropdown';
-    import select from './Select';
-    import { get, post } from '../helpers/api';
-    import store from '../store';
-    import calendarHelpers from '../helpers/calendar.js';
+    import { get, post } from '../../helpers/api';
+    import store from '../../store';
+    import calendarHelpers from '../../helpers/calendar.js';
 
     export default {
         props: {
@@ -73,11 +70,6 @@
                 calendarUser: store.getters.user._id,
                 pupils: store.getters.pupils
             }
-        },
-        components: {
-            'v-button': button,
-            'v-select': select,
-            'v-dropdown': dropdown,
         },
         mixins: [
             calendarHelpers

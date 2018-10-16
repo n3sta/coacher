@@ -18,9 +18,13 @@ const questionSchema = new mongoose.Schema({
         type: 'Number',
         required: true
     },
-    options: {
-        type: 'Array',
-        default: []
+    options: [{
+        type: 'String',
+        default: ''
+    }],
+    required: {
+        type: Boolean,
+        default: false
     }
 });
 

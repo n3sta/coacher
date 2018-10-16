@@ -23,7 +23,7 @@
 	import moment from 'moment';
 	import Statistic from './Statistic';
 	import nextStart from './nextStart';
-	import Calendar from '../../components/Calendar';
+	import Calendar from '../Trainings/Calendar';
 	import { get } from '../../helpers/api';
     import store from '../../store';
 
@@ -31,8 +31,6 @@
     	data() {
     		return {
     			user: store.getters.user,
-    			notifications: [],
-    			messages: [],
     			trainings: {}
     		}
     	},

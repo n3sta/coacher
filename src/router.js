@@ -19,7 +19,7 @@ export default new Router({
         {
             path: '/treningi',
             name: 'admin',
-            component: () => import('./views/Calendar/Index'),
+            component: () => import('./views/Trainings/Index'),
             beforeEnter: (to, from, next) => {
                 guard(to, from, next)
             },
@@ -27,15 +27,7 @@ export default new Router({
         {
             path: '/trening',
             name: 'addTraining',
-            component: () => import('./components/form'),
-            beforeEnter: (to, from, next) => {
-                guard(to, from, next)
-            },
-        },
-        {
-            path: '/ustawienia',
-            name: 'settings',
-            component: () => import('./views/Settings/Index'),
+            component: () => import('./views/Trainings/addTraining'),
             beforeEnter: (to, from, next) => {
                 guard(to, from, next)
             },
@@ -43,22 +35,28 @@ export default new Router({
         {
             path: '/konto',
             name: 'account',
-            component: () => import('./views/Settings/Account')
+            component: () => import('./views/Users/Account')
         },               
         {
             path: '/treningi',
             name: 'trainings',
-            component: () => import('./views/Settings/Trainings')
+            component: () => import('./views/Users/Account')
         },
         {
             path: '/zawodnicy',
             name: 'pupils',
-            component: () => import('./views/Settings/Pupils')
+            component: () => import('./views/Users/Pupils')
+        },
+        {
+            path: '/zawodnicy/:userId',
+            name: 'pupil',
+            props: true,
+            component: () => import('./views/Users/Pupil')
         },
         {
             path: '/ustawienia-ankiety',
             name: 'questions',
-            component: () => import('./views/Settings/Questions')
+            component: () => import('./views/Questions/Index')
         },
         {
             path: '/rejestracja',
@@ -71,7 +69,7 @@ export default new Router({
             component: () => import('./views/Auth/Login')
         },
         {
-            path: '/ankieta/',
+            path: '/ustawienia-ankiety/ankieta',
             name: 'profiler',
             component: () => import('./views/Auth/Profiler'),
             beforeEnter: (to, from, next) => {
@@ -82,7 +80,7 @@ export default new Router({
             path: '/ustawienia-ankiety/pytanie/:id',
             name: 'addQuestion',
             props: true,
-            component: () => import('./views/Settings/addQuestion'),
+            component: () => import('./views/Questions/addQuestion'),
             beforeEnter: (to, from, next) => {
                 guard(to, from, next)
             },

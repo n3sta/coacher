@@ -7,37 +7,40 @@
                 </div>
                 <div class="box__content">
                     <div class="row">
-                        <div class="form__box col-sm-6 col-xs-12">
-                            <v-select :items="trainingTypes" :label="'Typ treningu'" :id="'trainingType'" :value="training.trainingType" @change="training.trainingType = $event"></v-select>
-                            <div v-if="$v.training.trainingType.$error">
-                                <div class="form__error" v-if="!$v.training.trainingType.required">To pole jest wymagane.</div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form__box">
+                                <v-select :items="trainingTypes" :label="'Typ treningu'" :id="'trainingType'" :value="training.trainingType" @change="training.trainingType = $event"></v-select>
+                                <div v-if="$v.training.trainingType.$error">
+                                    <div class="form__error" v-if="!$v.training.trainingType.required">To pole jest wymagane.</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="form__box col-sm-6 col-xs-12">
-                            <label class="form__label" for="amount">Suma kilometrów</label>
-                            <input type="number" class="form__input" id="amount" v-model="training.amount" min="0" :max="$v.training.amount.$params.maxValue" @input="$v.training.amount.$touch()">
-                            <div v-if="$v.training.amount.$error">
-                                <div class="form__error" v-if="!$v.training.amount.required">To pole jest wymagane.</div>
-                                <div class="form__error" v-if="!$v.training.amount.numeric">To pole może zawierać tylko liczby.</div>
-                                <div class="form__error" v-if="!$v.training.amount.maxValue">Maksymalna możliwa liczba wynosi 256</div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form__box">
+                                <v-input :type="'number'" :for="'amount'" :value="training.amount" @input="$v.training.amount.$touch()">Suma kilometrów</v-input>
+                                <div v-if="$v.training.amount.$error">
+                                    <div class="form__error" v-if="!$v.training.amount.required">To pole jest wymagane.</div>
+                                    <div class="form__error" v-if="!$v.training.amount.numeric">To pole może zawierać tylko liczby.</div>
+                                    <div class="form__error" v-if="!$v.training.amount.maxValue">Maksymalna możliwa liczba wynosi 256</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="form__box">
+                        <textarea class="form__textarea" v-model="training.content" id="content" rows="3" @input="$v.form.content.$touch()"></textarea>
                         <label class="form__label" for="content">Przebieg treningu</label>
-                        <textarea class="form__textarea" v-model="training.content" id="content" rows="3"></textarea>
                         <div v-if="$v.training.content.$error">
                             <div class="form__error" v-if="!$v.training.content.required">To pole jest wymagane.</div>
                             <div class="form__error" v-if="!$v.training.content.minLength">To pole musi mieć co najmniej {{ $v.training.content.$params.minLength.min }} znaki</div>
                         </div>
                     </div>
                     <div class="form__box">
-                        <label class="form__label" for="note">Komentarz</label>
                         <textarea class="form__textarea" v-model="training.note" id="note" rows="3"></textarea>
+                        <label class="form__label" for="note">Komentarz</label>
                     </div>
                     <div class="form__box">
-                        <label class="form__label" for="note">Data treningu</label>
                         <v-datepicker :value="training.createdAt" @change="training.createdAt = $event"></v-datepicker>
+                        <label class="form__label" for="note">Data treningu</label>
                         <div v-if="$v.training.createdAt.$error">
                             <div class="form__error" v-if="!$v.training.createdAt.required">To pole jest wymagane.</div>
                         </div>
@@ -62,14 +65,10 @@
 </template>
 
 <script>
-    import { required, minLength, numeric, maxValue, date } from 'vuelidate/lib/validators'
+    import { required, minLength, numeric, maxValue } from 'vuelidate/lib/validators'
     import moment from 'moment';
-    import { get,post,del,put } from './../helpers/api'
-    import store from './../store'
-    import select from './Select';
-    import button from './Button';
-    import checkbox from './Checkbox';
-    import Datepicker from './Datepicker';
+    import { get,post,del,put } from '../../helpers/api'
+    import store from '../../store'
 
     export default {
         props: {
@@ -92,12 +91,6 @@
                     createdAt: store.getters.trainingData.createdAt
                 }
             }
-        },
-        components: {
-            'v-select': select,
-            'v-button': button,
-            'v-checkbox': checkbox,
-            'v-datepicker': Datepicker,
         },
         watch: {
             'training.createdAt': function() {

@@ -7,7 +7,11 @@ export default {
         return res.status(200).json(answers);
     },
     async create(req, res) {
-        const answer = await new Answer(req.body).save();
+        const answer = await new Answer({
+            userId: req.userId,
+            questionId: req.body.questionId,
+            answer: req.body.answer
+        }).save();
 
         return res.status(200).json(answer);
     },

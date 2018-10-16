@@ -10,8 +10,7 @@
 
 <script>
     import store from '../../store';
-    import Calendar from '../../components/Calendar';
-    import Button from '../../components/Button';
+    import Calendar from './Calendar';
 
     export default {
         data() {
@@ -21,7 +20,6 @@
         },
         components: {
             'v-calendar': Calendar,
-            'v-button': Button,
         },
     }
 </script>

@@ -102,8 +102,6 @@
     import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
     import { get, put, patch } from '../../helpers/api'
     import store from '../../store'
-    import checkbox from '../../components/Checkbox'
-    import button from '../../components/Button'
 
     const touchMap = new WeakMap();
 
@@ -118,10 +116,6 @@
                 },
                 user: store.getters.user,
             }
-        },
-        components: {
-            'v-checkbox': checkbox,
-            'v-button': button,
         },
         watch: {
             'user.coach': function() {
