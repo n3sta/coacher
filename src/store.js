@@ -44,9 +44,12 @@ export default new Vuex.Store({
         },
         types: [
             {name: 'Pole tekstowe', _id: 1},
-            {name: 'Lista rozwijalna', _id: 2},
-            {name: 'Pole wyboru', _id: 3},
-        ]
+            {name: 'Długie pole tekstowe', _id: 2},
+            {name: 'Lista rozwijalna', _id: 3},
+            {name: 'Checkbox', _id: 4},
+            {name: 'Data', _id: 5},
+        ],
+        modal: false
     },
     getters: {
         snackbar: state => state.snackbar,

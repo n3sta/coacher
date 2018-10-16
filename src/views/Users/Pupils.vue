@@ -6,16 +6,18 @@
             </div>
             <div class="box__content">
                 <form @submit.prevent="submit()">
-                    <div class="form__box form__box--inline">
+                    <div class="form__box">
                         <div class="form__box-helper">
-                            <label for="pupil" class="form__label">Zaproś nowego zawodnika</label>
-                            <input type="email" id="pupil" v-model="form.email" class="form__input">
+                            <v-input :type="'email'" :id="'pupil'" :value="form.email" @change="form.email = $event" @input="$v.form.email.$touch()">Email nowego zawodnika</v-input>
                             <div v-if="$v.form.email.$error">
                                 <div class="form__error" v-if="!$v.form.email.required">To pole jest wymagane.</div>
                                 <div class="form__error" v-if="!$v.form.email.email">Nieprawidłowy format e-mail.</div>
                             </div>
                         </div>
-                        <v-button type="submit" :color="'blue'" class="button--inline">Wyślij</v-button>
+                    </div>
+                    <div class="form__buttons">
+                        <div class="spacer"></div>
+                        <v-button type="submit" :color="'blue'" class="button--inline">Wyślij zaproszenie</v-button>
                     </div>
                 </form>
             </div>
@@ -24,7 +26,7 @@
                     <div class="list__item" v-for="item in pupils" :key="item._id">
                         <div class="list__item-content">
                             <div class="list__avatar">{{ item.name.firstName.charAt(0) }}{{ item.name.lastName.charAt(0) }}</div>
-                            <router-link :to="{name: 'pupil'}" class="list__name">{{ item.name.firstName }} {{ item.name.lastName }}</router-link>
+                            <router-link :to="{name: 'pupil', params: {userId: item._id}}" class="list__name">{{ item.name.firstName }} {{ item.name.lastName }}</router-link>
                         </div>
                         <div class="list__buttons">
                             <span class="material-icons text--red" aria-hidden="true" @click="deletePupil(item._id)">delete</span>
@@ -62,7 +64,6 @@
     import { required, email } from 'vuelidate/lib/validators'
     import store from '../../store'
     import { get, post, del, patch } from '../../helpers/api'
-    import button from '../../components/Button'
 
     export default {
         data() {
@@ -74,9 +75,6 @@
                 user: store.getters.user,
                 pupils: []
             }
-        },
-        components: {
-            'v-button': button,
         },
         created() {
             this.pupils = store.getters.pupils;

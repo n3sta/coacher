@@ -37,7 +37,6 @@
     import { required, minLength, email } from 'vuelidate/lib/validators'
     import store from '../../store'
     import { post } from '../../helpers/api'
-    import button from '../../components/Button';
 
     export default {
         data() {
@@ -48,9 +47,6 @@
                     password: ''
                 }
             }
-        },
-        components: {
-            'v-button': button
         },
         methods: {
             submit() {

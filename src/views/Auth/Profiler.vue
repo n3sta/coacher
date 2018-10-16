@@ -1,168 +1,104 @@
 <template>
-    <v-container class="loginPage" fluid fill-height>
-        <v-layout justify-center>
-            <v-flex xs12 sm8 md5>
-                <h1 class="display-1">TheCoacher</h1>
-                <v-card class="elevation-12">
-                    <v-toolbar dark color="primary">
-                        <v-toolbar-title>Ankieta zawodnika</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-                    <v-card-text>
-                        <div class="ml-2 mr-2 mb-5">
-                            <v-progress-linear
-                                    color="green"
-                                    v-model="progress"
-                            ></v-progress-linear>
+    <div>
+        <div class="box box--medium">
+            <div class="box__title">
+                <div class="box__title-name">Profilowanie zawodnika</div>
+            </div>
+            <div class="box__content">
+                <div class="form__box">
+                    <div class="progress">
+                        <div class="progress__line">
+                            <div class="progress__done" :style="`width: ${percent}%`"></div>
                         </div>
-                        <v-form>
-                            <template v-for="(question, index) in questions">
-                                <div v-if="formStep === index + 1" class="ml-2 mr-2">
-                                    <template v-if="question.type_input === 1">
-                                        <v-text-field
-                                                :label="question.question"
-                                                v-model="form[question.id]"
-                                                type="text"
-                                                v-validate="'required'"
-                                                :error-messages="errors.collect(question.question)"
-                                                :data-vv-name="question.question">
-                                        </v-text-field>
-                                    </template>
-                                    <template v-else-if="question.type_input === 2">
-                                        <v-textarea
-                                                :label="question.question"
-                                                v-model="form[question.id]"
-                                                rows="2"
-                                                v-validate="'required'"
-                                                :error-messages="errors.collect(question.question)"
-                                                :data-vv-name="question.question">
-                                        </v-textarea>
-                                    </template>
-                                    <template v-else-if="question.type_input === 3">
-                                        <v-text-field
-                                                :label="question.question"
-                                                v-model="form[question.id]"
-                                                v-validate="'required|decimal'"
-                                                :error-messages="errors.collect(question.question)"
-                                                :data-vv-name="question.question">
-                                        </v-text-field>
-                                    </template>
-                                    <template v-else-if="question.type_input === 4">
-                                        <v-menu
-                                                :ref="menu[question.id]"
-                                                :close-on-content-click="false"
-                                                v-model="menu"
-                                                :nudge-right="40"
-                                                min-width="290px"
-                                                :return-value.sync="form[question.id]">
-                                            <v-text-field
-                                                    :label="question.question"
-                                                    v-model="form[question.id]"
-                                                    type="text"
-                                                    v-validate="'required'"
-                                                    :error-messages="errors.collect(question.question)"
-                                                    :data-vv-name="question.question"
-                                                    readonly>
-                                            </v-text-field>
-                                            <v-date-picker v-model="form[question.id]"
-                                                           no-title
-                                                           scrollable
-                                                           locale="pl">
-                                                <v-spacer></v-spacer>
-                                                <v-btn flat color="primary" @click="menu[question.id] = false">Anuluj</v-btn>
-                                                <v-btn color="primary" @click="$refs.menu[question.id].save(form[question.id])">OK</v-btn>
-                                            </v-date-picker>
-                                        </v-menu>
-                                    </template>
-                                    <template v-else-if="question.type_input === 5">
-                                        <v-checkbox
-                                                :label="question.question"
-                                                true-value="1"
-                                                v-model="form[question.id]">
-                                        </v-checkbox>
-                                    </template>
-                                    <template v-else-if="question.type_input === 6">
-                                        <v-select
-                                                :label="question.question"
-                                                :items="question.select_options.split(';')"
-                                                v-model="form[question.id]"
-                                                item-value="id"
-                                                v-validate="'required'"
-                                                :error-messages="errors.collect(question.question)"
-                                                :data-vv-name="question.question"
-                                        ></v-select>
-                                    </template>
-                                </div>
+                        <div class="progress__percent">{{ percent }}%</div>
+                    </div>
+                </div>
+                <form @submit.prevent="submit()">
+                    <div class="form__box" v-for="(item, index) in questions" :key="item._id">
+                        <template v-if="step === index">
+                            <template v-if="item.type === 1">
+                                <v-input v-model="form[step]" :id="`input${index}`" @keyup="$v.form.$each.$iter[index].$touch()" @input="form[step] = $event">{{ item.question }}</v-input>
                             </template>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn v-if="formStep > 1 && !isProcessing" flat @click="formStep = formStep - 1">Wróć</v-btn>
-                                <v-btn v-if="formStep < questions.length" color="primary" @click="next()">Dalej</v-btn>
-                                <v-btn v-else color="primary" :loading="isProcessing" :disabled="isProcessing" @click="save()">Wyślij</v-btn>
-                            </v-card-actions>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-                <v-btn class="register" color="primary" flat @click="$router.push({name: 'admin'})">Wypełnie później</v-btn>
-            </v-flex>
-        </v-layout>
-    </v-container>
+                            <template v-if="item.type === 2">
+                                <v-textarea v-model="form[step]" :id="`input${index}`" :value="form[step]" @keyup="$v.form.$each.$iter[index].$touch()" @input="form[step] = $event">{{ item.question }}</v-textarea>
+                            </template>
+                            <div v-if="$v.form.$each.$iter[index].$error">
+                                <div class="form__error" v-if="!$v.form.$each.$iter[index].required">To pole jest wymagane.</div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="form__buttons">
+                        <div class="spacer"></div>
+                        <div @click="prev()" v-if="step !== 0">
+                            <v-button type="button" :color="'blue'">Wróć</v-button>
+                        </div>
+                        <div @click="submit()">
+                            <v-button type="button" :color="'blue'">
+                                <span v-if="step + 1 < steps">Dalej</span>
+                                <span v-else>Zapisz</span>
+                            </v-button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-    import store from '../../store'
-    import { get, post } from '../../helpers/api'
+    import { required } from 'vuelidate/lib/validators'
+    import store from '../../store';
+    import { get, post, put } from '../../helpers/api';
 
     export default {
         data() {
             return {
-                isProcessing: false,
-                formStep: 1,
-                form: {},
-                menu: {},
-                questions: {},
-                user: store.getters.user.token,
-                progress: 0
+                questions: [],
+                user: store.getters.user,
+                step: 0,
+                form: [],
             }
         },
-        watch: {
-            formStep() {
-                this.progress = (this.formStep-1)/this.questions.length * 100;
+        computed: {
+            steps() {
+                return this.questions.length;
+            },
+            percent() {
+                return ((this.step)/(this.steps || 1) * 100).toFixed(0);
             }
         },
         created() {
-            this.getData();
+            this.getQuestions();
         },
         methods: {
-            getData() {
-                get(`/api/questions/${this.user.user_id}`)
-                    .then((res) => {
-                        if(res.data) {
-                            this.questions = res.data;
-                        }
-                    })
+            async getQuestions() {
+                const res = await get(`/questions`, {userId: this.user._id});
+                this.questions = res.data;
+                this.form = this.questions.map(() => {return ''})
             },
-            next() {
-                // this.$validator.validateAll().then((result) => {
-                //     if (!result) {
-                //         return false
-                //     }
-                //     this.formStep++;
-                // });
-                this.formStep++;
+            async submit() {
+                !this.$v.form.$each.$iter[this.step].$touch();
+                if (this.$v.form.$each.$iter[this.step].$invalid) {
+                    return false;
+                }
+                await post('answers', {
+                    questionId: this.questions[this.step]._id,
+                    answer: this.form[this.step],
+                });
+                this.step++;
+                if (this.step === this.steps) {
+                    this.$router.push({name: 'admin'})
+                }
             },
-            save() {
-                this.formStep = this.formStep + 1;
-                this.isProcessing = true;
-                post(`api/answers/${this.user.user_id}`, this.form)
-                    .then(() => {
-                        this.$store.dispatch('setSnackbar', {color: 'green', text: 'Ankieta wypełniona. Poczekaj na odezw trenera.'});
-                        this.$router.push({name: 'admin'});
-                    })
-                    .catch(() => {
-                        this.$store.dispatch('setSnackbar', {color: 'red', text: 'Błąd serwera.'});
-                        this.isProcessing = false;
-                    })
+            prev() {
+                this.step--;
+            }
+        },
+        validations: {
+            form: {
+                $each: {
+                    required
+                }
             }
         }
     }

@@ -34,7 +34,6 @@
     import store from '../../store'
     import { get, post, put, del } from '../../helpers/api'
     import Sortable from 'sortablejs'
-    import button from '../../components/Button';
 
     export default {
         data() {
@@ -43,9 +42,6 @@
                 questions: [],
                 types: store.state.types,
             }
-        },
-        components: {
-            'v-button': button,
         },
         created() {
             this.getData();

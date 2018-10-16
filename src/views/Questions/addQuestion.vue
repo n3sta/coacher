@@ -7,8 +7,7 @@
                 </div>
                 <div class="box__content">
                     <div class="form__box">
-                        <label class="form__label" for="name">Pytanie</label>
-                        <input type="text" class="form__input" v-model="form.question" id="name">
+                        <v-input :type="'text'" :for="'name'" :value="form.question" :id="'question'" @input="form.question = $event" @keyup="$v.form.question.$touch()">Pytanie</v-input>
                         <div v-if="$v.form.question.$error">
                             <div class="form__error" v-if="!$v.form.question.required">To pole jest wymagane.</div>
                             <div class="form__error" v-if="!$v.form.question.minLength">To pole musi mieć co najmniej {{ $v.form.question.$params.minLength.min }} znaki</div>
@@ -20,6 +19,19 @@
                             <div class="form__error" v-if="!$v.form.type.required">To pole jest wymagane.</div>
                         </div>
                     </div>
+                    <div class="form__box" v-if="form.options.length && form.type === 3">
+                        <ul class="simple-list">
+                            <li class="simple-list__item" v-for="(item, index) in form.options" :key="index">{{ item }}</li>
+                        </ul>
+                    </div>
+                    <div class="form__box form__box--align-start" v-if="form.type === 3">
+                        <div @click="show = true">
+                            <v-button type="button" :color="'transparent'">Opcje listy</v-button>
+                        </div>
+                    </div>
+                    <div class="form__box">
+                        <v-checkbox :checked="form.required" :id="'required'" @change="form.required = $event">Wymagane</v-checkbox>
+                    </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
                         <div @click="back()">
@@ -30,6 +42,7 @@
                 </div>
             </div>
         </form>
+        <addOption v-if="show" :show="show" :options="form.options" @close="show = false" @done="form.options = $event"></addOption>
     </div>
 </template>
 
@@ -38,8 +51,7 @@
     import moment from 'moment';
     import { get,post,del,put } from '../../helpers/api'
     import store from '../../store'
-    import select from '../../components/Select';
-    import button from '../../components/Button';
+    import addOption from './addOption';
 
     export default {
         props: {
@@ -53,13 +65,15 @@
                     userId: store.getters.user._id,
                     question: null,
                     type: null,
+                    options: [],
+                    required: false
                 },
-                types: store.getters.types
+                types: store.getters.types,
+                show: false
             }
         },
         components: {
-            'v-select': select,
-            'v-button': button,
+            'addOption': addOption,
         },
         created() {
             this.getQuestion();
@@ -95,7 +109,11 @@
             },
             back() {
                 this.$router.go(-1);
-            }
+            },
+            done(options) {
+                this.addOption = false;
+                this.form.options = options;
+            },
         },
         validations: {
             form: {
