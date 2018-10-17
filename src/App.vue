@@ -11,7 +11,7 @@
         </div>
         <div v-else>
             <header class="header">
-                <h1 class="header__logo">TheCoacher.com</h1>
+                <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">TheCoacher.com</router-link></h1>
             </header>
             <main class="main">
                 <aside class="aside">
@@ -39,6 +39,27 @@
                         <button type="button" class="snackbar__close button-icon" @click="$store.commit('closeSnackbar')"><span class="material-icons" aria-hidden="true">close</span></button>
                     </div>
                 </transition>
+                <transition name="fadeIn">
+                    <v-modal :show="alert.show" @close="close()">
+                        <div class="box modal__box">
+                            <div class="box__title">
+                                <div class="box__title-name">{{ alert.title }}</div>
+                            </div>
+                            <div class="box__content">
+                                <p>{{ alert.body }}</p>
+                                <div class="form__buttons">
+                                    <div class="spacer"></div>
+                                    <div @click="cancel()">
+                                        <v-button type="button">Anuluj</v-button>
+                                    </div>
+                                    <div @click="confirm()">
+                                        <v-button type="button" :color="'blue'">Zatwierdź</v-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </v-modal>
+                </transition>
             </main>
         </div>
     </div>
@@ -56,11 +77,11 @@
         methods: {
             ...mapActions(['setSnackbar', 'closeAlert', 'getUser']),
             cancel() {
-                store.state.main.alert.resolve(false);
+                store.state.alert.resolve(false);
                 this.closeAlert();
             },
             confirm() {
-                store.state.main.alert.resolve(true);
+                store.state.alert.resolve(true);
                 this.closeAlert();
             }
         }

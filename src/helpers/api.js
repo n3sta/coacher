@@ -25,7 +25,7 @@ instance.interceptors.response.use((response) => {
     }
     if (error.response.status === 500) {
         store.commit('setSnackbar', {
-            color: 'red', 
+            class: 'error',
             text: 'Błąd serwera. Prosimy spróbować później.'
         });
     }

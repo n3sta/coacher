@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 import moment from "moment/moment";
 
-const canBeDone = (date) => {
-    return moment(date).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD')
+const daysDiff = (date) => {
+    const start = moment(date).startOf('day');
+    const end = moment(new Date()).startOf('day');
+    return start.diff(end, 'days');
 };
 
 const trainingSchema = new mongoose.Schema({
@@ -47,15 +49,15 @@ const trainingSchema = new mongoose.Schema({
 });
 
 trainingSchema.pre('save', function(next) {
-    if (canBeDone(this.createdAt)) {
+    if (daysDiff(this.createdAt) > 0) {
         this.done = false;
     }
     next();
 });
 
 trainingSchema.pre('findOneAndUpdate', function(next) {
-    if (canBeDone(this.createdAt)) {
-        this.findOneAndUpdate({}, {done: false});
+    if (daysDiff(this._update.createdAt) > 0) {
+        this.findOneAndUpdate({_id: this._conditions._id}, {done: false});
     }
     next();
 });

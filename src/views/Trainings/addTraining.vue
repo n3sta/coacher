@@ -44,8 +44,8 @@
                         </div>
                     </div>
                     <div class="form__box">
-                        <v-checkbox :id="'done'" :checked="training.done" @change="training.done = $event" :disabled="!canBeDone()">Wykonany</v-checkbox>
-                        <div class="hint" v-if="!canBeDone()">Jako wykonane można oznaczyć tylko treningi z datą dzisiejszą i wcześniejszą.</div>
+                        <v-checkbox :id="'done'" :checked="training.done" @change="training.done = $event" :disabled="training.createdAt && !canBeDone()">Wykonany</v-checkbox>
+                        <div class="hint" v-if="training.createdAt && !canBeDone()">Jako wykonane można oznaczyć tylko treningi z datą dzisiejszą i wcześniejszą.</div>
                     </div>
                     <div class="form__buttons">
                         <v-button type="button" :color="'red'" v-if="id" @click.native="remove()">Usuń</v-button>
@@ -92,7 +92,7 @@
         },
         watch: {
             'training.createdAt': function() {
-                if (this.canBeDone()) {
+                if (this.training.createdAt && !this.canBeDone()) {
                     this.training.done = false;
                 }
             },
@@ -148,11 +148,17 @@
                 }
             },
             remove() {
-                del(`/trainings/${this.id}`)
-                    .then(() => {
-                        store.commit('setSnackbar', {class: 'success', text: 'Trening został usunięty'});
-                        this.back();
-                    })
+                store.dispatch('openAlert', {
+                    title: 'Czy jesteś pewny?',
+                    body: 'Usuniętego treningu nie można już przywrócić.'
+                }).then(confirmation => {
+                    if (confirmation) {
+                        del(`/trainings/${this.id}`).then(() => {
+                            store.commit('setSnackbar', {class: 'success', text: 'Trening został usunięty'});
+                            this.back();
+                        })
+                    }
+                })
             },
             back() {
                 this.$router.go(-1);
@@ -175,7 +181,6 @@
                 },
                 content: {
                     required,
-                    minLength: minLength(3)
                 },
                 createdAt: {
                     required

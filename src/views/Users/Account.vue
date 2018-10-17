@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                             <div class="form__box">
-                                <v-input :type="'email'" :id="'lastName'" v-model="user.email" @input="user.email = $event" @keyup="$v.user.email.$touch()">Adres e-mail</v-input>
+                                <v-input :type="'email'" :id="'email'" v-model="user.email" @input="user.email = $event" @keyup="$v.user.email.$touch()">Adres e-mail</v-input>
                                 <div v-if="$v.user.email.$error">
                                     <div class="form__error" v-if="!$v.user.email.required">To pole jest wymagane.</div>
                                     <div class="form__error" v-if="!$v.user.email.email">Nieprawidłowy format e-mail.</div>
@@ -124,6 +124,7 @@
                 }
                 await put(`/users/${this.user._id}`, this.user);
                 store.dispatch('getUser');
+                store.commit('setSnackbar', {class: 'success', text: 'Zapisano pomyślnie.'});
             },
             async submitPassword() {
                 this.$v.form.$touch();
@@ -131,10 +132,11 @@
                     return false;
                 }
                 await patch(`/users/changePassword`, {password: this.form.password});
+                store.commit('setSnackbar', {class: 'success', text: 'Zapisano pomyślnie.'});
             },
             async changeCoach(value) {
                 await put(`/users/${this.user._id}`, {coach: value});
-                store.dispatch('getUser');
+                store.dispatch('getUser')
             },
             delayTouch($v) {
                 $v.$reset();

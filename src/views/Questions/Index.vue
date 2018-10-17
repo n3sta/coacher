@@ -14,7 +14,7 @@
                 <div class="list" ref="list">
                     <div class="list__item" v-for="item in questions" :key="item._id">
                         <div class="list__item-content" :id="item._id">
-                            <button type="button" class="button-icon list__item-drag"><span class="material-icons" aria-hidden="true">dehaze</span> {{item.order}}</button>
+                            <button type="button" class="button-icon list__item-drag"><span class="material-icons" aria-hidden="true">dehaze</span></button>
                             <a @click="$router.push({name: 'addQuestion', params: {id: item._id}})" class="list__name">{{ item.question }} ({{ getTypeName(item.type) }})</a>
                         </div>
                         <div class="list__buttons">

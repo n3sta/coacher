@@ -68,6 +68,14 @@
     color: $text__black;
     transition: border 0.15s linear;
     margin-bottom: 8px;
+    &:hover {
+      cursor: move;
+      cursor: -webkit-grabbing;
+      & * {
+        cursor: move;
+        cursor: -webkit-grabbing;
+      }
+    }
     &:focus {
       filter: opacity(0.6);
     }

@@ -37,6 +37,7 @@ body {
 }
 
 .snackbar {
+	min-width: 300px;
 	position: fixed;
 	bottom: 15px;
 	left: 15px;
@@ -86,6 +87,9 @@ body {
 
 .main {
 	display: flex;
+	&--auth {
+		min-height: 100vh;
+	}
 }
 
 .header {
@@ -102,6 +106,9 @@ body {
 		width: 270px;
 		color: $white;
 	}
+	&__link:hover {
+		text-decoration: none;
+	}
 }
 
 .aside {
@@ -110,6 +117,7 @@ body {
 	overflow-y: auto;
 	overflow-x: hidden;
 	min-height: calc(100vh - 60px);
+	background-color: $background;
 }
 
 .nav {
@@ -149,6 +157,7 @@ body {
 .content {
 	flex: 1 1 calc(100% - 255px);
 	padding: 32px;
+	background-color: $background;
 }
 
 .spacer {
