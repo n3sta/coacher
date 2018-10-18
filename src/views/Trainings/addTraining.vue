@@ -43,7 +43,7 @@
                             <div class="form__error" v-if="!$v.training.createdAt.required">To pole jest wymagane.</div>
                         </div>
                     </div>
-                    <div class="form__box">
+                    <div class="form__box" v-if="user._id === training.user">
                         <v-checkbox :id="'done'" :checked="training.done" @change="training.done = $event" :disabled="training.createdAt && !canBeDone()">Wykonany</v-checkbox>
                         <div class="hint" v-if="training.createdAt && !canBeDone()">Jako wykonane można oznaczyć tylko treningi z datą dzisiejszą i wcześniejszą.</div>
                     </div>
@@ -87,7 +87,8 @@
                     user: store.getters.trainingData.userId,
                     trainingType: '',
                     createdAt: store.getters.trainingData.createdAt
-                }
+                },
+                user: store.getters.user,
             }
         },
         watch: {
