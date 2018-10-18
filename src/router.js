@@ -26,7 +26,7 @@ export default new Router({
                     component: () => import('./views/Auth/Login')
                 },
                 {
-                    path: '/questionnaire/',
+                    path: '/questionnaire/answer',
                     name: 'profiler',
                     component: () => import('./views/Auth/Profiler'),
                     beforeEnter: (to, from, next) => {
@@ -72,12 +72,12 @@ export default new Router({
                     component: () => import('./views/Users/Pupil')
                 },
                 {
-                    path: '/questionnaire/settings',
+                    path: '/questionnaire',
                     name: 'questions',
                     component: () => import('./views/Questions/Index')
                 },
                 {
-                    path: '/questionnaire/create/:id',
+                    path: '/questionnaire/form',
                     name: 'addQuestion',
                     props: true,
                     component: () => import('./views/Questions/addQuestion'),

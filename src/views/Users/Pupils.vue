@@ -17,7 +17,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" class="button--inline">Wyślij zaproszenie</v-button>
+                        <v-button type="submit" :color="'blue'" class="button--inline" :disabled="$v.form.email.$invalid || isProcessing" :loading="isProcessing">Wyślij zaproszenie</v-button>
                     </div>
                 </form>
             </div>
@@ -29,7 +29,7 @@
                             <router-link :to="{name: 'pupil', params: {userId: item._id}}" class="list__name">{{ item.name.firstName }} {{ item.name.lastName }}</router-link>
                         </div>
                         <div class="list__buttons">
-                            <span class="material-icons text--red" aria-hidden="true" @click="deletePupil(item._id)">delete</span>
+                            <span class="material-icons text--red cursor" aria-hidden="true" @click="deletePupil(item._id)">delete</span>
                         </div>
                     </div>
                 </div>
@@ -46,9 +46,9 @@
                             <div class="list__name text--bold">{{ item.email }}</div>
                         </div>
                         <div class="list__buttons">
-                            <span class="text--red text--bold" @click="deleteInvitation(item._id)">Anuluj</span>
+                            <span class="text--red text--bold cursor" @click="deleteInvitation(item._id)"> Anuluj </span>
                             <span> lub </span>
-                            <span class="text--blue text--bold">Wyślij ponownie</span>
+                            <span class="text--blue text--bold cursor" @click="resend(item.email)"> Wyślij ponownie</span>
                         </div>
                     </div>
                 </div>
@@ -73,11 +73,11 @@
                 },
                 invitations: [],
                 user: store.getters.user,
-                pupils: store.getters.pupils
+                pupils: store.getters.pupils,
+                isProcessing: false
             }
         },
         created() {
-            console.log('getPupils')
             this.getInvitations();
         },
         methods: {
@@ -98,10 +98,18 @@
                 if (this.$v.$invalid) {
                     return false;
                 }
+                this.isProcessing = true;
                 await post('/invitations', {email: this.form.email, coach: this.user._id});
+                store.commit('setSnackbar', {class: 'success', text: 'Zaproszenie zostało wysłane'});
                 this.getInvitations();
+                this.isProcessing = false;
                 this.form.email = '';
                 this.$v.$reset();
+            },
+            async resend(email) {
+                await post('/invitations', {email: email, coach: this.user._id});
+                store.commit('setSnackbar', {class: 'success', text: 'Zaproszenie zostało wysłane ponownie.'});
+                this.getInvitations();
             }
         },
         validations: {

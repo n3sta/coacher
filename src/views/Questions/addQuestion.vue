@@ -48,7 +48,6 @@
 
 <script>
     import { required, minLength } from 'vuelidate/lib/validators'
-    import moment from 'moment';
     import { get,post,del,put } from '../../helpers/api'
     import store from '../../store'
     import addOption from './addOption';
@@ -76,7 +75,6 @@
             'addOption': addOption,
         },
         created() {
-            this.getQuestion();
             if (this.id) {
                 this.getQuestion();
             }
