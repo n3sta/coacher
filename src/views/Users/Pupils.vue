@@ -29,10 +29,13 @@
                             <router-link :to="{name: 'pupil', params: {userId: item._id}}" class="list__name">{{ item.name.firstName }} {{ item.name.lastName }}</router-link>
                         </div>
                         <div class="list__buttons">
-                            <span class="material-icons text--red cursor" aria-hidden="true" @click="deletePupil(item._id)">delete</span>
+                            <button class="button-icon" @click="deletePupil(item._id)"><span class="material-icons text--red cursor" aria-hidden="true">delete</span></button>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="blank" v-else>
+                <span>Nie znaleziono żadnych zawodników</span>
             </div>
         </div>
         <div class="box box--medium">

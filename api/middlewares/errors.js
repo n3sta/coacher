@@ -4,4 +4,4 @@ exports.catchAsync = (fn) => {
 			next(err);
 		});
 	}
-}
+};

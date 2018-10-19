@@ -18,8 +18,10 @@
                     <nav class="nav">
                         <ul class="nav__list">
                             <li class="nav__item"><router-link :to="{ name: 'panel' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">home</span><span>Panel główny</span></router-link></li>
+                            <li class="nav__item"><router-link :to="{ name: 'users' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Lista użytkowników</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'pupils' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">group</span><span>Zawodnicy</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'admin' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">directions_run</span><span>Treningi</span></router-link></li>
+                            <li class="nav__item"><router-link :to="{ name: 'trainingTypes' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Typy treningów</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'questions' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">contact_support</span><span>Ankieta</span></router-link></li>
                             <hr class="nav__divider">
                             <li class="nav__item"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">fiber_new</span><span>Powiadomienia</span></a></li>
@@ -33,33 +35,6 @@
                 <div class="content">
                     <router-view></router-view>
                 </div>
-                <transition name="fadeIn">
-                    <div :class="['snackbar', `snackbar--${snackbar.class}`]" v-show="snackbar.show">
-                        <div class="snackbar__title">{{ snackbar.text }}</div>
-                        <button type="button" class="snackbar__close button-icon" @click="$store.commit('closeSnackbar')"><span class="material-icons" aria-hidden="true">close</span></button>
-                    </div>
-                </transition>
-                <transition name="fadeIn">
-                    <v-modal :show="alert.show" @close="close()">
-                        <div class="box modal__box">
-                            <div class="box__title">
-                                <div class="box__title-name">{{ alert.title }}</div>
-                            </div>
-                            <div class="box__content">
-                                <p>{{ alert.body }}</p>
-                                <div class="form__buttons">
-                                    <div class="spacer"></div>
-                                    <div @click="cancel()">
-                                        <v-button type="button">Anuluj</v-button>
-                                    </div>
-                                    <div @click="confirm()">
-                                        <v-button type="button" :color="'blue'">Zatwierdź</v-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </v-modal>
-                </transition>
             </main>
         </div>
     </div>
@@ -67,23 +42,12 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import store from './store';
 
     export default {
         created() {
             this.getUser();
         },
-        computed: mapGetters(['alert', 'modal', 'loading', 'snackbar']),
-        methods: {
-            ...mapActions(['setSnackbar', 'closeAlert', 'getUser']),
-            cancel() {
-                store.state.alert.resolve(false);
-                this.closeAlert();
-            },
-            confirm() {
-                store.state.alert.resolve(true);
-                this.closeAlert();
-            }
-        }
+        computed: mapGetters(['loading']),
+        methods: mapActions(['getUser'])
     }
 </script>

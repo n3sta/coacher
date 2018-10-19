@@ -22,6 +22,11 @@ export default {
 
         return res.status(200).json(user)
 	},
+    async delete(req, res) {
+        const user = await User.find({_id: req.params.id}).remove();
+
+        return res.status(200).json(user)
+    },
     async changePassword(req, res) {
         const password = bcrypt.hashSync(req.body.password, 8);
         const user = await User.findOneAndUpdate({_id: req.userId}, {password: password});

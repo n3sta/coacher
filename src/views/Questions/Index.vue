@@ -18,7 +18,7 @@
                             <a @click="$router.push({name: 'addQuestion', params: {id: item._id}})" class="list__name">{{ item.question }} ({{ getTypeName(item.type) }})</a>
                         </div>
                         <div class="list__buttons">
-                            <span class="material-icons text--red" aria-hidden="true" @click="deleteQuestion(item._id)">delete</span>
+                            <button class="button-icon" @click="deleteQuestion(item._id)"><span class="material-icons text--red cursor" aria-hidden="true">delete</span></button>
                         </div>
                     </div>
                 </div>

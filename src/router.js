@@ -56,6 +56,11 @@ export default new Router({
                     component: () => import('./views/Trainings/addTraining'),
                 },
                 {
+                    path: '/trainingTypes',
+                    name: 'trainingTypes',
+                    component: () => import('./views/Trainings/trainingTypes'),
+                },
+                {
                     path: '/account',
                     name: 'account',
                     component: () => import('./views/Users/Account')
@@ -70,6 +75,11 @@ export default new Router({
                     name: 'pupil',
                     props: true,
                     component: () => import('./views/Users/Pupil')
+                },
+                {
+                    path: '/users',
+                    name: 'users',
+                    component: () => import('./views/Users/Users')
                 },
                 {
                     path: '/questionnaire',
