@@ -53,8 +53,8 @@
                         <div @click="back()">
                             <v-button type="button" :color="'white'">Anuluj</v-button>
                         </div>
-                        <v-button type="submit" :color="'blue'" v-if="!id" :loading="isSubmitting" :disabled="isSubmitting">Dodaj</v-button>
-                        <v-button type="submit" :color="'blue'" v-else :loading="isSubmitting" :disabled="isSubmitting">Zaktualizuj</v-button>
+                        <v-button type="submit" :color="'blue'" v-if="!id" :disabled="$v.$invalid || isProcessing" :loading="isProcessing">Dodaj</v-button>
+                        <v-button type="submit" :color="'blue'" v-else :disabled="$v.$invalid || isProcessing" :loading="isProcessing">Zaktualizuj</v-button>
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
         data() {
             return {
                 id: store.getters.trainingData._id,
-                isSubmitting: false,
+                isProcessing: false,
                 trainingTypes: [],
                 training: {
                     content: '',
@@ -111,7 +111,7 @@
         },
         methods: {
             getTrainingTypes() {
-                get(`/trainingTypes`, {user: this.user})
+                get(`/trainingTypes`, {user: this.user._id})
                     .then((res) => {
                         this.trainingTypes = res.data;
                     });

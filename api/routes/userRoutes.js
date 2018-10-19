@@ -26,4 +26,6 @@ api.put('/:id', verifyToken, errorHandler.catchAsync(usersController.update));
 
 api.patch('/:id', verifyToken, errorHandler.catchAsync(usersController.patch));
 
+api.delete('/:id', verifyToken, errorHandler.catchAsync(usersController.delete));
+
 export default api;

@@ -14,14 +14,14 @@
                         </div>
                     </div>
                     <div class="form__box">
-                        <v-input :type="'password'" v-model="form.password" :value="form.password" :id="'email'" @input="form.password = $event" @keyup="$v.form.password.$touch()">Hasło</v-input>
+                        <v-input :type="'password'" v-model="form.password" :value="form.password" :id="'password'" @input="form.password = $event" @keyup="$v.form.password.$touch()">Hasło</v-input>
                         <div v-if="$v.form.password.$error">
                             <div class="form__error" v-if="!$v.form.password.required">To pole jest wymagane.</div>
                         </div>
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" :loading="isProcessing" :disabled="isProcessing">Zaloguj</v-button>
+                        <v-button type="submit" :color="'blue'" :disabled="this.$v.$invalid || isProcessing" :loading="isProcessing">Zaloguj</v-button>
                     </div>
                 </form>
             </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import { required, minLength, email } from 'vuelidate/lib/validators'
+    import { required, email } from 'vuelidate/lib/validators'
     import store from '../../store'
     import { post } from '../../helpers/api'
 
@@ -46,20 +46,20 @@
             }
         },
         methods: {
-            submit() {
+            async submit() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     return false;
                 }
                 this.isProcessing = true;
-                post('/auth/login', this.form)
-                    .then((res) => {
-                        store.dispatch('setUser', res.data);
-                        this.$router.push({name: 'panel'})
-                    })
-                    .catch(() => {
-                        this.isProcessing = false;
-                    })
+                try {
+                    const res = await post('/auth/login', this.form);
+                    store.dispatch('setUser', res.data);
+                    this.$router.push({name: 'panel'})
+                } catch(e) {
+                    this.isProcessing = false;
+                    store.commit('setSnackbar', {class: 'error', text: e.data.message});
+                }
             }
         },
         validations: {
@@ -70,7 +70,6 @@
                 },
                 password: {
                     required,
-                    minLength: minLength(8)
                 }
             }
         }

@@ -55,9 +55,14 @@
     & button {
       width: 100%;
       text-align: left;
+      padding: 0 8px;
       max-width: calc(100% - 16px);
       margin: 0 auto;
       border: 1px solid $border;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
     }
   }
   &__event {

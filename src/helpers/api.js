@@ -20,10 +20,14 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use((response) => {
     return response;
 }, (error) => {
-    if (error.response.status === 401) {
+    if (!error.response) {
+        store.commit('setSnackbar', {
+            class: 'error',
+            text: 'Błąd serwera. Prosimy spróbować później.'
+        });
+    } else if (error.response.status === 401) {
         store.commit('logout');
-    }
-    if (error.response.status === 500) {
+    } else if  (error.response.status === 500) {
         store.commit('setSnackbar', {
             class: 'error',
             text: 'Błąd serwera. Prosimy spróbować później.'

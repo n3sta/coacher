@@ -29,6 +29,9 @@ body {
 	}
 	&__loader {
 		margin: 32px 0 16px;
+		& .path {
+			stroke: $blue400;
+		}
 	}
 	&__text {
 		color: $text__gray;

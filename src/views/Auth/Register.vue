@@ -42,7 +42,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" :disabled="isProcessing">Zarejestruj</v-button>
+                        <v-button type="submit" :color="'blue'" :disabled="this.$v.$invalid || isProcessing" :loading="isProcessing">Zarejestruj</v-button>
                     </div>
                 </form>
             </div>
@@ -71,19 +71,19 @@
             }
         },
         methods: {
-            submit() {
+            async submit() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     return false;
                 }
                 this.isProcessing = true;
-                post('/auth/register', this.form).then((res) => {
+                try {
+                    const res = await post('/auth/register', this.form);
                     store.dispatch('setUser', {token: res.data.token, user: res.data.user});
-                    this.$router.push({name: 'panel'})
-                })
-                .catch(() => {
+                    this.$router.push({name: 'panel'});
+                } catch (e) {
                     this.isProcessing = false;
-                })
+                }
             },
         },
         validations: {
