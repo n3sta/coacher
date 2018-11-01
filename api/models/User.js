@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         required: true,
         unique: true,
-        validate: [validateEmail, 'Wypełnij adres e-mail.']
+        // validate: [validateEmail, 'Wypełnij adres e-mail.']
     },
     password: {
         type: String,
@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
         default: null,
         select: false
     },
+    activated: {
+        type: Boolean,
+        default: false
+    }
 });
 
 export default mongoose.model('User', userSchema);

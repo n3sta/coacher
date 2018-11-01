@@ -12,7 +12,11 @@ export default new Vuex.Store({
         user: {
             _id: localStorage.getItem('_id'),
             email: null,
-            coach: null
+            coach: null,
+            name: {
+                firstName: null
+            },
+            activated: false
         },
         pupils: [],
         trainingTypes: [],
@@ -26,6 +30,7 @@ export default new Vuex.Store({
             show: false,
             title: '',
             body: '',
+            type: null,
             resolve: null,
             reject: null,
         },
@@ -72,6 +77,9 @@ export default new Vuex.Store({
             localStorage.setItem('_id', data.user._id);
             state.user = data.user;
             state.token = data.token;
+            if (!data.token) {
+                router.push({name: 'login'});
+            }
         },
         logout(state) {
             localStorage.removeItem('token');
@@ -81,15 +89,7 @@ export default new Vuex.Store({
             router.push({name: 'login'});
         },
         getPupils (state, data) {
-            if (data.length) {
-                state.pupils = data;
-            } else {
-                state.pupils = [
-                    {name: {firstName: 'Janek', lastName: 'Mądry'}, _id: '154353454354354354354354522323sdfwerw'},
-                    {name: {firstName: 'Zbyszko', lastName: 'Szybki'}, _id: '3432432432432434kjnkjfdngkjdfngkjfkgj'},
-                    {name: {firstName: 'Bartek', lastName: 'Silny'}, _id: '5435435431223233v213v23v243243sdfwerw'},
-                ]
-            }
+            state.pupils = data;
         },
         getTrainingTypes (state, data) {
             state.trainingTypes = data;
@@ -139,9 +139,13 @@ export default new Vuex.Store({
             if (!localStorage.getItem('_id')) {
                 return false;
             }
-            const res = await get(`/auth/logged/${localStorage.getItem('_id')}`);
-            commit('setUser', res.data);
-            dispatch('getStartData');
+            try {
+                const res = await get(`/auth/logged/${localStorage.getItem('_id')}`);
+                commit('setUser', res.data);
+                dispatch('getStartData');
+            } catch(e) {
+                router.push({name: 'login'});
+            }
         },
         setUser({ commit, dispatch }, data) {
             commit('setUser', data);
@@ -162,10 +166,10 @@ export default new Vuex.Store({
                 commit('setLoading');
             });
         },
-        openAlert ({ commit }, { title, body }) {
+        openAlert ({ commit }, { title, body, type }) {
             return new Promise((resolve, reject) => {
                 commit('openAlert', {
-                    show: true, title, body, resolve, reject
+                    show: true, title, body, type, resolve, reject
                 });
             });
         },

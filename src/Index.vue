@@ -7,22 +7,27 @@
             </div>
         </transition>
         <transition name="fadeIn">
-            <v-modal :show="alert.show" @close="close()">
+            <v-modal :show="alert.show" @cancel="cancel()">
                 <div class="box modal__box">
                     <div class="box__title">
                         <div class="box__title-name">{{ alert.title }}</div>
                     </div>
-                    <div class="box__content">
+                    <div class="box__content box__content--minheight">
                         <p>{{ alert.body }}</p>
+                    </div>
+                    <div class="box__content">
                         <div class="form__buttons">
                             <div class="spacer"></div>
-                            <div @click="cancel()">
+                            <div @click="cancel()" v-if="alert.type === 'question'">
                                 <v-button type="button">Anuluj</v-button>
                             </div>
                             <div @click="confirm()">
-                                <v-button type="button" :color="'blue'">Zatwierdź</v-button>
+                                <v-button type="button" :color="'blue'">
+                                    <span v-if="alert.type !== 'statement'">Zatwierdź</span>
+                                    <span v-else>Jasne</span>
+                                </v-button>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </v-modal>

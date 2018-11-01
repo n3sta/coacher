@@ -8,24 +8,18 @@
                     </div>
                     <div class="box__content">
                         <form @submit.prevent="submitUserData()">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="form__box">
-                                        <v-input :id="'firstName'" v-model="user.name.firstName" @input="user.name.firstName = $event" @keyup="$v.user.name.firstName.$touch()">Imię</v-input>
-                                        <div v-if="$v.user.name.firstName.$error">
-                                            <div class="form__error" v-if="!$v.user.name.firstName.required">To pole jest wymagane.</div>
-                                            <div class="form__error" v-if="!$v.user.name.firstName.minLength">To pole musi mieć co najmniej {{ $v.user.name.firstName.$params.minLength.min }} znaki.</div>
-                                        </div>
-                                    </div>
+                            <div class="form__box">
+                                <v-input :id="'firstName'" v-model="user.name.firstName" @input="user.name.firstName = $event" @keyup="$v.user.name.firstName.$touch()">Imię</v-input>
+                                <div v-if="$v.user.name.firstName.$error">
+                                    <div class="form__error" v-if="!$v.user.name.firstName.required">To pole jest wymagane.</div>
+                                    <div class="form__error" v-if="!$v.user.name.firstName.minLength">To pole musi mieć co najmniej {{ $v.user.name.firstName.$params.minLength.min }} znaki.</div>
                                 </div>
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="form__box">
-                                        <v-input :id="'lastName'" v-model="user.name.lastName" @input="user.name.lastName = $event" @keyup="$v.user.name.lastName.$touch()">Nazwisko</v-input>
-                                        <div v-if="$v.user.name.lastName.$error">
-                                            <div class="form__error" v-if="!$v.user.name.lastName.required">To pole jest wymagane.</div>
-                                            <div class="form__error" v-if="!$v.user.name.lastName.minLength">To pole musi mieć co najmniej {{ $v.user.name.lastName.$params.minLength.min }} znaki.</div>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="form__box">
+                                <v-input :id="'lastName'" v-model="user.name.lastName" @input="user.name.lastName = $event" @keyup="$v.user.name.lastName.$touch()">Nazwisko</v-input>
+                                <div v-if="$v.user.name.lastName.$error">
+                                    <div class="form__error" v-if="!$v.user.name.lastName.required">To pole jest wymagane.</div>
+                                    <div class="form__error" v-if="!$v.user.name.lastName.minLength">To pole musi mieć co najmniej {{ $v.user.name.lastName.$params.minLength.min }} znaki.</div>
                                 </div>
                             </div>
                             <div class="form__box">
@@ -42,6 +36,8 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
                 <div class="box">
                     <div class="box__title">
                         <div class="box__title-name">Ustawienia hasła</div>
@@ -73,18 +69,6 @@
                                 <v-button type="submit" :color="'blue'" :loading="isSubmitting" :disabled="isSubmitting">Zapisz</v-button>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <div class="box">
-                    <div class="box__title">
-                        <div class="box__title-name">Ustawienia trenerskie</div>
-                    </div>
-                    <div class="box__content">
-                        <div class="form__box">
-                            <v-checkbox :id="'coach'" :checked="user.coach" v-model="user.coach" @change="changeCoach($event)">Jestem trenerem</v-checkbox>
-                        </div>
                     </div>
                 </div>
             </div>

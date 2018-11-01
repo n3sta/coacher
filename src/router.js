@@ -41,7 +41,7 @@ export default new Router({
             component: App,
             children: [
                 {
-                    path: '/panel',
+                    path: '/',
                     name: 'panel',
                     component: () => import('./views/Panel/Index'),
                 },

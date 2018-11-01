@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/User';
+import Training from "../models/Training";
+import Question from '../models/Question';
 import userHelpers from '../middlewares/helpers/users';
-import fillRegisterData from '../utils/fillRegisterData';
+import { fillRegisterData, fillSampleData } from '../utils/fillRegisterData';
 
 export default {
 	async register(req, res) {
@@ -18,6 +20,7 @@ export default {
 
         try {
             fillRegisterData(user._id);
+            fillSampleData(user._id);
             return res.status(200).json({
                 user: user,
                 token: userHelpers.generateToken(user._id)
@@ -42,10 +45,22 @@ export default {
 	},
     async logged(req, res) {
         const user = await User.findOne({_id: req.params.id});
+        if (!user) return res.status(404).json({message: 'Nie ma takiego użytkownika.'})
 
         return res.status(200).json({
             user: user,
             token: userHelpers.generateToken(user._id)
         });
+    },
+    async clean(req, res) {
+        try {
+            await User.remove({coachId: req.userId});
+            await Training.remove({user: req.userId});
+            await Question.remove({userId: req.userId});
+            await User.findOneAndUpdate({_id: req.userId}, {activated: true});
+            return res.status(200).json({message: 'Przykładowe dane zostały usunięte.'});
+        } catch(e) {
+            return res.status(400).json({message: 'Wystąpił bład. Spróbuj ponownie.'});
+        }
     }
 }

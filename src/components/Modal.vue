@@ -2,7 +2,7 @@
     <transition name="modal">
         <div class="modal" v-show="show">
             <div class="modal__content">
-                <button type="button" class="modal__close button-icon" @click="close()"><span class="material-icons text--red" aria-hidden="true">close</span></button>
+                <button type="button" class="modal__close button-icon" @click="cancel()"><span class="material-icons text--red" aria-hidden="true">close</span></button>
                 <slot></slot>
             </div>
         </div>
@@ -30,8 +30,8 @@
             });
         },
         methods: {
-            close() {
-                this.$emit('close');
+            cancel() {
+                this.$emit('cancel');
             }
         }
     }

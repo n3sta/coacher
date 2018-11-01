@@ -61,11 +61,11 @@
             return {
                 form: {
                     name: {
-                        firstName: null,
-                        lastName: null,
+                        firstName: 'asdsd',
+                        lastName: 'dsadasd',
                     },
-                    email: '',
-                    password: '',
+                    email: 'asd@dsa.pl',
+                    password: 'asdasdasdasd',
                 },
                 isProcessing: false,
             }
@@ -80,6 +80,7 @@
                 try {
                     const res = await post('/auth/register', this.form);
                     store.dispatch('setUser', {token: res.data.token, user: res.data.user});
+                    localStorage.setItem('firstLogin', true)
                     this.$router.push({name: 'panel'});
                 } catch (e) {
                     this.isProcessing = false;
