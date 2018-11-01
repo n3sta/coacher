@@ -26,7 +26,7 @@ export default new Router({
                     component: () => import('./views/Auth/Login')
                 },
                 {
-                    path: '/questionnaire/answer',
+                    path: '/profiler',
                     name: 'profiler',
                     component: () => import('./views/Auth/Profiler'),
                     beforeEnter: (to, from, next) => {
@@ -91,7 +91,7 @@ export default new Router({
                     name: 'addQuestion',
                     props: true,
                     component: () => import('./views/Questions/addQuestion'),
-                },
+                }
             ],
             beforeEnter: (to, from, next) => {
                 guard(to, from, next)

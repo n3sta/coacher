@@ -45,32 +45,38 @@ const fillQuestions = async (id) => {
             type: 3,
             options: [
                 'Mężczyzna', 'Kobieta'
-            ]
+            ],
+            order: 0
         },
         {
             userId: id,
             question: 'Waga',
             type: 1,
+            order: 1
         },
         {
             userId: id,
             question: 'Wzrost',
             type: 1,
+            order: 2
         },
         {
             userId: id,
             question: 'Ile lat już trenujesz?',
-            type: 1
+            type: 1,
+            order: 3
         },
         {
             userId: id,
             question: 'Jakie są Twoje plany/cele?',
-            type: 1
+            type: 1,
+            order: 4
         },
         {
             userId: id,
             question: 'Czy masz jakieś przeciwwskazania do uprawiania sportu? Jeśli tak to je wymień',
-            type: 2
+            type: 2,
+            order: 5
         },
     ]
 

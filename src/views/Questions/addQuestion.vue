@@ -29,9 +29,6 @@
                             <v-button type="button" :color="'transparent'">Opcje listy</v-button>
                         </div>
                     </div>
-                    <div class="form__box">
-                        <v-checkbox :checked="form.required" :id="'required'" @change="form.required = $event">Wymagane</v-checkbox>
-                    </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
                         <div @click="back()">

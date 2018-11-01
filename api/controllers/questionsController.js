@@ -31,8 +31,8 @@ export default {
         const resNew = await Question.findOne({_id: req.body.new});
         let order = 0;
 
-        if (!oldIndex || !newIndex) {
-            return res.status(400).json(false);
+        if (!resOld || !resNew) {
+            return res.status(400).json({message: 'Nie znaleziono pytań.'});
         }
         const oldIndex = resOld.order;
         const newIndex = resNew.order;

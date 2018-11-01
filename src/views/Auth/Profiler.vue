@@ -22,6 +22,9 @@
                             <template v-if="item.type === 2">
                                 <v-textarea v-model="form[step]" :id="`input${index}`" :value="form[step]" @keyup="$v.form.$each.$iter[index].$touch()" @input="form[step] = $event">{{ item.question }}</v-textarea>
                             </template>
+                            <template v-if="item.type === 3">
+                                <v-select-simple v-model="form[step]" :items="questions[index].options" :id="`input${index}`" :value="form[step]" :label="item.question"  @change="$v.form.$each.$iter[index].$touch()" @input="form[step] = $event"></v-select-simple>
+                            </template>
                             <div v-if="$v.form.$each.$iter[index].$error">
                                 <div class="form__error" v-if="!$v.form.$each.$iter[index].required">To pole jest wymagane.</div>
                             </div>
@@ -81,13 +84,16 @@
                 if (this.$v.form.$each.$iter[this.step].$invalid) {
                     return false;
                 }
-                await post('answers', {
-                    questionId: this.questions[this.step]._id,
-                    answer: this.form[this.step],
-                });
                 this.step++;
-                if (this.step === this.steps) {
+                if (this.user.coachId && this.step === this.steps) {
+                    await post('answers', {
+                        questionId: this.questions[this.step]._id,
+                        answer: this.form[this.step],
+                    });
                     this.$router.push({name: 'admin'})
+                } 
+                if (!this.user.coachId && this.step === this.steps) {
+                    this.$router.push({name: 'questions'})
                 }
             },
             prev() {
