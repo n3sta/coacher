@@ -151,7 +151,8 @@
             remove() {
                 store.dispatch('openAlert', {
                     title: 'Czy jesteś pewny?',
-                    body: 'Usuniętego treningu nie można już przywrócić.'
+                    body: 'Usuniętego treningu nie można już przywrócić.',
+                    type: 'question'
                 }).then(confirmation => {
                     if (confirmation) {
                         del(`/trainings/${this.id}`).then(() => {
