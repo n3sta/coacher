@@ -34,31 +34,28 @@
 </template>
 
 <script>
-    import store from '../../store'
-    import { get, post, put, del } from '../../helpers/api'
+    import { mapGetters } from 'vuex';
+    import { get, put, del } from '../../helpers/api'
     import Sortable from 'sortablejs'
 
     export default {
         data() {
             return {
-                user: store.getters.user,
                 questions: [],
-                types: store.state.types,
                 old: null
             }
         },
+        computed: mapGetters(['user', 'types']),
         created() {
             this.getData();
         },
         mounted() {
-            setTimeout(() => {
-                new Sortable(this.$refs.list, {
-                    draggable: '.list__item',
-                    handle: '.list__item-drag',
-                    onEnd: this.reorder,
-                    onStart: this.startOrder
-                });
-            },1000)
+            new Sortable(this.$refs.list, {
+                draggable: '.list__item',
+                handle: '.list__item-drag',
+                onEnd: this.reorder,
+                onStart: this.startOrder
+            });
         },
         methods: {
             async reorder({ newIndex }) {

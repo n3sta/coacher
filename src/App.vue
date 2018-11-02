@@ -40,7 +40,7 @@
                             <li class="nav__item"><router-link :to="{ name: 'trainingTypes' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Typy treningów</span></router-link></li>
                             <hr class="nav__divider">
                             <li class="nav__item"><router-link :to="{ name: 'account' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">person</span><span>Edytuj profil</span></router-link></li>
-                            <li class="nav__item" @click="$store.commit('logout')"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">exit_to_app</span><span>Wyloguj</span></a></li>
+                            <li class="nav__item" @click="logout"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">exit_to_app</span><span>Wyloguj</span></a></li>
                         </ul>
                     </nav>
                 </aside>
@@ -54,9 +54,8 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapGetters, mapMutations, mapActions } from 'vuex';
     import { del } from './helpers/api';
-    import store from './store';
 
     export default {
         data() {
@@ -67,11 +66,11 @@
         created() {
             this.getUser();
             if (localStorage.getItem('firstLogin')) {
-                store.dispatch('openAlert', {
+                this.openAlert({
                     title: 'Witaj!',
-                    body: 'Wypełniliśmy dla Ciebie system przykładowymi danymi w celu sprawdzenia jego możliwości. Gdy będziesz chciał zacząć pracę kliknij przycisk w górym prawym rogu ekranu.',
+                    body: 'Wypełniliśmy dla Ciebie system przykładowymi danymi w celu sprawdzenia jego możliwości. Gdy będziesz chciał zacząć pracę kliknij przycisk w prawym górym rogu ekranu.',
                     type: 'statement'
-                }).then(async (confirmation) => {
+                }).then((confirmation) => {
                     if (confirmation) {
                         localStorage.removeItem('firstLogin')
                     }
@@ -92,9 +91,10 @@
         },
         computed: mapGetters(['loading', 'user']),
         methods: {
-            ...mapActions(['getUser']),
+            ...mapActions(['getUser', 'openAlert']),
+            ...mapMutations(['logout']),
             removeSampleData() {
-                store.dispatch('openAlert', {
+                this.openAlert({
                     title: 'Czy jesteś pewny?',
                     body: 'System zostanie wyczyszczony z wszystkich przykładowych danych i bedzie gotowy do rozpoczęcia pracy.',
                     type: 'question'

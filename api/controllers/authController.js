@@ -62,5 +62,10 @@ export default {
         } catch(e) {
             return res.status(400).json({message: 'Wystąpił bład. Spróbuj ponownie.'});
         }
-    }
+    },
+    async email(req, res) {
+        const user = await User.findOne({email: req.query.email});
+
+        return res.status(200).json(user);
+    },
 }

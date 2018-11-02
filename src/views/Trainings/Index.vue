@@ -29,8 +29,8 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
     import moment from 'moment';
-    import store from '../../store';
     import { get, post, put } from '../../helpers/api';
     import Calendar from './Calendar';
     import List from './List';
@@ -47,25 +47,18 @@
                 daysNames: ['nd', 'pon', 'wt', 'śr', 'czw', 'pt', 'sb'],
                 months: ['Sty', 'Lut', 'Mar', 'Kwe', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
                 monthsLong: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
-                user: store.getters.user,
                 events: [],
                 currDate: moment(),
-                calendarUser: store.getters.user._id,
-                pupils: store.getters.pupils,
-                showList: JSON.parse(localStorage.getItem('showList'))
+                showList: JSON.parse(localStorage.getItem('showList')),
+                calendarUser: this.$store.state.user._id,
             }
         },
+        computed: mapGetters(['user', 'pupils']),
         components: {
             'v-calendar': Calendar,
             'v-list': List
         },
-        watch: {
-            'calendarUser': function() {
-                this.getEvents();
-            },
-        },
         created() {
-            this.getEvents();
             this.checkWidth();
             window.addEventListener('resize', this.checkWidth);
             if (this.miniCalendar) this.showList = false; 
@@ -74,6 +67,7 @@
             window.removeEventListener('resize', this.checkWidth);
         },
         methods: {
+            ...mapMutations(['setTrainingData']),
             async getEvents() {
                 const firstMonthDay = moment(this.currDate).startOf('month');
                 const lastMonthDay = moment(this.currDate).endOf('month');
@@ -88,10 +82,10 @@
                 };
                 this.events = [];
                 const res = await get('/trainings', params);
-                this.events = res.data;;
+                this.events = res.data;
             },
             show(data) {
-                store.commit('setTrainingData', {
+                this.setTrainingData({
                     createdAt: new Date(data.date),
                     userId: this.calendarUser,
                     _id: data.id

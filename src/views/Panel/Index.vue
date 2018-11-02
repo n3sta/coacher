@@ -20,26 +20,19 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
 	import moment from 'moment';
 	import Statistic from './Statistic';
 	import nextStart from './nextStart';
 	import Trainings from '../Trainings/Index';
 	import { get } from '../../helpers/api';
-    import store from '../../store';
 
     export default {
-    	data() {
-    		return {
-    			user: store.getters.user
-    		}
-    	},
     	components: {
     		'v-statistic': Statistic,
     		'v-nextStart': nextStart,
     		'v-trainings': Trainings
     	},
-    	methods: {
-    		
-    	}
+    	computed: mapGetters(['user'])
     }
 </script>

@@ -13,7 +13,6 @@
 
 <script>
     import { get } from '../../helpers/api';
-    import store from '../../store';
 
     export default {
         data() {
@@ -22,9 +21,7 @@
             }
         },
         methods: {
-            getLastStart() {
-
-            }
+            
         }
     }
 </script>

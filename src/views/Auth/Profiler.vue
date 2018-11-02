@@ -49,20 +49,20 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import { required } from 'vuelidate/lib/validators'
-    import store from '../../store';
     import { get, post, put } from '../../helpers/api';
 
     export default {
         data() {
             return {
                 questions: [],
-                user: store.getters.user,
                 step: 0,
                 form: [],
             }
         },
         computed: {
+            ...mapGetters(['user']),
             steps() {
                 return this.questions.length;
             },

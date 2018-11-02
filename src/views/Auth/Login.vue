@@ -21,7 +21,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" :disabled="this.$v.$invalid || isProcessing" :loading="isProcessing">Zaloguj</v-button>
+                        <v-button type="submit" :color="'blue'" :disabled="isProcessing" :loading="isProcessing">Zaloguj</v-button>
                     </div>
                 </form>
             </div>
@@ -31,8 +31,8 @@
 </template>
 
 <script>
+    import { mapMutations, mapActions } from 'vuex';
     import { required, email } from 'vuelidate/lib/validators'
-    import store from '../../store'
     import { post } from '../../helpers/api'
 
     export default {
@@ -46,6 +46,8 @@
             }
         },
         methods: {
+            ...mapActions(['setUser']),
+            ...mapMutations(['setSnackbar']),
             async submit() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
@@ -54,11 +56,11 @@
                 this.isProcessing = true;
                 try {
                     const res = await post('/auth/login', this.form);
-                    store.dispatch('setUser', res.data);
+                    this.setUser(res.data);
                     this.$router.push({name: 'panel'})
                 } catch(e) {
                     this.isProcessing = false;
-                    store.commit('setSnackbar', {class: 'error', text: e.data.message});
+                    this.setSnackbar({class: 'error', text: e.data.message});
                 }
             }
         },

@@ -30,10 +30,10 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import Sortable from 'sortablejs';
     import moment from 'moment';
     import { get, post, put } from '../../helpers/api';
-    import store from '../../store';
 
     export default {
         props: {
@@ -58,10 +58,10 @@
         data() {
             return {
                 monthDays: [],
-                user: store.getters.user,
                 dragging: false,
             }
         },
+        computed: mapGetters(['user']),
         created() {
             if (this.miniCalendar) {
                 this.drawMiniCalendar();

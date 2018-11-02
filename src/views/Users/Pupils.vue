@@ -17,7 +17,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" class="button--inline" :disabled="$v.form.email.$invalid || isProcessing" :loading="isProcessing">Wyślij zaproszenie</v-button>
+                        <v-button type="submit" :color="'blue'" class="button--inline" :disabled="isProcessing" :loading="isProcessing">Wyślij zaproszenie</v-button>
                     </div>
                 </form>
             </div>
@@ -64,8 +64,8 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
     import { required, email } from 'vuelidate/lib/validators'
-    import store from '../../store'
     import { get, post, del, patch } from '../../helpers/api'
 
     export default {
@@ -75,23 +75,22 @@
                     email: '',
                 },
                 invitations: [],
-                user: store.getters.user,
-                pupils: store.getters.pupils,
                 isProcessing: false
             }
         },
+        computed: mapGetters(['user', 'pupils']),
         created() {
             this.getInvitations();
         },
         methods: {
+            ...mapMutations(['getPupils', 'setSnackbar']),
             async getInvitations() {
                 const res = await get('/invitations', {coach: this.user._id});
                 this.invitations = res.data;
             },
             async deletePupil(id) {
                 await patch(`/users/${id}`, {coachId: null});
-                store.dispatch('getPupils');
-                this.pupils = store.getters.pupils;
+                this.getPupils()
             },
             async deleteInvitation(id) {
                 await del(`/invitations/${id}`);
@@ -104,7 +103,7 @@
                 }
                 this.isProcessing = true;
                 await post('/invitations', {email: this.form.email, coach: this.user._id});
-                store.commit('setSnackbar', {class: 'success', text: 'Zaproszenie zostało wysłane'});
+                this.setSnackbar({class: 'success', text: 'Zaproszenie zostało wysłane'});
                 this.getInvitations();
                 this.isProcessing = false;
                 this.form.email = '';
@@ -112,7 +111,7 @@
             },
             async resend(email) {
                 await post('/invitations', {email: email, coach: this.user._id});
-                store.commit('setSnackbar', {class: 'success', text: 'Zaproszenie zostało wysłane ponownie.'});
+                this.setSnackbar({class: 'success', text: 'Zaproszenie zostało wysłane ponownie.'});
                 this.getInvitations();
             }
         },
