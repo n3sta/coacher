@@ -12,11 +12,11 @@
 					<div class="progress__percent">{{ planDoneAnimated }}%</div>
 				</div>
 				<div class="row">
-					<div class="stats col-xs-12 col-sm-6">
+					<div class="stats col-sm-6 col-xs-6">
 						<span class="stats__data">{{ weekDoneAnimated }}/{{ stats.week }}</span>
 						<span class="stats__name">Obecny tydzień [km]</span>
 					</div>
-					<div class="stats col-xs-12 col-sm-6">
+					<div class="stats col-sm-6 col-xs-6">
 						<span class="stats__data">{{ monthDoneAnimated }}/{{ stats.month }}</span>
 						<span class="stats__name">Obecny miesiąc [km]</span>
 					</div>

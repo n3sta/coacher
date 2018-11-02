@@ -1,17 +1,6 @@
 <template>
     <div>
         <div class="calendar">
-            <div class="calendar__filters" v-if="!miniCalendar">
-                <v-dropdown :items="pupils" :id="'calendarUser'" @change="calendarUser = $event"></v-dropdown>
-                <div class="calendar__divider"></div>
-                <span class="calendar__month">{{ monthsLong[currDate.format('M')-1] }} {{ currDate.format('Y') }}</span>
-                <button type="button" class="button-icon" @click="setPrevMonth()"><span class="material-icons" aria-hidden="true">keyboard_arrow_left</span></button>
-                <button type="button" class="button-icon" @click="setNextMonth()"><span class="material-icons" aria-hidden="true">keyboard_arrow_right</span></button>
-                <div class="calendar__divider"></div>
-                <v-button v-if="user.coach === true" :color="'blue'">
-                    Exportuj do PDF
-                </v-button>
-            </div>
             <div class="calendar__week">
                 <div class="calendar__day" v-for="(day, dayIndex) in monthDays"
                      @click="show(0, day.createdAt)"
@@ -20,19 +9,16 @@
                      :class="{
                         'calendar__day--prev-month': isPrevMonth(day.createdAt),
                         'calendar__day--next-month': isNextMonth(day.createdAt),
-                        'calendar__day--today': isToday(day.createdAt),
-                        'calendar__day--no-event': isEvent(day.createdAt)
+                        'calendar__day--today': isToday(day.createdAt)
                      }"
                 >
                     <div class="calendar__date">
                         <span v-if="dayIndex < 7">{{ daysNames[getWeekDay(day.createdAt)] }}, </span>{{ getDay(day.createdAt) }} {{ monthShortcut(day.createdAt) }}
                     </div>
                     <div class="calendar__events calendar__sortable" :data-date="day.createdAt">
-                        <transition-group name="slideDown">
-                            <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-date="day.createdAt" :data-id="event._id" @click.stop="show(event._id, day.createdAt)">
-                                <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.trainingType.name }}</v-button>
-                            </div>
-                        </transition-group>
+                        <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-date="day.createdAt" :data-id="event._id" @click.stop="show(event._id, day.createdAt)">
+                            <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.trainingType.name }}</v-button>
+                        </div>
                     </div>
                     <div class="calendar__tooltip">
                         <span>Kliknij, aby dodać</span>
@@ -48,48 +34,35 @@
     import moment from 'moment';
     import { get, post, put } from '../../helpers/api';
     import store from '../../store';
-    import calendarHelpers from '../../helpers/calendar.js';
 
     export default {
         props: {
             miniCalendar: {
                 type: Number,
                 default: 0
-            }
+            },
+            events: {
+                type: Array,
+                default: []
+            },
+            currDate: {
+                type: Object
+            },
+            daysNames: {
+                type: Array
+            },
+            months: {
+                type: Array
+            },
         },
         data() {
             return {
-                daysNames: ['nd', 'pon', 'wt', 'śr', 'czw', 'pt', 'sb'],
-                months: ['Sty', 'Lut', 'Mar', 'Kwe', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
-                monthsLong: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
                 monthDays: [],
                 user: store.getters.user,
-                events: [],
-                currDate: moment(),
                 dragging: false,
-                calendarUser: store.getters.user._id,
-                pupils: store.getters.pupils
             }
-        },
-        mixins: [
-            calendarHelpers
-        ],
-        watch: {
-            'currDate': function() {
-                if (this.miniCalendar) {
-                    this.drawMiniCalendar();
-                } else {
-                    this.drawCalendar();
-                }
-            },
-            'calendarUser': function() {
-                this.getEvents();
-            },
         },
         created() {
-            if (!this.pupils.filter(pupil => pupil._id === this.user._id).length) {
-                this.pupils.unshift({name: {firstName: this.user.name.firstName, lastName: this.user.name.lastName}, _id: this.user._id});
-            }
             if (this.miniCalendar) {
                 this.drawMiniCalendar();
             } else {
@@ -102,7 +75,7 @@
                 const tooltip = day.querySelector('.calendar__tooltip');
                 day.addEventListener('mouseover', (e) => {
                     tooltip.style.display = (!this.dragging) ? 'block' : 'none';
-                    tooltip.innerText = (e.target.tagName === "BUTTON") ? "Edytuj trening" : "Kliknij, aby dodać" ;
+                    tooltip.innerText = (e.target.tagName === "BUTTON") ? "Edytuj lub przenieś" : "Kliknij, aby dodać" ;
                 });
                 day.addEventListener('mouseleave', () => {
                     tooltip.style.display = 'none';
@@ -126,8 +99,7 @@
             }
         },
         methods: {
-            async dragEnd({ to, item}) {
-                item = item.querySelector('.calendar__event');
+            async dragEnd({ to, item }) {
                 const id = item.getAttribute('data-id');
                 const date = new Date(to.getAttribute('data-date'));
                 this.dragging = false;
@@ -137,25 +109,7 @@
             },
             dragStart() {
                 this.dragging = true;
-            },
-            getEvents() {
-                const firstMonthDay = moment(this.currDate).startOf('month');
-                const lastMonthDay = moment(this.currDate).endOf('month');
-                const firstCalendarDay = moment(firstMonthDay).startOf('isoWeek');
-                const lastCalendarDay = moment(lastMonthDay).endOf('isoWeek');
-                const params = {
-                    user: this.calendarUser,
-                    createdAt: {
-                        $gte: new Date(firstCalendarDay),
-                        $lte: new Date(lastCalendarDay)
-                    }
-                };
-                this.events = [];
-                get('/trainings', params).then((res) => {
-                    this.events = res.data;
-                    this.eventsLoaded = false;
-                });
-            },
+            },            
             drawMiniCalendar() {
                 const firstWeekDay = moment(this.currDate).startOf('week');
                 for (let i = 0; i < 7; i++) {
@@ -165,7 +119,7 @@
                         createdAt: moment(firstWeekDay).format('YYYY-MM-DD'),
                     })
                 }
-                this.getEvents(moment(this.currDate).format('YYYY-MM-DD'));
+                this.$emit('getEvents');
             },
             drawCalendar() {
                 const firstWeekDay = moment(this.currDate).startOf('month');
@@ -178,15 +132,40 @@
                         createdAt: moment(firstMonthDay).format('YYYY-MM-DD'),
                     })
                 }
-                this.getEvents(moment(this.currDate).format('YYYY-MM-DD'));
+                this.$emit('getEvents');
             },
-            show(_id, d = new Date()) {
-                store.commit('setTrainingData', {
-                    createdAt: new Date(d),
-                    userId: this.calendarUser,
-                    _id: _id
-                });
-                this.$router.push({name: 'addTraining'})
+            show(id, date = new Date()) {
+                this.$emit('show', {id, date})
+            },
+            dayEvents(date) {
+                return this.events.filter(event => moment(event.createdAt).format('YYYY-MM-DD') == moment(date).format('YYYY-MM-DD'));
+            },
+            getDay(d) {
+                const date = new Date(d);
+                return date.getDate();
+            },
+            getWeekDay(d) {
+                const date = moment(d);
+                return date.day();
+            },
+            isToday(d) {
+                const today = moment(new Date()).format('YYYY-MM-DD');
+                return !!(today === d);
+            },
+            isPrevMonth(d) {
+                const currDate = moment(this.currDate).format('M');
+                const prevMonth = moment(d).format('M');
+                return currDate > prevMonth;
+            },
+            isNextMonth(d) {
+                const currDate = moment(this.currDate).format('M');
+                const nextMonth = moment(d).format('M');
+                return currDate < nextMonth
+            },
+            monthShortcut(d) {
+                const date = new Date(d);
+                const month = date.getMonth();
+                return this.months[month];
             },
         },
     }

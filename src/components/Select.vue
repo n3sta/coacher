@@ -2,7 +2,7 @@
     <div>
         <div class="select" ref="select">
             <label class="form__label" :data-filled="Boolean(value)">{{ label }}</label>
-            <button type="button" class="select__button" :id="id" @click="active = true">{{ selected }}</button>
+            <div class="select__button" :id="id" @click="active = true">{{ selected }}</div>
             <span class="material-icons select__caret" aria-hidden="true">unfold_more</span>
             <transition name="fadeIn">
                 <ul class="select__ul" v-if="active">

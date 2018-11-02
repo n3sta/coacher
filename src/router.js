@@ -51,9 +51,9 @@ export default new Router({
                     component: () => import('./views/Trainings/Index'),
                 },
                 {
-                    path: '/trainings/create',
+                    path: '/trainings/training',
                     name: 'addTraining',
-                    component: () => import('./views/Trainings/addTraining'),
+                    component: () => import('./views/Trainings/Training'),
                 },
                 {
                     path: '/trainingTypes',

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
+import moment from 'moment';
 
 import style from './css/layout.scss';
 

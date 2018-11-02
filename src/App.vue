@@ -11,13 +11,24 @@
         </div>
         <div v-else>
             <header class="header">
-                <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">TheCoacher.com</router-link></h1>
+                <div class="header__inner">
+                    <button type="button" class="button-icon aside-toggler" @click="showAside = !showAside">
+                        <span class="material-icons" aria-hidden="true">dehaze</span>
+                    </button>
+                    <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">TheCoacher.com</router-link></h1>
+                </div>
                 <div v-if="!user.activated" @click="removeSampleData()">
-                     <v-button>Wyczyść system</v-button>
-                 </div>
+                    <v-button>Wyczyść system</v-button>
+                </div>
             </header>
             <main class="main">
-                <aside class="aside">
+                <aside :class="['aside', (showAside) ? 'aside--show' : '']">
+                    <div class="header__inner">
+                        <button type="button" class="button-icon aside-toggler" @click="showAside = !showAside">
+                            <span class="material-icons" aria-hidden="true">dehaze</span>
+                        </button>
+                        <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">TheCoacher.com</router-link></h1>
+                    </div>
                     <nav class="nav">
                         <ul class="nav__list">
                             <li class="nav__item"><router-link :to="{ name: 'panel' }" exact class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">home</span><span>Panel główny</span></router-link></li>
@@ -36,6 +47,7 @@
                 <div class="content">
                     <router-view></router-view>
                 </div>
+                <div :class="['overlay', (showAside) ? 'overlay--show' : '']" @click="showAside = !showAside"></div>
             </main>
         </div>
     </div>
@@ -47,6 +59,11 @@
     import store from './store';
 
     export default {
+        data() {
+            return {
+                showAside: false
+            }
+        },
         created() {
             this.getUser();
             if (localStorage.getItem('firstLogin')) {
@@ -59,6 +76,18 @@
                         localStorage.removeItem('firstLogin')
                     }
                 })
+            }
+        },
+        watch: {
+            '$route'() {
+                this.showAside = false;
+            },
+            showAside() {
+                if (this.showAside) {
+                    document.body.classList.add('body--overflow');
+                } else {
+                    document.body.classList.remove('body--overflow');
+                }
             }
         },
         computed: mapGetters(['loading', 'user']),

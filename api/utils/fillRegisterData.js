@@ -123,10 +123,10 @@ const fillUsers = async (id) => {
 const fillTrainings = async (id) => {
     const trainings = [];
     const countUser = await User.find({coachId: id}).count().exec();
-    const user = await User.findOne().skip(Math.floor(Math.random() * countUser));
     const countTrainingType = await TrainingType.find({user: id}).count().exec();
-    const trainingType = await TrainingType.findOne().skip(Math.floor(Math.random() * countTrainingType));
     for (let i = 2; i < 16; i = i + (Boolean(Math.random() > 0.5) + 1)) {
+        const user = await User.findOne().skip(Math.floor(Math.random() * countUser));
+        const trainingType = await TrainingType.findOne({user: id}).skip(Math.floor(Math.random() * countTrainingType));
         const date = moment().toDate();
         trainings.push({
             user: id,

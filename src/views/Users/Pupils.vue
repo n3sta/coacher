@@ -91,6 +91,7 @@
             async deletePupil(id) {
                 await patch(`/users/${id}`, {coachId: null});
                 store.dispatch('getPupils');
+                this.pupils = store.getters.pupils;
             },
             async deleteInvitation(id) {
                 await del(`/invitations/${id}`);

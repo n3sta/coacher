@@ -39,7 +39,7 @@
                 </div>
             </div>
         </form>
-        <addOption v-if="show" :show="show" :options="form.options" @close="show = false" @done="form.options = $event"></addOption>
+        <addOption v-if="show" :show="show" :options="form.options" @cancel="show = false" @done="form.options = $event"></addOption>
     </div>
 </template>
 

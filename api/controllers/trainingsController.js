@@ -9,7 +9,7 @@ export default {
 		return res.status(200).json(training);
 	},
 	async findAll(req, res) {
-		const trainings = await Training.find(req.filters).populate('trainingType');
+		const trainings = await Training.find(req.filters).sort('createdAt').populate('trainingType');
 
 		return res.status(200).json(trainings);
 	},

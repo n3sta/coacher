@@ -16,11 +16,14 @@
                 type: Boolean
             }
         },
-        created() {
-            document.body.classList.add('body--overflow');
-        },
-        destroyed() {
-            document.body.classList.remove('body--overflow');
+        watch: {
+            show() {
+                if (this.showAside) {
+                    document.body.classList.add('body--overflow');
+                } else {
+                    document.body.classList.remove('body--overflow');
+                }
+            }
         },
         mounted() {
             document.addEventListener("keydown", (e) => {
