@@ -3,7 +3,7 @@
         <transition name="fadeIn">
             <div :class="['snackbar', `snackbar--${snackbar.class}`]" v-show="snackbar.show">
                 <div class="snackbar__title">{{ snackbar.text }}</div>
-                <button type="button" class="snackbar__close button-icon" @click="$store.commit('closeSnackbar')"><span class="material-icons" aria-hidden="true">close</span></button>
+                <button type="button" class="snackbar__close button-icon" @click="closeSnackbar"><span class="material-icons" aria-hidden="true">close</span></button>
             </div>
         </transition>
         <transition name="fadeIn">
@@ -37,19 +37,18 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex';
-    import store from './store';
+    import { mapGetters, mapMutations } from 'vuex';
 
     export default {
         computed: mapGetters(['alert', 'snackbar']),
         methods: {
-            ...mapActions(['setSnackbar', 'closeAlert']),
+            ...mapMutations(['closeSnackbar', 'closeAlert']),
             cancel() {
-                store.state.alert.resolve(false);
+                this.$store.state.alert.resolve(false);
                 this.closeAlert();
             },
             confirm() {
-                store.state.alert.resolve(true);
+                this.$store.state.alert.resolve(true);
                 this.closeAlert();
             }
         }

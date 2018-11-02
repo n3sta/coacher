@@ -15,6 +15,8 @@ api.use((req, res, next) => {
 
 api.get('/logged/:id', errorHandler.catchAsync(authController.logged));
 
+api.get('/email', errorHandler.catchAsync(authController.email));
+
 api.post('/register', errorHandler.catchAsync(authController.register));
 
 api.post('/login', errorHandler.catchAsync(authController.login));

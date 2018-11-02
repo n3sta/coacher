@@ -40,8 +40,8 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations, mapActions } from 'vuex';
     import { required, minLength } from 'vuelidate/lib/validators'
-    import store from '../../store'
     import { get, post, del } from '../../helpers/api'
 
     export default {
@@ -50,7 +50,6 @@
                 form: {
                     name: ''
                 },
-                user: store.getters.user,
                 types: [],
                 isProcessing: false
             }
@@ -58,7 +57,9 @@
         created() {
             this.getTypes();
         },
+        computed: mapGetters(['user']),
         methods: {
+            ...mapActions(['setSnackbar']),
             async getTypes() {
                 const res = await get(`/trainingTypes`, {user: this.user._id});
                 this.types = res.data;
@@ -74,7 +75,7 @@
                 }
                 this.isProcessing = true;
                 await post('/trainingTypes', {user: this.user._id, name: this.form.name});
-                store.commit('setSnackbar', {class: 'success', text: 'Typ treningu został dodany.'});
+                this.setSnackbar({class: 'success', text: 'Typ treningu został dodany.'});
                 this.getTypes();
                 this.isProcessing = false;
                 this.form.name = '';

@@ -45,8 +45,7 @@ export default new Vuex.Store({
             month: 0,
             monthDone: 0,
             plan: 0,
-            planDone: 0,
-            planPercent: 0
+            planDone: 0
         },
         types: [
             {name: 'Pole tekstowe', _id: 1},
@@ -148,6 +147,7 @@ export default new Vuex.Store({
             }
         },
         setUser({ commit, dispatch }, data) {
+            console.log(data);
             commit('setUser', data);
             dispatch('getStartData');
         },

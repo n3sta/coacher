@@ -44,9 +44,9 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations, mapActions } from 'vuex';
     import { required, minLength } from 'vuelidate/lib/validators'
     import { get,post,del,put } from '../../helpers/api'
-    import store from '../../store'
     import addOption from './addOption';
 
     export default {
@@ -78,8 +78,14 @@
             }
         },
         computed: {
+            ...mapGetters(['user', 'types']),
             action() {
                 return (this.id) ? 'Edycja pytania' : 'Dodawanie pytania';
+            }
+        },
+        watch: {
+            user() {
+                this.form.userId = user._id;
             }
         },
         methods: {

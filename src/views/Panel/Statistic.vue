@@ -7,7 +7,7 @@
 			<div class="box__content">
 				<div class="progress">
 					<div class="progress__line">
-						<div class="progress__done" :style="`width: ${stats.planPercent}%`"></div>
+						<div class="progress__done" :style="`width: ${planPercent}%`"></div>
 					</div>
 					<div class="progress__percent">{{ planDoneAnimated }}%</div>
 				</div>
@@ -27,21 +27,25 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
 	import { get } from '../../helpers/api';
-	import store from '../../store';
     import { TweenLite } from "gsap/TweenLite";
 
     export default {
-		data() {
-			return {
-				user: store.getters.user,
-				stats: store.getters.stats,
-                weekDoneTweened: store.getters.stats.weekDone,
-                monthDoneTweened: store.getters.stats.monthDone,
-                planDoneTweened: store.getters.stats.planPercent
-			}
-		},
+    	data() {
+    		return {
+    			planPercent: 0,
+    			planDoneTweened: 0
+    		}
+    	},
         computed: {
+        	...mapGetters(['user', 'stats']),
+        	weekDoneTweened() {
+        		return this.stats.weekDone
+        	},
+        	monthDoneTweened() {
+        		return this.stats.monthDone
+        	},
             weekDoneAnimated: function() {
                 return this.weekDoneTweened.toFixed(0);
             },
@@ -53,7 +57,7 @@
             }
         },
         watch: {
-            'stats.planPercent': function(value) {
+            'planPercent': function(value) {
                 TweenLite.to(this.$data, 0.5, { planDoneTweened: value });
             },
             'stats.weekDone': function(value) {
@@ -67,15 +71,14 @@
 			this.getStatistic();
 		},
 		methods: {
-			getStatistic() {
-                get(`/trainings/stats`, {user: this.user._id, date: new Date()}).then((res) => {
-                    this.stats = res.data;
-                    res.data.planPercent = this.calculate();
-                    store.commit('setStats', res.data);
-                });
+			...mapMutations(['setStats']),
+			async getStatistic() {
+                const res = await get(`/trainings/stats`, {user: this.user._id, date: new Date()});
+                this.setStats(res.data);
+                this.planPercent = this.calculate();
             },
             calculate() {
-                return this.stats.planPercent = ((this.stats.planDone/this.stats.plan || 0)*100).toFixed(2)*1;
+                return this.planPercent = ((this.stats.planDone/this.stats.plan || 0)*100).toFixed(2)*1;
             }
 		}
 	}

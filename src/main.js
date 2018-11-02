@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
-import moment from 'moment';
 
 import style from './css/layout.scss';
 
 import Index from './Index.vue'
 import router from './router'
-import store from './store'
 
 import Select from './components/Select'
 import SelectSimple from './components/SelectSimple'
@@ -34,6 +32,5 @@ Vue.use(Vuelidate);
 
 new Vue({
   router,
-  store,
   render: h => h(Index)
 }).$mount('#root');

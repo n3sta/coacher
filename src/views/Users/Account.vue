@@ -77,9 +77,9 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations, mapActions } from 'vuex';
     import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
     import { get, put, patch } from '../../helpers/api'
-    import store from '../../store'
 
     const touchMap = new WeakMap();
 
@@ -92,23 +92,25 @@
                     password: '',
                     confirm: '',
                 },
-                user: store.getters.user,
             }
         },
+        computed: mapGetters(['user']),
         watch: {
             'user.coach': function() {
                 this.changeCoach();
             },
         },
         methods: {
+            ...mapActions(['getUser']),
+            ...mapMutations(['setSnackbar']),
             async submitUserData() {
                 this.$v.user.$touch();
                 if (this.$v.user.$invalid) {
                     return false;
                 }
                 await put(`/users/${this.user._id}`, this.user);
-                store.dispatch('getUser');
-                store.commit('setSnackbar', {class: 'success', text: 'Zapisano pomyślnie.'});
+                this.getUser();
+                this.setSnackbar({class: 'success', text: 'Zapisano pomyślnie.'});
             },
             async submitPassword() {
                 this.$v.form.$touch();
@@ -116,11 +118,11 @@
                     return false;
                 }
                 await patch(`/users/changePassword`, {password: this.form.password});
-                store.commit('setSnackbar', {class: 'success', text: 'Zapisano pomyślnie.'});
+                this.setSnackbar({class: 'success', text: 'Zapisano pomyślnie.'});
             },
             async changeCoach(value) {
                 await put(`/users/${this.user._id}`, {coach: value});
-                store.dispatch('getUser')
+                this.getUser();
             },
             delayTouch($v) {
                 $v.$reset();

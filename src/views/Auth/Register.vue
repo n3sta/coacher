@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-sm-6 col-xs-12">
                             <div class="form__box">
-                                <v-input v-model="form.name.lastName" :value="form.name.lastName" :id="'email'" @input="form.name.lastName = $event" @keyup="$v.form.name.lastName.$touch()">Nazwisko</v-input>
+                                <v-input v-model="form.name.lastName" :value="form.name.lastName" :id="'lastName'" @input="form.name.lastName = $event" @keyup="$v.form.name.lastName.$touch()">Nazwisko</v-input>
                                 <div v-if="$v.form.name.lastName.$error">
                                     <div class="form__error" v-if="!$v.form.name.lastName.required">To pole jest wymagane.</div>
                                     <div class="form__error" v-if="!$v.form.name.lastName.minLength">To pole musi mieć co najmniej {{ $v.form.name.lastName.$params.minLength.min }} znaki</div>
@@ -27,14 +27,15 @@
                         </div>
                     </div>
                     <div class="form__box">
-                        <v-input :type="'email'" v-model="form.email" :value="form.email" :id="'email'" @input="form.email = $event" @keyup="$v.form.email.$touch()">Adres e-mail</v-input>
+                        <v-input :type="'email'" v-model="form.email" :value="form.email" :id="'email'" @input="form.email = $event" @keyup="delayTouch($v.form.email)">Adres e-mail</v-input>
                         <div v-if="$v.form.email.$error">
                             <div class="form__error" v-if="!$v.form.email.required">To pole jest wymagane.</div>
                             <div class="form__error" v-if="!$v.form.email.email">Nieprawidłowy format e-mail.</div>
+                            <div class="form__error" v-if="!$v.form.email.correct">Ten e-mail jest zajęty.</div>
                         </div>
                     </div>
                     <div class="form__box">
-                        <v-input :type="'password'" v-model="form.password" :value="form.password" :id="'email'" @input="form.password = $event" @keyup="$v.form.password.$touch()">Hasło</v-input>
+                        <v-input :type="'password'" v-model="form.password" :value="form.password" :id="'password'" @input="form.password = $event" @keyup="$v.form.password.$touch()">Hasło</v-input>
                         <div v-if="$v.form.password.$error">
                             <div class="form__error" v-if="!$v.form.password.required">To pole jest wymagane.</div>
                             <div class="form__error" v-if="!$v.form.password.minLength">To pole musi mieć co najmniej {{ $v.form.password.$params.minLength.min }} znaków</div>
@@ -42,7 +43,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" :disabled="this.$v.$invalid || isProcessing" :loading="isProcessing">Zarejestruj</v-button>
+                        <v-button type="submit" :color="'blue'" :disabled="isProcessing" :loading="isProcessing">Zarejestruj</v-button>
                     </div>
                 </form>
             </div>
@@ -52,9 +53,11 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
     import { required, minLength, email } from 'vuelidate/lib/validators'
-    import store from '../../store';
-    import { post } from '../../helpers/api'
+    import { get, post } from '../../helpers/api'
+
+    const touchMap = new WeakMap();
 
     export default {
         data() {
@@ -71,6 +74,7 @@
             }
         },
         methods: {
+            ...mapActions(['setUser']),
             async submit() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
@@ -79,13 +83,20 @@
                 this.isProcessing = true;
                 try {
                     const res = await post('/auth/register', this.form);
-                    store.dispatch('setUser', {token: res.data.token, user: res.data.user});
-                    localStorage.setItem('firstLogin', true)
+                    this.setUser({token: res.data.token, user: res.data.user});
+                    localStorage.setItem('firstLogin', true);
                     this.$router.push({name: 'panel'});
                 } catch (e) {
                     this.isProcessing = false;
                 }
             },
+            delayTouch($v) {
+                $v.$reset();
+                if (touchMap.has($v)) {
+                    clearTimeout(touchMap.get($v));
+                }
+                touchMap.set($v, setTimeout($v.$touch, 150));
+            }
         },
         validations: {
             form: {
@@ -101,7 +112,13 @@
                 },
                 email: {
                     required,
-                    email
+                    email,
+                    async correct(value) {
+                        if (value === '') return true;
+                        const res = await get('/auth/email', {email: value});
+                        console.log(!res.data)
+                        return !res.data;
+                    }
                 },
                 password: {
                     required,

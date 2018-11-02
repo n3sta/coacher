@@ -24,16 +24,16 @@
 </template>
 
 <script>
-    import store from '../../store'
+    import { mapGetters } from 'vuex';
     import { get, del } from '../../helpers/api'
 
     export default {
         data() {
             return {
-                user: store.getters.user,
                 users: [],
             }
         },
+        computed: mapGetters(['user']),
         created() {
             this.getUsers();
         },
