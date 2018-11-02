@@ -147,7 +147,6 @@ export default new Vuex.Store({
             }
         },
         setUser({ commit, dispatch }, data) {
-            console.log(data);
             commit('setUser', data);
             dispatch('getStartData');
         },

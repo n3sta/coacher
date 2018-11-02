@@ -34,7 +34,7 @@
                         <div @click="back()">
                             <v-button type="button" :color="'white'">Anuluj</v-button>
                         </div>
-                        <v-button type="submit" :color="'blue'" :disabled="$v.$invalid || isProcessing" :loading="isProcessing">Dodaj</v-button>
+                        <v-button type="submit" :color="'blue'" :disabled="isProcessing" :loading="isProcessing">Dodaj</v-button>
                     </div>
                 </div>
             </div>

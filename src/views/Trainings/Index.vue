@@ -49,7 +49,8 @@
                 monthsLong: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
                 events: [],
                 currDate: moment(),
-                showList: JSON.parse(localStorage.getItem('showList'))
+                showList: JSON.parse(localStorage.getItem('showList')),
+                calendarUser: this.$store.state.user._id,
             }
         },
         computed: mapGetters(['user', 'pupils']),
@@ -57,16 +58,7 @@
             'v-calendar': Calendar,
             'v-list': List
         },
-        watch: {
-            'user'() {
-                this.calendarUser = this.user._id;
-            },
-            'calendarUser'() {
-                this.getEvents();
-            },
-        },
         created() {
-            this.getEvents();
             this.checkWidth();
             window.addEventListener('resize', this.checkWidth);
             if (this.miniCalendar) this.showList = false; 
@@ -90,7 +82,7 @@
                 };
                 this.events = [];
                 const res = await get('/trainings', params);
-                this.events = res.data;;
+                this.events = res.data;
             },
             show(data) {
                 this.setTrainingData({

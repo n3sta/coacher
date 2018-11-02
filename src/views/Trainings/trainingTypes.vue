@@ -16,7 +16,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" class="button--inline" :disabled="$v.form.name.$invalid || isProcessing" :loading="isProcessing">Dodaj</v-button>
+                        <v-button type="submit" :color="'blue'" class="button--inline" :disabled="isProcessing" :loading="isProcessing">Dodaj</v-button>
                     </div>
                 </form>
             </div>

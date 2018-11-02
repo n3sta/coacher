@@ -21,7 +21,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" :disabled="this.$v.$invalid || isProcessing" :loading="isProcessing">Zaloguj</v-button>
+                        <v-button type="submit" :color="'blue'" :disabled="isProcessing" :loading="isProcessing">Zaloguj</v-button>
                     </div>
                 </form>
             </div>

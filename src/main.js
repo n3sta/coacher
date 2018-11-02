@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
-
+import store from './store';
 import style from './css/layout.scss';
 
 import Index from './Index.vue'
@@ -32,5 +32,6 @@ Vue.use(Vuelidate);
 
 new Vue({
   router,
+  store,
   render: h => h(Index)
 }).$mount('#root');
