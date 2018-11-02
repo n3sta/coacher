@@ -6,9 +6,12 @@
                 <div @click="$router.push({name: 'addQuestion'})">
                     <v-button type="button" :color="'blue'">Dodaj pytanie</v-button>
                 </div>
+                <div class="box__title-button-margin" @click="$router.push({name: 'profiler'})">
+                    <v-button type="button" :color="'blue'">Przetestuj ankietę</v-button>
+                </div>
             </div>
             <div class="box__content">
-                <span>Ułóż pytania do ankiety. Rejestrujący się zawodnik odpowie na Twoje pytania dzięki czemu uzyskasz na jego temat istotne informacje. Przeciągając za <span class="material-icons" aria-hidden="true" style="position: relative; top: 7px; line-height: 0;">dehaze</span> możesz zmieniać kolejność pytań.</span>
+                <p>Ułóż pytania do ankiety. Rejestrujący się zawodnik odpowie na Twoje pytania dzięki czemu uzyskasz na jego temat istotne informacje. Przeciągając za <span class="material-icons" aria-hidden="true" style="position: relative; top: 7px; line-height: 0;">dehaze</span> możesz zmieniać kolejność pytań.</p>
             </div>
             <div class="box__content box__content--no-padding" v-if="questions.length">
                 <div class="list" ref="list">

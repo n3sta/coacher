@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<div class="row">
-			<div class="col-sm-6 col-xs-12">
+			<div class="col-md-6 col-sm-12">
 				<v-statistic></v-statistic>
 			</div>
-			<div class="col-sm-6 col-xs-12">
+			<div class="col-md-6 col-sm-12">
 				<v-nextStart></v-nextStart>
 			</div>
 		</div>
@@ -13,7 +13,7 @@
 				<span class="box__title-name">Ostatnie aktywności</span>
 			</div>
 			<div class="box__content">
-				<v-calendar :miniCalendar="1"></v-calendar>
+				<v-trainings v-bind:miniCalendar="1"></v-trainings>
 			</div>
 		</div>
 	</div>
@@ -23,37 +23,22 @@
 	import moment from 'moment';
 	import Statistic from './Statistic';
 	import nextStart from './nextStart';
-	import Calendar from '../Trainings/Calendar';
+	import Trainings from '../Trainings/Index';
 	import { get } from '../../helpers/api';
     import store from '../../store';
 
     export default {
     	data() {
     		return {
-    			user: store.getters.user,
-    			trainings: {}
+    			user: store.getters.user
     		}
     	},
     	components: {
     		'v-statistic': Statistic,
     		'v-nextStart': nextStart,
-    		'v-calendar': Calendar
-    	},
-    	mounted() {
-    		this.getLastTraining();
+    		'v-trainings': Trainings
     	},
     	methods: {
-    		getLastTraining() {
-    			get('/trainings', {
-    				user: this.user._id,
-    				createdAt: {
-    					$gte: new Date(moment().startOf('day')),
-    					$lte: new Date(moment().endOf('day'))
-    				}
-    			}).then((res) => {
-    				this.trainings = res.data;
-    			})
-    		},
     		
     	}
     }

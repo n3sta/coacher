@@ -21,11 +21,7 @@ const questionSchema = new mongoose.Schema({
     options: [{
         type: 'String',
         default: ''
-    }],
-    required: {
-        type: Boolean,
-        default: false
-    }
+    }]
 });
 
 questionSchema.pre('save', function(next) {

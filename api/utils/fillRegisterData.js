@@ -45,32 +45,38 @@ const fillQuestions = async (id) => {
             type: 3,
             options: [
                 'Mężczyzna', 'Kobieta'
-            ]
+            ],
+            order: 0
         },
         {
             userId: id,
             question: 'Waga',
             type: 1,
+            order: 1
         },
         {
             userId: id,
             question: 'Wzrost',
             type: 1,
+            order: 2
         },
         {
             userId: id,
             question: 'Ile lat już trenujesz?',
-            type: 1
+            type: 1,
+            order: 3
         },
         {
             userId: id,
             question: 'Jakie są Twoje plany/cele?',
-            type: 1
+            type: 1,
+            order: 4
         },
         {
             userId: id,
             question: 'Czy masz jakieś przeciwwskazania do uprawiania sportu? Jeśli tak to je wymień',
-            type: 2
+            type: 2,
+            order: 5
         },
     ]
 
@@ -117,10 +123,10 @@ const fillUsers = async (id) => {
 const fillTrainings = async (id) => {
     const trainings = [];
     const countUser = await User.find({coachId: id}).count().exec();
-    const user = await User.findOne().skip(Math.floor(Math.random() * countUser));
     const countTrainingType = await TrainingType.find({user: id}).count().exec();
-    const trainingType = await TrainingType.findOne().skip(Math.floor(Math.random() * countTrainingType));
     for (let i = 2; i < 16; i = i + (Boolean(Math.random() > 0.5) + 1)) {
+        const user = await User.findOne().skip(Math.floor(Math.random() * countUser));
+        const trainingType = await TrainingType.findOne({user: id}).skip(Math.floor(Math.random() * countTrainingType));
         const date = moment().toDate();
         trainings.push({
             user: id,

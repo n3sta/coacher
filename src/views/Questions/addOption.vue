@@ -1,5 +1,5 @@
 <template>
-    <v-modal :show="show" @close="close()">
+    <v-modal :show="show" @cancel="cancel">
         <div class="box modal__box">
             <div class="box__title">
                 <div class="box__title-name">Opcje listy rozwijalnej</div>
@@ -93,14 +93,14 @@
                     return true;
                 }
                 this.$emit('done', this.options);
-                this.close();
+                this.cancel();
             },
             deleteOption(index) {
                 this.options.splice(index, 1);
             },
-            close() {
+            cancel() {
                 this.options = [];
-                this.$emit('close');
+                this.$emit('cancel');
             }
         },
         validations: {
