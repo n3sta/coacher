@@ -130,7 +130,7 @@ export default new Vuex.Store({
         },
         async getTrainingTypes ({ commit, state }) {
             const res = await get(`/trainingTypes`, {
-                userId: state.user._id
+                user: state.user._id
             });
             commit('getTrainingTypes', res.data);
         },

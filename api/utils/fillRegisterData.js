@@ -13,7 +13,23 @@ export const fillRegisterData = async (id) => {
             },
             {
                 user: id,
+                name: 'Długie rozbieganie'
+            },
+            {
+                user: id,
                 name: 'Siła biegowa'
+            },
+            {
+                user: id,
+                name: 'Interwały'
+            },
+            {
+                user: id,
+                name: 'Zabawa biegowa'
+            },
+            {
+                user: id,
+                name: 'Szybkość'
             },
             {
                 user: id,
@@ -26,6 +42,10 @@ export const fillRegisterData = async (id) => {
             {
                 user: id,
                 name: 'Zawody'
+            },
+            {
+                user: id,
+                name: 'Siła ogólna/sprawność'
             }
         ]
     );
