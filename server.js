@@ -10,6 +10,7 @@ import notificationsRoutes from "./api/routes/notificationsRoutes";
 import invitationsRoutes from "./api/routes/invitationsRoutes";
 import questionsRoutes from "./api/routes/questionsRoutes";
 import answersRoutes from "./api/routes/answersRoutes";
+import competitionsRoutes from "./api/routes/competitionsRoutes";
 
 const hostname = '127.0.0.1';
 const port = 8082;
@@ -31,6 +32,7 @@ app.use('/notifications', notificationsRoutes);
 app.use('/invitations', invitationsRoutes);
 app.use('/questions', questionsRoutes);
 app.use('/answers', answersRoutes);
+app.use('/competitions', competitionsRoutes);
 
 app.listen(port, hostname, () => {
     console.log('Server running at http://'+ hostname + ':' + port + '/');
