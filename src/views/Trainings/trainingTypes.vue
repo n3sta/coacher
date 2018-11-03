@@ -5,29 +5,24 @@
                 <div class="box__title-name">Typy treningów</div>
             </div>
             <div class="box__content">
-                <form @submit.prevent="submit()">
-                    <div class="form__box">
-                        <div class="form__box-helper">
-                            <v-input :id="'trainingType'" :value="form.name" @input="form.name = $event" @keyup="$v.form.name.$touch()">Nazwa treningu</v-input>
-                            <div v-if="$v.form.name.$error">
-                                <div class="form__error" v-if="!$v.form.name.required">To pole jest wymagane.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form__buttons">
-                        <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" class="button--inline" :disabled="isProcessing" :loading="isProcessing">Dodaj</v-button>
-                    </div>
-                </form>
+                <p>Uwaga! Wszystkie treningi z wybranym nieaktywnym typem nie zostaną wyświetlone w systemie i nie będzie możliwości dodania treningu z takim typem.</p>
             </div>
             <div class="box__content box__content--no-padding" v-if="types">
                 <div class="list">
+                    <div class="list__item">
+                        <div class="list__item-content">
+                            <span class="list__name bold">Nazwa treningu</span>
+                        </div>
+                        <div>
+                            <p class="bold">Aktywny</p>
+                        </div>
+                    </div>
                     <div class="list__item" v-for="item in types" :key="item._id">
                         <div class="list__item-content">
                             <span class="list__name">{{ item.name }}</span>
                         </div>
                         <div class="list__buttons">
-                            <button class="button-icon" @click="deleteType(item._id)"><span class="material-icons text--red cursor" aria-hidden="true">delete</span></button>
+                            <v-checkbox :id="`active${item._id}`" :checked="item.active" @change="changeActive($event, item._id)"></v-checkbox>
                         </div>
                     </div>
                 </div>
@@ -40,9 +35,8 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions } from 'vuex';
-    import { required, minLength } from 'vuelidate/lib/validators'
-    import { get, post, del } from '../../helpers/api'
+    import { mapGetters } from 'vuex';
+    import { get, put } from '../../helpers/api'
 
     export default {
         data() {
@@ -59,35 +53,13 @@
         },
         computed: mapGetters(['user']),
         methods: {
-            ...mapActions(['setSnackbar']),
             async getTypes() {
                 const res = await get(`/trainingTypes`, {user: this.user._id});
                 this.types = res.data;
             },
-            async deleteType(id) {
-                await del(`/trainingTypes/${id}`);
+            async changeActive(value, _id) {
+                await put(`/trainingTypes/${_id}`, {active: value});
                 this.getTypes();
-            },
-            async submit() {
-                this.$v.$touch();
-                if (this.$v.$invalid) {
-                    return false;
-                }
-                this.isProcessing = true;
-                await post('/trainingTypes', {user: this.user._id, name: this.form.name});
-                this.setSnackbar({class: 'success', text: 'Typ treningu został dodany.'});
-                this.getTypes();
-                this.isProcessing = false;
-                this.form.name = '';
-                this.$v.$reset();
-            },
-        },
-        validations: {
-            form: {
-                name: {
-                    required,
-                    minLength: minLength(3)
-                },
             }
         }
     }

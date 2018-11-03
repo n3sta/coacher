@@ -16,8 +16,6 @@ api.use((req, res, next) => {
 
 api.get('/', verifyToken, getFilters, errorHandler.catchAsync(trainingTypesController.findAll));
 
-api.post('/', verifyToken, errorHandler.catchAsync(trainingTypesController.create));
-
 api.put('/:id', verifyToken, errorHandler.catchAsync(trainingTypesController.update));
 
 api.delete('/:id', verifyToken, errorHandler.catchAsync(trainingTypesController.delete));

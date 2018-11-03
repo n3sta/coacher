@@ -1,5 +1,6 @@
 import moment from 'moment';
 import Training from '../models/Training';
+import trainingType from '../models/TrainingType';
 import trainingHelpers from '../middlewares/helpers/trainings';
 
 export default {
@@ -9,6 +10,8 @@ export default {
 		return res.status(200).json(training);
 	},
 	async findAll(req, res) {
+		const types = await trainingType.find({user: req.query.user, active: true});
+		req.filters.trainingType = {$in: types};
 		const trainings = await Training.find(req.filters).sort('createdAt').populate('trainingType');
 
 		return res.status(200).json(trainings);
