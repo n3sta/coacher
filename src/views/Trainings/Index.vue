@@ -59,6 +59,7 @@
             'v-list': List
         },
         created() {
+            this.getEvents();
             this.checkWidth();
             window.addEventListener('resize', this.checkWidth);
             if (this.miniCalendar) this.showList = false; 

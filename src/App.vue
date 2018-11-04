@@ -34,6 +34,7 @@
                             <li class="nav__item"><router-link :to="{ name: 'panel' }" exact class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">home</span><span>Panel główny</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'pupils' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">group</span><span>Zawodnicy</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'admin' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">directions_run</span><span>Treningi</span></router-link></li>
+                            <li class="nav__item"><router-link :to="{ name: 'starts' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Starty</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'questions' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">contact_support</span><span>Ankieta</span></router-link></li>
                             <hr class="nav__divider">
                             <li class="nav__item"><router-link :to="{ name: 'users' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Lista użytkowników</span></router-link></li>

@@ -2,7 +2,7 @@ import TrainingType from '../models/TrainingType';
 
 export default {
 	async findAll(req, res) {
-		const trainingTypes = await TrainingType.find(req.filters);
+		const trainingTypes = await TrainingType.find({user: req.query.user});
 
 		return res.status(200).json(trainingTypes);
 	},

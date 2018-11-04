@@ -56,9 +56,20 @@ export default new Router({
                     component: () => import('./views/Trainings/Training'),
                 },
                 {
-                    path: '/starts/start',
-                    name: 'startForm',
-                    component: () => import('./views/Panel/StartForm'),
+                    path: '/starts',
+                    name: 'starts',
+                    component: () => import('./views/Starts/Index'),
+                },
+                {
+                    path: '/starts/add',
+                    name: 'addStart',
+                    component: () => import('./views/Starts/Form'),
+                },
+                {
+                    path: '/starts/edit/:_id',
+                    name: 'editStart',
+                    props: true,
+                    component: () => import('./views/Starts/Form'),
                 },
                 {
                     path: '/trainingTypes',
