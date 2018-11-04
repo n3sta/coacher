@@ -63,11 +63,7 @@
         },
         computed: mapGetters(['user']),
         created() {
-            if (this.miniCalendar) {
-                this.drawMiniCalendar();
-            } else {
-                this.drawCalendar();
-            }
+            (this.miniCalendar) ? this.drawMiniCalendar() : this.drawCalendar();
         },
         mounted() {
             const days = document.querySelectorAll('.calendar__day');
@@ -111,7 +107,7 @@
                 this.dragging = true;
             },            
             drawMiniCalendar() {
-                const firstWeekDay = moment(this.currDate).startOf('week');
+                const firstWeekDay = moment(this.currDate).startOf('isoweek');
                 for (let i = 0; i < 7; i++) {
                     const days = (i > 1) ? 'days' : 'day';
                     firstWeekDay.add(1, days);
@@ -119,11 +115,10 @@
                         createdAt: moment(firstWeekDay).format('YYYY-MM-DD'),
                     })
                 }
-                this.$emit('getEvents');
             },
             drawCalendar() {
                 const firstWeekDay = moment(this.currDate).startOf('month');
-                const firstMonthDay = moment(firstWeekDay).startOf('week');
+                const firstMonthDay = moment(firstWeekDay).startOf('isoweek');
                 this.monthDays = [];
                 for (let i = 0; i < 35; i++) {
                     const days = (i > 1) ? 'days' : 'day';
@@ -132,7 +127,6 @@
                         createdAt: moment(firstMonthDay).format('YYYY-MM-DD'),
                     })
                 }
-                this.$emit('getEvents');
             },
             show(id, date = new Date()) {
                 this.$emit('show', {id, date})

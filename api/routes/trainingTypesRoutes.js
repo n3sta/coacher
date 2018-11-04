@@ -1,7 +1,6 @@
 import express from 'express';
 import trainingTypesController from '../controllers/trainingTypesController';
 import verifyToken from '../auth/index';
-import getFilters from '../middlewares/filters/trainingTypes';
 import errorHandler from '../middlewares/errors';
 
 let api = express.Router();
@@ -14,7 +13,7 @@ api.use((req, res, next) => {
     next();
 });
 
-api.get('/', verifyToken, getFilters, errorHandler.catchAsync(trainingTypesController.findAll));
+api.get('/', verifyToken, errorHandler.catchAsync(trainingTypesController.findAll));
 
 api.put('/:id', verifyToken, errorHandler.catchAsync(trainingTypesController.update));
 

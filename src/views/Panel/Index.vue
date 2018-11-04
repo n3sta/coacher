@@ -5,7 +5,7 @@
 				<v-statistic></v-statistic>
 			</div>
 			<div class="col-md-6 col-sm-12">
-				<v-nextStart></v-nextStart>
+				<v-start></v-start>
 			</div>
 		</div>
 		<div class="box">
@@ -23,14 +23,14 @@
     import { mapGetters } from 'vuex';
 	import moment from 'moment';
 	import Statistic from './Statistic';
-	import nextStart from './nextStart';
+	import Start from './Start';
 	import Trainings from '../Trainings/Index';
 	import { get } from '../../helpers/api';
 
     export default {
     	components: {
     		'v-statistic': Statistic,
-    		'v-nextStart': nextStart,
+    		'v-start': Start,
     		'v-trainings': Trainings
     	},
     	computed: mapGetters(['user'])

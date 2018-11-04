@@ -2,6 +2,7 @@ import TrainingType from "../models/TrainingType";
 import Training from "../models/Training";
 import User from "../models/User";
 import Question from '../models/Question';
+import Competition from '../models/Competition';
 import moment from 'moment';
 
 export const fillRegisterData = async (id) => {
@@ -55,6 +56,36 @@ export const fillSampleData = async (id) => {
     fillUsers(id);
     fillTrainings(id);
     fillQuestions(id);
+    fillCometitions(id);
+}
+
+const fillCometitions = async (id) => {
+    const competitions = [
+        {
+            user: id,
+            name: 'Bieg po złote kalesony',
+            distance: 12,
+            date: new Date()
+        },
+        {
+            user: id,
+            name: 'Wiosenne biegi przełajowe',
+            distance: 5,
+            date: new Date()
+        },
+        {
+            user: id,
+            name: 'Bieg solidarności',
+            distance: 21.097,
+            date: new Date()
+        },
+    ]
+
+    try {
+        await Competition.insertMany(competitions);
+    } catch(e) {
+        console.log('Error:' + e)
+    }
 }
 
 const fillQuestions = async (id) => {

@@ -52,7 +52,6 @@
 
 <script>
     import { required, minLength } from 'vuelidate/lib/validators'
-    import modal from '../../components/Modal';
 
     export default {
         props: {
@@ -70,9 +69,6 @@
                 option: '',
                 touch: false
             }
-        },
-        components: {
-            'v-modal': modal,
         },
         methods: {
             addOption() {

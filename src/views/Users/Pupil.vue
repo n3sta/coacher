@@ -23,7 +23,6 @@
     import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
     import { get, put, patch } from '../../helpers/api'
     import Statistic from '../Panel/Statistic';
-    import nextStart from '../Panel/nextStart';
     import Calendar from '../Trainings/Calendar';
 
     export default {
