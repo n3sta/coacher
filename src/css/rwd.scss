@@ -1,0 +1,97 @@
+@import 'vars.scss';
+
+@media screen and (max-width: 1100px) {
+	.aside-toggler {
+		display: block !important;
+	}
+	.header {
+		&__logo {
+			font-size: 20px;
+		}
+	}
+	.aside {
+		min-width: 280px;
+		position: fixed;
+	    top: 0;
+	    height: 100%;
+	    left: 0;
+	    z-index: 9;
+	    transform: translateX(-300px);
+	    z-index: 999;
+	    &--show {
+	    	transform: translateX(0);
+	    }
+	    & .header__inner {
+	    	padding: 0 15px;
+	    	display: flex !important;
+	    	position: relative;
+	    	top: -20px;
+	    }
+	    & .header__logo {
+			color: $text__black;
+			font-size: 20px;
+			& a {
+				color: $text__black;
+			}
+		}
+		& .aside-toggler {
+			&:hover {
+				background-color: $background__hover;
+			}
+			& span {
+				color: $text__black;
+			}
+		}
+	}
+	.content {
+		padding: 16px;
+		flex: 1 0 100%;
+	}
+	.box {
+		width: 100%;
+	}
+	.changeView {
+		display: none;
+	}
+	.calendar {
+		&__divider {
+			display: none;
+		}
+	}
+	.mx-datepicker.month {
+		display: block;
+	}
+	.calendar__switch-date {
+		display: none;
+	}
+}
+
+// @media screen and (max-width: 768px) {
+// 	table {
+// 		margin-bottom: 0;
+// 		background-color: transparent;
+// 	}
+// 	& thead,
+// 	& tfoot {
+// 		display: none;
+// 	}
+// 	& tbody {
+// 		display: block;
+// 		& tr {
+// 			display: block;
+// 			border: 1px solid $border;
+// 			border-radius: 2px;
+// 			margin-bottom: 0;
+// 		}
+// 		& td {
+// 			display: block;
+// 			vertical-align: middle;
+// 			text-align: right;
+// 		}
+// 		& td[data-title]:before {
+// 			content: attr(data-title);
+// 			float: left;
+// 			font-size: inherit;
+// 		}
+// 	}
+// }
