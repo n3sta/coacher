@@ -3,7 +3,7 @@ import qs from 'qs';
 import store from '../store';
 
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8082',
+    baseURL: 'localhost/api',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
