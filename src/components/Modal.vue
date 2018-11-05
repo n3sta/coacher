@@ -18,7 +18,7 @@
         },
         watch: {
             show() {
-                if (this.showAside) {
+                if (this.show) {
                     document.body.classList.add('body--overflow');
                 } else {
                     document.body.classList.remove('body--overflow');

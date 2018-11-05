@@ -72,7 +72,7 @@
 	.modal {
 		&__content {
 		    margin: 0 8px;
-		    width: calc(100% - 32px);
+		    width: calc(100% - 16px);
 		    left: 0;
 		    transform: translateX(0);
 		    min-height: auto;
@@ -95,10 +95,13 @@
 	}
 	.calendar__filters {
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		& .mx-datepicker.month {
 			max-width: 120px;
 			margin: 12px 8px 4px;
+		}
+		& .dropdown {
+			min-width: auto;
 		}
 	}
 }
@@ -107,31 +110,31 @@
 	.responsiveTable {
 		margin-bottom: 0;
 		background-color: transparent;
-	}
-	& thead,
-	& tfoot {
-		display: none;
-	}
-	& tbody {
-		display: block;
-		& tr {
-			display: block;
-			border: 1px solid $border;
-			border-radius: 2px;
-			margin-bottom: 0;
-			margin-bottom: 8px;
+		& thead,
+		& tfoot {
+			display: none;
 		}
-		& td {
+		& tbody {
 			display: block;
-			vertical-align: middle;
-			text-align: right;
-		}
-		& td[data-title]:before {
-			content: attr(data-title);
-			padding-right: 4px;
-			font-weight: 500;
-			float: left;
-			font-size: inherit;
+			& tr {
+				display: block;
+				border: 1px solid $border;
+				border-radius: 2px;
+				margin-bottom: 0;
+				margin-bottom: 8px;
+			}
+			& td {
+				display: block;
+				vertical-align: middle;
+				text-align: right;
+			}
+			& td[data-title]:before {
+				content: attr(data-title);
+				padding-right: 4px;
+				font-weight: 500;
+				float: left;
+				font-size: inherit;
+			}
 		}
 	}
 	.clearsystem {
