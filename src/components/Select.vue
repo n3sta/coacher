@@ -2,7 +2,7 @@
     <div>
         <div class="select" ref="select">
             <label class="form__label" :data-filled="Boolean(value)">{{ label }}</label>
-            <div class="select__button" :id="id" @click="active = true">{{ selected }}</div>
+            <div class="select__button" :id="id" @click="active = true" @focus="focus" tabindex="0">{{ selected }}</div>
             <span class="material-icons select__caret" aria-hidden="true">unfold_more</span>
             <transition name="fadeIn">
                 <ul class="select__ul" v-if="active">
@@ -56,6 +56,9 @@
                 if (select !== e.target && !select.contains(e.target)) {
                     this.active = false
                 }
+            },
+            focus() {
+                this.active = true;
             }
         }
     }

@@ -37,7 +37,6 @@ export default new Router({
         },
         {
             path: '/',
-            name: 'App',
             component: App,
             children: [
                 {
@@ -51,9 +50,16 @@ export default new Router({
                     component: () => import('./views/Trainings/Index'),
                 },
                 {
-                    path: '/trainings/training',
+                    path: '/trainings/add/:user/:createdAt',
                     name: 'addTraining',
-                    component: () => import('./views/Trainings/Training'),
+                    props: true,
+                    component: () => import('./views/Trainings/Form'),
+                },
+                {
+                    path: '/trainings/edit/:_id',
+                    name: 'editTraining',
+                    props: true,
+                    component: () => import('./views/Trainings/Form'),
                 },
                 {
                     path: '/starts',
@@ -75,6 +81,9 @@ export default new Router({
                     path: '/trainingTypes',
                     name: 'trainingTypes',
                     component: () => import('./views/Trainings/trainingTypes'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 },
                 {
                     path: '/account',
@@ -84,10 +93,13 @@ export default new Router({
                 {
                     path: '/pupils',
                     name: 'pupils',
-                    component: () => import('./views/Users/Pupils')
+                    component: () => import('./views/Users/Pupils'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 },
                 {
-                    path: '/pupils/:userId',
+                    path: '/pupils/:_id',
                     name: 'pupil',
                     props: true,
                     component: () => import('./views/Users/Pupil')
@@ -95,18 +107,32 @@ export default new Router({
                 {
                     path: '/users',
                     name: 'users',
-                    component: () => import('./views/Users/Users')
+                    component: () => import('./views/Users/Users'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 },
                 {
-                    path: '/questionnaire',
+                    path: '/questions',
                     name: 'questions',
                     component: () => import('./views/Questions/Index')
                 },
                 {
-                    path: '/questionnaire/form',
+                    path: '/questions/form',
                     name: 'addQuestion',
+                    component: () => import('./views/Questions/Form'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
+                },
+                {
+                    path: '/questions/edit/:_id',
+                    name: 'editQuestion',
                     props: true,
-                    component: () => import('./views/Questions/addQuestion'),
+                    component: () => import('./views/Questions/Form'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 }
             ],
             beforeEnter: (to, from, next) => {
@@ -122,5 +148,13 @@ const guard = (to, from, next) => {
         next()
     } else {
         next('/login');
+    }
+};
+
+const coach = (to, from, next) => {
+    if (store.getters.user.coach) {
+        next()
+    } else {
+        next('/');
     }
 };

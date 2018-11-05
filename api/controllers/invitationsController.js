@@ -1,5 +1,4 @@
 import Invitation from '../models/Invitation';
-import Email from '../emails/Email';
 
 export default {
     async find(req, res) {
@@ -12,10 +11,6 @@ export default {
         if (!invitation) {
             await new Invitation(req.body).save();
         }
-        const email = await Email.sendText(req.body.email, 'TheCoacher.com | Zaproszenie do aplikacji', '', `
-            <h1>Witaj</h1>
-            Kliknij w link potwierdzający <a href="#">LINK</a>
-        `);
 
         return res.status(200).json(email);
     },

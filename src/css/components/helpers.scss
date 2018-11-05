@@ -592,4 +592,29 @@
         border-bottom: 1px solid rgba(0,0,0,.12);
         color: $text__gray;
     }
-}   
+}
+
+.mx-datepicker.month {
+    display: none;
+    margin-left: 16px;
+    input {
+        display: block;
+        color: $text__black;
+        background-color: $white;
+        padding: 0 16px;
+        height: 36px;
+        border-radius: 2px;
+        line-height: 36px;
+        text-transform: uppercase;
+        font-weight: 600;
+        box-shadow: $button__shadow;
+        transition: $transition;
+        cursor: pointer;
+        background-color: $blue400;
+        color: $white;
+        border: none;
+    }
+    & .mx-input-append {
+        display: none !important;
+    }
+}

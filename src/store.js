@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { get,post } from './helpers/api.js'
+import { get } from './helpers/api.js'
 import router from './router'
 
 Vue.use(Vuex);
@@ -19,7 +19,6 @@ export default new Vuex.Store({
             activated: false
         },
         pupils: [],
-        trainingTypes: [],
         snackbar: {
             show: false,
             text: '',
@@ -33,11 +32,6 @@ export default new Vuex.Store({
             type: null,
             resolve: null,
             reject: null,
-        },
-        trainingData: {
-            _id: null,
-            createdAt: null,
-            userId: null
         },
         stats: {
             week: 0,
@@ -61,7 +55,6 @@ export default new Vuex.Store({
         alert: state => state.alert,
         user: state => state.user,
         token: state => state.token,
-        trainingData: state => state.trainingData,
         stats: state => state.stats,
         pupils: state => state.pupils,
         types: state => state.types,
@@ -88,10 +81,7 @@ export default new Vuex.Store({
             router.push({name: 'login'});
         },
         getPupils (state, data) {
-            state.pupils = data;
-        },
-        getTrainingTypes (state, data) {
-            state.trainingTypes = data;
+            state.pupils = data || [];
         },
         setSnackbar (state, data) {
             state.snackbar.class = data.class;
@@ -114,9 +104,6 @@ export default new Vuex.Store({
         closeAlert (state) {
             state.alert.show = false;
         },
-        setTrainingData (state, data) {
-            state.trainingData = data;
-        },
         setStats (state, data) {
             state.stats = data;
         }
@@ -127,12 +114,6 @@ export default new Vuex.Store({
                 coachId: state.user._id
             });
             commit('getPupils', res.data);
-        },
-        async getTrainingTypes ({ commit, state }) {
-            const res = await get(`/trainingTypes`, {
-                user: state.user._id
-            });
-            commit('getTrainingTypes', res.data);
         },
         async getUser({ commit, dispatch }) {
             if (!localStorage.getItem('_id')) {
@@ -151,17 +132,12 @@ export default new Vuex.Store({
             dispatch('getStartData');
         },
         getStartData({ commit, dispatch }) {
-            const getTrainingTypes = () => {
-                return new Promise((resolve) => {
-                    resolve(dispatch('getTrainingTypes'));
-                });
-            };
             const getPupils = () => {
                 return new Promise((resolve) => {
                     resolve(dispatch('getPupils'));
                 });
             };
-            Promise.all([getTrainingTypes(), getPupils()]).then(() => {
+            Promise.all([getPupils()]).then(() => {
                 commit('setLoading');
             });
         },

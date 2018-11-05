@@ -3,7 +3,7 @@
         <div class="calendar">
             <div class="calendar__week">
                 <div class="calendar__day" v-for="(day, dayIndex) in monthDays"
-                     @click="show(0, day.createdAt)"
+                     @click="$router.push({name: 'addTraining', params: {user: calendarUser, createdAt: day.createdAt}})"
                      :ref="`day${dayIndex}`"
                      :key="dayIndex"
                      :class="{
@@ -16,7 +16,7 @@
                         <span v-if="dayIndex < 7">{{ daysNames[getWeekDay(day.createdAt)] }}, </span>{{ getDay(day.createdAt) }} {{ monthShortcut(day.createdAt) }}
                     </div>
                     <div class="calendar__events calendar__sortable" :data-date="day.createdAt">
-                        <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-date="day.createdAt" :data-id="event._id" @click.stop="show(event._id, day.createdAt)">
+                        <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-date="day.createdAt" :data-id="event._id" @click.stop="$router.push({name: 'editTraining', params: {_id: event._id}})">
                             <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.trainingType.name }}</v-button>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
     import { mapGetters } from 'vuex';
     import Sortable from 'sortablejs';
     import moment from 'moment';
-    import { get, post, put } from '../../helpers/api';
+    import { put } from '../../helpers/api';
 
     export default {
         props: {
@@ -43,7 +43,7 @@
             },
             events: {
                 type: Array,
-                default: []
+                default: () => []
             },
             currDate: {
                 type: Object
@@ -54,6 +54,9 @@
             months: {
                 type: Array
             },
+            calendarUser: {
+                type: String
+            }
         },
         data() {
             return {

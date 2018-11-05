@@ -13,7 +13,7 @@ api.use((req, res, next) => {
     next();
 });
 
-api.get('/', verifyToken, errorHandler.catchAsync(answersController.find));
+api.get('/', verifyToken, errorHandler.catchAsync(answersController.findAll));
 
 api.post('/', verifyToken, errorHandler.catchAsync(answersController.create));
 
