@@ -49,6 +49,7 @@
 	}
 	.box {
 		width: 100%;
+		padding: 8px;
 	}
 	.changeView {
 		display: none;
@@ -60,38 +61,77 @@
 	}
 	.mx-datepicker.month {
 		display: block;
+		max-width: 110px;
 	}
 	.calendar__switch-date {
 		display: none;
 	}
 }
 
-// @media screen and (max-width: 768px) {
-// 	table {
-// 		margin-bottom: 0;
-// 		background-color: transparent;
-// 	}
-// 	& thead,
-// 	& tfoot {
-// 		display: none;
-// 	}
-// 	& tbody {
-// 		display: block;
-// 		& tr {
-// 			display: block;
-// 			border: 1px solid $border;
-// 			border-radius: 2px;
-// 			margin-bottom: 0;
-// 		}
-// 		& td {
-// 			display: block;
-// 			vertical-align: middle;
-// 			text-align: right;
-// 		}
-// 		& td[data-title]:before {
-// 			content: attr(data-title);
-// 			float: left;
-// 			font-size: inherit;
-// 		}
-// 	}
-// }
+@media screen and (max-width: 600px) {
+	.modal {
+		&__content {
+		    margin: 0 8px;
+		    width: calc(100% - 32px);
+		    left: 0;
+		    transform: translateX(0);
+		    min-height: auto;
+		}
+	}
+	.box {
+		&__content {
+			padding: 8px;
+		}
+	}
+	.clearSystem {
+		display: none;
+		&--mobile {
+			display: block;
+		}
+	}
+	.button-float {
+		right: 16px;
+		bottom: 16px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	table {
+		margin-bottom: 0;
+		background-color: transparent;
+	}
+	& thead,
+	& tfoot {
+		display: none;
+	}
+	& tbody {
+		display: block;
+		& tr {
+			display: block;
+			border: 1px solid $border;
+			border-radius: 2px;
+			margin-bottom: 0;
+			margin-bottom: 8px;
+		}
+		& td {
+			display: block;
+			vertical-align: middle;
+			text-align: right;
+		}
+		& td[data-title]:before {
+			content: attr(data-title);
+			padding-right: 4px;
+			font-weight: 500;
+			float: left;
+			font-size: inherit;
+		}
+	}
+	.clearsystem {
+		&--icon {
+			display: block;
+		}
+		&--button {
+			display: none;
+		}
+	}
+}

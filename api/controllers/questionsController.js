@@ -2,7 +2,7 @@ import Question from '../models/Question';
 
 export default {
     async find(req, res) {
-        const questions = await Question.find({userId: req.query.userId}).sort({order: 1});
+        const questions = await Question.find({}).sort({order: 1});
 
         return res.status(200).json(questions);
     },

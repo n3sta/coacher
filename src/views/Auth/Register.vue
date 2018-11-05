@@ -64,11 +64,11 @@
             return {
                 form: {
                     name: {
-                        firstName: 'asdsd',
-                        lastName: 'dsadasd',
+                        firstName: null,
+                        lastName: null,
                     },
-                    email: 'asd@dsa.pl',
-                    password: 'asdasdasdasd',
+                    email: null,
+                    password: null,
                     coachId: null,
                     coach: true
                 },
@@ -107,7 +107,7 @@
                 if (touchMap.has($v)) {
                     clearTimeout(touchMap.get($v));
                 }
-                touchMap.set($v, setTimeout($v.$touch, 150));
+                touchMap.set($v, setTimeout($v.$touch, 300));
             }
         },
         validations: {

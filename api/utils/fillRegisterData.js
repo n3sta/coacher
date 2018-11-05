@@ -52,7 +52,7 @@ export const fillRegisterData = async (id) => {
     );
 };
 
-export const fillSampleData = async (id) => {
+export const fillSampleData = (id) => {
     fillUsers(id);
     fillTrainings(id);
     fillQuestions(id);
@@ -91,7 +91,7 @@ const fillCometitions = async (id) => {
 const fillQuestions = async (id) => {
     const questions = [
         {
-            userId: id,
+            user: id,
             question: 'Płeć',
             type: 3,
             options: [
@@ -100,31 +100,31 @@ const fillQuestions = async (id) => {
             order: 0
         },
         {
-            userId: id,
+            user: id,
             question: 'Waga',
             type: 1,
             order: 1
         },
         {
-            userId: id,
+            user: id,
             question: 'Wzrost',
             type: 1,
             order: 2
         },
         {
-            userId: id,
+            user: id,
             question: 'Ile lat już trenujesz?',
             type: 1,
             order: 3
         },
         {
-            userId: id,
+            user: id,
             question: 'Jakie są Twoje plany/cele?',
             type: 1,
             order: 4
         },
         {
-            userId: id,
+            user: id,
             question: 'Czy masz jakieś przeciwwskazania do uprawiania sportu? Jeśli tak to je wymień',
             type: 2,
             order: 5

@@ -11,8 +11,8 @@ import questionsRoutes from "./api/routes/questionsRoutes";
 import answersRoutes from "./api/routes/answersRoutes";
 import competitionsRoutes from "./api/routes/competitionsRoutes";
 
-const hostname = 'localhost/api';
-const port = 8080;
+const hostname = 'localhost';
+const port = process.env.PORT || 8082;
 const app = express();
 const mongoDB = 'mongodb://localhost:27017/app';
 

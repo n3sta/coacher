@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="loading" v-if="loading">
-            <div class="loading__logo">TheCoacher.com</div>
+            <div class="loading__logo">elanista.com</div>
             <div class="loading__loader">
                 <svg class="spinner" width="44px" height="44px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
                     <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
@@ -15,10 +15,11 @@
                     <button type="button" class="button-icon aside-toggler" @click="showAside = !showAside">
                         <span class="material-icons" aria-hidden="true">dehaze</span>
                     </button>
-                    <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">TheCoacher.com</router-link></h1>
+                    <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">elanista.pl</router-link></h1>
                 </div>
                 <div v-if="!user.activated" @click="removeSampleData()">
-                    <v-button>Wyczyść system</v-button>
+                    <button type="button" class="button-icon clearsystem--icon"><span class="material-icons text--white">delete_forever</span></button>
+                    <v-button class="clearsystem--button">Wyczyść system</v-button>
                 </div>
             </header>
             <main class="main">
@@ -37,7 +38,6 @@
                             <li class="nav__item"><router-link :to="{ name: 'starts' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Starty</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'questions' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">contact_support</span><span>Ankieta</span></router-link></li>
                             <hr v-if="user.coach" class="nav__divider">
-                            <li v-if="user.coach" class="nav__item"><router-link :to="{ name: 'users' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Lista użytkowników</span></router-link></li>
                             <li v-if="user.coach" class="nav__item"><router-link :to="{ name: 'trainingTypes' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Typy treningów</span></router-link></li>
                             <hr class="nav__divider">
                             <li class="nav__item"><router-link :to="{ name: 'account' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">person</span><span>Edytuj profil</span></router-link></li>

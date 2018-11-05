@@ -15,9 +15,9 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in items" :key="item._id">
-                        <td :data-title="item.name"><router-link :to="{name: 'editStart', params: {_id: item._id}}">{{ item.name }}</router-link></td>
-                        <td :data-title="item.distance">{{ item.distance }}km</td>
-                        <td :data-title="formatDate(item.date)">{{ formatDate(item.date) }}</td>
+                        <td :data-title="headers[0]"><router-link :to="{name: 'editStart', params: {_id: item._id}}">{{ item.name }}</router-link></td>
+                        <td :data-title="headers[1]">{{ item.distance }}km</td>
+                        <td :data-title="headers[2]">{{ formatDate(item.date) }}</td>
                     </tr>
                 </tbody>
             </table>
