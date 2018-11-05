@@ -11,7 +11,7 @@ import questionsRoutes from "./api/routes/questionsRoutes";
 import answersRoutes from "./api/routes/answersRoutes";
 import competitionsRoutes from "./api/routes/competitionsRoutes";
 
-const hostname = 'localhost';
+const hostname = '54.38.55.135';
 const port = process.env.PORT || 8082;
 const app = express();
 const mongoDB = 'mongodb://localhost:27017/app';
@@ -23,14 +23,14 @@ app.use(cors());
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB);
 
-app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
-app.use('/trainings', trainingRoutes);
-app.use('/trainingTypes', trainingTypesRoutes);
-app.use('/invitations', invitationsRoutes);
-app.use('/questions', questionsRoutes);
-app.use('/answers', answersRoutes);
-app.use('/competitions', competitionsRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/trainings', trainingRoutes);
+app.use('/api/trainingTypes', trainingTypesRoutes);
+app.use('/api/invitations', invitationsRoutes);
+app.use('/api/questions', questionsRoutes);
+app.use('/api/answers', answersRoutes);
+app.use('/api/competitions', competitionsRoutes);
 
 app.listen(port, hostname, () => {
     console.log('Server running at http://'+ hostname + ':' + port + '/');

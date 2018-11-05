@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="box__content">
-            <table class="table" v-if="items.length">
+            <table class="table responsiveTable" v-if="items.length">
                 <thead>
                     <tr>
                         <th v-for="(item, index) in headers" :key="index">{{ item }}</th>

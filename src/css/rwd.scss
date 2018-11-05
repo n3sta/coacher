@@ -93,10 +93,18 @@
 		right: 16px;
 		bottom: 16px;
 	}
+	.calendar__filters {
+		flex-direction: column;
+		align-items: center;
+		& .mx-datepicker.month {
+			max-width: 120px;
+			margin: 12px 8px 4px;
+		}
+	}
 }
 
 @media screen and (max-width: 768px) {
-	table {
+	.responsiveTable {
 		margin-bottom: 0;
 		background-color: transparent;
 	}
