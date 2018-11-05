@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import store from '../store';
+    import { mapGetters } from 'vuex';
 
     export default {
         props: {
@@ -35,11 +35,11 @@
         data() {
             return {
                 active: false,
-                value: null,
-                user: store.getters.user
+                value: null
             }
         },
         computed: {
+            ...mapGetters(['user']),
             initials() {
                 let user = this.items.filter(pupil => pupil._id === this.value)[0] || this.user;
                 return `${user.name.firstName.charAt(0)}${user.name.lastName.charAt(0)}`;

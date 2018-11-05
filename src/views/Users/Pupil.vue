@@ -1,33 +1,35 @@
 <template>
     <div>
-        <div class="pupil">
-            <div class="pupil__avatar">{{ user.name.firstName.charAt(0) }}{{ user.name.lastName.charAt(0) }}</div>
-            <h3 class="pupil">{{ user.name.firstName }} {{ user.name.lastName }}</h3>
-            <div class="pupil__options-wrapper">
-                <v-button :color="'blue'">Napisz wiadomość</v-button>
-                <v-button :color="'red'">Usuń</v-button>
-            </div>
-        </div>
-        <div class="box">
+        <div class="box box--medium">
             <div class="box__title">
-                <span class="box__title-name">Ostatnie aktywności</span>
+                <div class="box__title-name">{{ user.name.firstName }} {{ user.name.lastName }}</div>
             </div>
             <div class="box__content">
-                <v-calendar :miniCalendar="1"></v-calendar>
+                <table class="table" v-if="items.length">
+                    <thead>
+                        <tr>
+                            <th v-for="(item, index) in headers" :key="index">{{ item }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in items" :key="item._id">
+                            <td :data-title="item.question.question">{{ item.question.question }}</td>
+                            <td :data-title="item.answer">{{ item.answer }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span v-else>Nie znaleziono startów</span>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-    import { get, put, patch } from '../../helpers/api'
-    import Statistic from '../Panel/Statistic';
-    import Calendar from '../Trainings/Calendar';
+    import { get } from '../../helpers/api'
 
     export default {
         props: {
-            userId: {
+            _id: {
                 type: String,
             }
         },
@@ -35,39 +37,27 @@
             return {
                 user: {
                     name: {
-                        firstName: '',
-                        lastName: ''
+                        firstName: null,
+                        lastName: null
                     }
                 },
-                trainings: []
+                headers: ['Pytanie', 'Odpowiedź'],
+                items: []
             }
-        },
-        components: {
-            'v-statistic': Statistic,
-            'v-nextStart': nextStart,
-            'v-calendar': Calendar
         },
         created() {
             this.getUser();
+            this.getAnswers();
         },
         methods: {
             async getUser() {
-                const res = await get(`/users/${this.userId}`);
+                const res = await get(`/users/${this._id}`);
                 this.user = res.data;
             },
-            async getLastTraining() {
-                const res = await get('/trainings', {
-                    user: this.user._id,
-                    createdAt: {
-                        $gte: new Date(moment().startOf('day')),
-                        $lte: new Date(moment().endOf('day'))
-                    }
-                });
-                this.trainings = res.data;
+            async getAnswers() {
+                const res = await get('/answers', {user: this._id});
+                this.items = res.data;
             },
         },
-        validations: {
-
-        }
     }
 </script>

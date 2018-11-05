@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 const invitationSchema = new mongoose.Schema({
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    questionId: {
+    question: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question',
         required: true

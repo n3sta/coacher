@@ -15,12 +15,15 @@ export default {
             },
             email: req.body.email,
             password: hashed,
-            coach: req.body.coach
+            coach: req.body.coach,
+            coachId: req.body.coachId
         }).save();
 
         try {
-            fillRegisterData(user._id);
-            fillSampleData(user._id);
+            if (user.coach) {
+                fillRegisterData(user._id);
+                fillSampleData(user._id);
+            }
             return res.status(200).json({
                 user: user,
                 token: userHelpers.generateToken(user._id)

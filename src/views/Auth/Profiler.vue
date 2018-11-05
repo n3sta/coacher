@@ -49,13 +49,14 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { required } from 'vuelidate/lib/validators'
     import { get, post, put } from '../../helpers/api';
 
     export default {
         data() {
             return {
+                answers: [],
                 questions: [],
                 step: 0,
                 form: [],
@@ -72,27 +73,47 @@
         },
         created() {
             this.getQuestions();
+            this.getAnswers();
+            this.openAlert({
+                title: 'Chcę Cię lepiej poznać.',
+                body: 'Wypełnij proszę ten formularz. Pomoże mi to w ułożeniu dla Ciebie planu treningowego.',
+                type: 'statement'
+            });
         },
         methods: {
+            ...mapActions(['openAlert']),
             async getQuestions() {
-                const res = await get(`/questions`, {userId: this.user._id});
+                const res = await get(`/questions`, {user: this.user._id});
                 this.questions = res.data;
                 this.form = this.questions.map(() => {return ''})
+            },
+            async getAnswers() {
+                const res = await get(`/answers`, {user: this.user._id});
+                this.answers = res.data;
             },
             async submit() {
                 !this.$v.form.$each.$iter[this.step].$touch();
                 if (this.$v.form.$each.$iter[this.step].$invalid) {
                     return false;
                 }
-                this.step++;
-                if (this.user.coachId && this.step === this.steps) {
-                    await post('answers', {
-                        questionId: this.questions[this.step]._id,
-                        answer: this.form[this.step],
+                if (this.answers[this.step]) {
+                    const id = this.answers[this.step]._id;
+                    await put(`answers/${id}`, {
+                        answer: this.form[this.step]
                     });
-                    this.$router.push({name: 'admin'})
-                } 
-                if (!this.user.coachId && this.step === this.steps) {
+                } else {
+                    await post('answers', {
+                        user: this.user._id,
+                        question: this.questions[this.step]._id,
+                        answer: this.form[this.step]
+                    });
+                }
+                this.step++;
+                if (this.step === this.steps) {
+                    if (this.user.coachId) {
+                        localStorage.setItem('firstLogin', true);
+                        this.$router.push({name: 'admin'})
+                    }
                     this.$router.push({name: 'questions'})
                 }
             },

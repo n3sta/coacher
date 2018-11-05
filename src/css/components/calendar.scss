@@ -7,6 +7,10 @@
 .calendar {
   width: 100%;
   padding-top: 15px;
+  &__switch-date {
+    display: flex;
+    align-items: center;
+  }
   &-list {
     padding-top: 15px;
     & .list__item:hover {

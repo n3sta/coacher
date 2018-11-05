@@ -32,20 +32,20 @@
     import { TweenLite } from "gsap/TweenLite";
 
     export default {
-    	data() {
-    		return {
-    			planPercent: 0,
-    			planDoneTweened: 0
-    		}
-    	},
+        data() {
+            return {
+                planPercent: 0,
+                planDoneTweened: 0
+            }
+        },
         computed: {
-        	...mapGetters(['user', 'stats']),
-        	weekDoneTweened() {
-        		return this.stats.weekDone
-        	},
-        	monthDoneTweened() {
-        		return this.stats.monthDone
-        	},
+            ...mapGetters(['user', 'stats']),
+            weekDoneTweened() {
+                return this.stats.weekDone
+            },
+            monthDoneTweened() {
+                return this.stats.monthDone
+            },
             weekDoneAnimated: function() {
                 return this.weekDoneTweened.toFixed(0);
             },
@@ -67,12 +67,12 @@
                 TweenLite.to(this.$data, 0.5, { monthDoneTweened: value });
             }
         },
-		created() {
-			this.getStatistic();
-		},
-		methods: {
-			...mapMutations(['setStats']),
-			async getStatistic() {
+        created() {
+            this.getStatistic();
+        },
+        methods: {
+            ...mapMutations(['setStats']),
+            async getStatistic() {
                 const res = await get(`/trainings/stats`, {user: this.user._id, date: new Date()});
                 this.setStats(res.data);
                 this.planPercent = this.calculate();
@@ -80,6 +80,6 @@
             calculate() {
                 return this.planPercent = ((this.stats.planDone/this.stats.plan || 0)*100).toFixed(2)*1;
             }
-		}
-	}
+        }
+    }
 </script>

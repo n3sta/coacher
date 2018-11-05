@@ -69,9 +69,17 @@
                     },
                     email: 'asd@dsa.pl',
                     password: 'asdasdasdasd',
+                    coachId: null,
+                    coach: true
                 },
                 isProcessing: false,
             }
+        },
+        created() {
+            if (this.$route.query.ref) {
+                this.form.coachId = this.$route.query.ref;
+                this.form.coach = false;
+            }            
         },
         methods: {
             ...mapActions(['setUser']),
@@ -84,8 +92,12 @@
                 try {
                     const res = await post('/auth/register', this.form);
                     this.setUser({token: res.data.token, user: res.data.user});
-                    localStorage.setItem('firstLogin', true);
-                    this.$router.push({name: 'panel'});
+                    if (!this.form.coachId) {
+                        localStorage.setItem('firstLogin', true);
+                        this.$router.push({name: 'panel'});
+                    } else {
+                        this.$router.push({name: 'profiler'});
+                    }
                 } catch (e) {
                     this.isProcessing = false;
                 }
@@ -116,7 +128,6 @@
                     async correct(value) {
                         if (value === '') return true;
                         const res = await get('/auth/email', {email: value});
-                        console.log(!res.data)
                         return !res.data;
                     }
                 },

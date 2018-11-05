@@ -139,15 +139,13 @@ const fillQuestions = async (id) => {
 }
 
 const fillUsers = async (id) => {
-    await User.find({email: 'jan@kowalski.pl'}).remove();
-    await User.find({email: 'pawel@nowak.pl'}).remove();
     const users = [
         {
             name: {
                 firstName: 'Jan',
                 lastName: 'Kowalski'
             },
-            email: 'jan@kowalski.pl',
+            email: uniqueEmail(),
             password: '12345678',
             coach: 0,
             coachId: id
@@ -157,13 +155,12 @@ const fillUsers = async (id) => {
                 firstName: 'Paweł',
                 lastName: 'Nowak'
             },
-            email: 'pawel@nowak.pl',
+            email: uniqueEmail(),
             password: '12345678',
             coach: 0,
             coachId: id
         }
     ];
-
     try {
         await User.insertMany(users);
     } catch(e) {
@@ -195,4 +192,26 @@ const fillTrainings = async (id) => {
     } catch(e) {
         console.log('Error:' + e)
     }
+}
+
+const uniqueEmail = () => {
+    let email, data = [];
+    do {
+        email = generateEmail();
+        data = checkUser(email);
+    } while (data.length <= 0)
+    return email;
+}
+
+const generateEmail = () => {
+    const e1 = Math.random().toString(36);
+    const e2 = Math.random().toString(36);
+    const e3 = Math.random().toString(36);
+    const e4 = Math.random().toString(36).replace(/[^a-z]+/g, '');
+    return `${e1}.${e2}@${e3}.${e1}`;
+}
+
+const checkUser = async (email) => {
+    const res = await User.find({email: email});
+    return res.data;
 }

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import Training from '../models/Training';
+import User from '../models/User';
 import trainingType from '../models/TrainingType';
 import trainingHelpers from '../middlewares/helpers/trainings';
 
@@ -10,7 +11,9 @@ export default {
 		return res.status(200).json(training);
 	},
 	async findAll(req, res) {
-		const types = await trainingType.find({user: req.query.user, active: true});
+		const user = await User.findOne({_id: req.query.user});
+		const id = (user.coach) ? req.query.user : user.coachId;
+		const types = await trainingType.find({user: id, active: true});
 		req.filters.trainingType = {$in: types};
 		const trainings = await Training.find(req.filters).sort('createdAt').populate('trainingType');
 
@@ -46,7 +49,7 @@ export default {
 		const planDone = Training.count({user: user, done: true}).exec();
 
 		await Promise.all([week, weekDone, month, monthDone, plan, planDone]).then((entity) => {
-			return res.status(201).json({
+			return res.status(200).json({
 				week: entity[0],
 				weekDone: entity[1],
 				month: entity[2],

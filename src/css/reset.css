@@ -51,6 +51,10 @@ table {
     box-sizing: border-box;
 }
 
+*:focus {
+    outline: none;
+}
+
 a {
     color: #1565C0;
     text-decoration: none;

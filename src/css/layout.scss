@@ -5,10 +5,16 @@
 @import 'components/calendar.scss';
 @import 'components/animations.scss';
 
+html {
+	height: 100%;
+}
+
 body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 14px;
 	color: $text__black;
+	height: 100%;
+	background-color: $background;
 }
 
 .body--overflow {
@@ -113,8 +119,11 @@ body {
 		width: 270px;
 		color: $white;
 	}
-	&__link:hover {
-		text-decoration: none;
+	&__link {
+		color: $white;
+		&:hover {
+			text-decoration: none;
+		}
 	}
 }
 
