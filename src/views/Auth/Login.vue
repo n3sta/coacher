@@ -60,7 +60,7 @@
                     this.$router.push({name: 'panel'})
                 } catch(e) {
                     this.isProcessing = false;
-                    this.setSnackbar({class: 'error', text: e.data.message});
+                    this.setSnackbar({class: 'error', text: e.message});
                 }
             }
         },

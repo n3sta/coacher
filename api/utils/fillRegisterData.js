@@ -1,52 +1,25 @@
-import TrainingType from "../models/TrainingType";
+import Type from "../models/Type";
 import Training from "../models/Training";
 import User from "../models/User";
 import Question from '../models/Question';
-import Competition from '../models/Competition';
+import Answer from '../models/Answer';
 import moment from 'moment';
 
 export const fillRegisterData = async (id) => {
-    await TrainingType.insertMany(
+    await Type.insertMany(
         [
             {
                 user: id,
-                name: 'Rozbieganie'
+                name: 'Trening',
+                default: true
             },
             {
                 user: id,
-                name: 'Długie rozbieganie'
+                name: 'Testowy typ treningu'
             },
             {
                 user: id,
-                name: 'Siła biegowa'
-            },
-            {
-                user: id,
-                name: 'Interwały'
-            },
-            {
-                user: id,
-                name: 'Zabawa biegowa'
-            },
-            {
-                user: id,
-                name: 'Szybkość'
-            },
-            {
-                user: id,
-                name: 'II zakres'
-            },
-            {
-                user: id,
-                name: 'III zakres'
-            },
-            {
-                user: id,
-                name: 'Zawody'
-            },
-            {
-                user: id,
-                name: 'Siła ogólna/sprawność'
+                name: 'Przykładowy trening'
             }
         ]
     );
@@ -56,36 +29,6 @@ export const fillSampleData = (id) => {
     fillUsers(id);
     fillTrainings(id);
     fillQuestions(id);
-    fillCometitions(id);
-}
-
-const fillCometitions = async (id) => {
-    const competitions = [
-        {
-            user: id,
-            name: 'Bieg po złote kalesony',
-            distance: 12,
-            date: new Date()
-        },
-        {
-            user: id,
-            name: 'Wiosenne biegi przełajowe',
-            distance: 5,
-            date: new Date()
-        },
-        {
-            user: id,
-            name: 'Bieg solidarności',
-            distance: 21.097,
-            date: new Date()
-        },
-    ]
-
-    try {
-        await Competition.insertMany(competitions);
-    } catch(e) {
-        console.log('Error:' + e)
-    }
 }
 
 const fillQuestions = async (id) => {
@@ -133,6 +76,27 @@ const fillQuestions = async (id) => {
 
     try {
         await Question.insertMany(questions);
+        fillAnswers(id);
+    } catch(e) {
+        console.log('QUESTIONS error:' + e)
+    }
+}
+
+const fillAnswers = async (id) => {
+    try {
+        const questions = await Question.find({user: id}).exec();
+        const pupils = await User.find({coachId: id}).exec();
+       console.log(questions.length);
+       console.log(pupils.length);
+        for (const question of questions) {
+            for (const pupil of pupils) {
+                const a = await new Answer({
+                    user: pupil._id,
+                    question: question._id,
+                    answer: (question.type === 3) ? question.options[0] : 'Przykładowa odpowiedź zawodnika'
+                }).save();
+            }
+        }
     } catch(e) {
         console.log('Error:' + e)
     }
@@ -148,12 +112,24 @@ const fillUsers = async (id) => {
             email: uniqueEmail(),
             password: '12345678',
             coach: 0,
-            coachId: id
+            coachId: id,
+            accepted: true
         },
         {
             name: {
                 firstName: 'Paweł',
                 lastName: 'Nowak'
+            },
+            email: uniqueEmail(),
+            password: '12345678',
+            coach: 0,
+            coachId: id,
+            accepted: true
+        },
+        {
+            name: {
+                firstName: 'Nowy',
+                lastName: 'Zawodnik'
             },
             email: uniqueEmail(),
             password: '12345678',
@@ -164,21 +140,21 @@ const fillUsers = async (id) => {
     try {
         await User.insertMany(users);
     } catch(e) {
-        console.log('Error:' + e)
+        console.log('ANSWERS error:' + e)
     }
 }
 
 const fillTrainings = async (id) => {
     const trainings = [];
     const countUser = await User.find({coachId: id}).count().exec();
-    const countTrainingType = await TrainingType.find({user: id}).count().exec();
+    const countType = await Type.find({user: id}).count().exec();
     for (let i = 2; i < 16; i = i + (Boolean(Math.random() > 0.5) + 1)) {
         const user = await User.findOne().skip(Math.floor(Math.random() * countUser));
-        const trainingType = await TrainingType.findOne({user: id}).skip(Math.floor(Math.random() * countTrainingType));
+        const type = await Type.findOne({user: id}).skip(Math.floor(Math.random() * countType));
         const date = moment().toDate();
         trainings.push({
             user: id,
-            trainingType: trainingType._id,
+            type: type._id,
             content: 'Przykładowy opis treningu',
             note: 'Przykładowy komentarz (opcjonalny)',
             amount: Math.floor(Math.random() * 16 + 6) + '',
@@ -190,7 +166,7 @@ const fillTrainings = async (id) => {
     try {
         await Training.insertMany(trainings);
     } catch(e) {
-        console.log('Error:' + e)
+        console.log('TRAININGS error:' + e)
     }
 }
 

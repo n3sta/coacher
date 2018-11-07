@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from './store'
+import store from './store/index'
 import App from './App'
 import Auth from './Auth'
 
@@ -62,25 +62,27 @@ export default new Router({
                     component: () => import('./views/Trainings/Form'),
                 },
                 {
-                    path: '/starts',
-                    name: 'starts',
-                    component: () => import('./views/Starts/Index'),
+                    path: '/types',
+                    name: 'types',
+                    component: () => import('./views/types/Index'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 },
                 {
-                    path: '/starts/add',
-                    name: 'addStart',
-                    component: () => import('./views/Starts/Form'),
-                },
-                {
-                    path: '/starts/edit/:_id',
-                    name: 'editStart',
+                    path: '/types/create',
+                    name: 'createType',
                     props: true,
-                    component: () => import('./views/Starts/Form'),
+                    component: () => import('./views/types/Form.vue'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 },
                 {
-                    path: '/trainingTypes',
-                    name: 'trainingTypes',
-                    component: () => import('./views/Trainings/trainingTypes'),
+                    path: '/types/edit/:_id',
+                    name: 'editType',
+                    props: true,
+                    component: () => import('./views/types/Form.vue'),
                     beforeEnter: (to, from, next) => {
                         coach(to, from, next);
                     }
@@ -93,7 +95,7 @@ export default new Router({
                 {
                     path: '/pupils',
                     name: 'pupils',
-                    component: () => import('./views/Users/Pupils'),
+                    component: () => import('./views/Users/Index'),
                     beforeEnter: (to, from, next) => {
                         coach(to, from, next);
                     }
@@ -102,12 +104,7 @@ export default new Router({
                     path: '/pupils/:_id',
                     name: 'pupil',
                     props: true,
-                    component: () => import('./views/Users/Pupil')
-                },
-                {
-                    path: '/users',
-                    name: 'users',
-                    component: () => import('./views/Users/Users'),
+                    component: () => import('./views/Users/Pupil'),
                     beforeEnter: (to, from, next) => {
                         coach(to, from, next);
                     }
@@ -115,7 +112,10 @@ export default new Router({
                 {
                     path: '/questions',
                     name: 'questions',
-                    component: () => import('./views/Questions/Index')
+                    component: () => import('./views/Questions/Index'),
+                    beforeEnter: (to, from, next) => {
+                        coach(to, from, next);
+                    }
                 },
                 {
                     path: '/questions/form',

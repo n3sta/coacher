@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User';
 import Training from "../models/Training";
 import Question from '../models/Question';
-import Competition from '../models/Competition';
 import userHelpers from '../middlewares/helpers/users';
 import { fillRegisterData, fillSampleData } from '../utils/fillRegisterData';
 
@@ -61,7 +60,6 @@ export default {
             await User.remove({coachId: req.userId});
             await Training.remove({user: req.userId});
             await Question.remove({user: req.userId});
-            await Competition.remove({user: req.userId});
             await User.findOneAndUpdate({_id: req.userId}, {activated: true});
             return res.status(200).json({message: 'Przykładowe dane zostały usunięte.'});
         } catch(e) {
@@ -73,4 +71,8 @@ export default {
 
         return res.status(200).json(user);
     },
+    async fill(req, res) {
+        fillRegisterData('5be31dd320becd02314bc0d6');
+        return res.status(200).json(fillSampleData('5be31dd320becd02314bc0d6'));
+    }
 }

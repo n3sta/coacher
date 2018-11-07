@@ -1,29 +1,16 @@
 <template>
     <div>
+        <v-switch-users v-if="user.coach"></v-switch-users>
         <form class="form" @submit.prevent="submit()">
-            <div class="box box--medium">
+            <div class="box">
                 <div class="box__title">
                     <span class="box__title-name">{{ action }}</span>
                 </div>
                 <div class="box__content">
-                    <div class="row">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="form__box">
-                                <v-select :items="trainingTypes" :label="'Typ treningu'" :id="'trainingType'" :value="training.trainingType" @change="training.trainingType = $event"></v-select>
-                                <div v-if="$v.training.trainingType.$error">
-                                    <div class="form__error" v-if="!$v.training.trainingType.required">To pole jest wymagane.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="form__box">
-                                <v-input :type="'number'" :for="'amount'" v-model="training.amount" :value="training.amount" @change="training.amount = $event" @input="$v.training.amount.$touch()">Suma kilometrów</v-input>
-                                <div v-if="$v.training.amount.$error">
-                                    <div class="form__error" v-if="!$v.training.amount.required">To pole jest wymagane.</div>
-                                    <div class="form__error" v-if="!$v.training.amount.numeric">To pole może zawierać tylko liczby.</div>
-                                    <div class="form__error" v-if="!$v.training.amount.maxValue">Maksymalna możliwa liczba wynosi 256</div>
-                                </div>
-                            </div>
+                    <div class="form__box">
+                        <v-select :items="types" :label="'Typ treningu'" :id="'type'" :value="training.type" @change="training.type = $event"></v-select>
+                        <div v-if="$v.training.type.$error">
+                            <div class="form__error" v-if="!$v.training.type.required">To pole jest wymagane.</div>
                         </div>
                     </div>
                     <div class="form__box">
@@ -65,9 +52,10 @@
 </template>
 
 <script>
+    import moment from 'moment';
+    import SwitchPupils from './../../components/SwitchPupils'
     import { mapGetters, mapMutations, mapActions } from 'vuex';
     import { required, minLength, numeric, maxValue } from 'vuelidate/lib/validators'
-    import moment from 'moment';
     import { get,post,del,put } from '../../helpers/api'
 
     export default {
@@ -79,13 +67,16 @@
                 type: String
             }
         },
+        components: {
+            'v-switch-users': SwitchPupils
+        },
         data() {
             return {
                 isProcessing: false,
-                trainingTypes: [],
+                types: [],
                 training: {
-                    user: this.$route.params.user,
-                    trainingType: '',
+                    user: this.$store.state.calendar.user,
+                    type: '',
                     content: '',
                     note: '',
                     amount: '',
@@ -95,6 +86,9 @@
             }
         },
         watch: {
+            'calendar.user'(val) {
+                this.training.user = val;
+            },
             'training.createdAt': function() {
                 if (this.training.createdAt && !this.canBeDone()) {
                     this.training.done = false;
@@ -102,13 +96,13 @@
             },
         },
         computed: {
-            ...mapGetters(['user']),
+            ...mapGetters(['user', 'calendar']),
             action() {
                 return (this._id) ? 'Edycja treningu' : 'Dodawanie treningu';
             }
         },
         created() {
-            this.getTrainingTypes();
+            this.getTypes();
             if (this._id) {
                 this.getTraining();
             }
@@ -116,21 +110,11 @@
         methods: {
             ...mapMutations(['setSnackbar']),
             ...mapActions(['openAlert']),
-            async getTrainingTypes() {
+            async getTypes() {
                 const user = (this.user.coach) ? this.user._id : this.user.coachId;
-                const res = await get(`/trainingTypes`, {user: user, active: true});
-                this.trainingTypes = res.data;
-                if (!res.data.length) {
-                    this.openAlert({
-                    title: 'Brak aktywnych typów treningów!',
-                    body: 'Zostaniesz przeniesiony na wiodok ustawień treningów. Przynajmniej jeden musi być aktywny.',
-                    type: 'statement'
-                    }).then(async (confirmation) => {
-                        if (confirmation) {
-                            this.$router.push({name: 'trainingTypes'});
-                        }
-                    })
-                }
+                const res = await get(`/types`, {user: user, active: true});
+                this.types = res.data;
+                this.training.type = this.types[0]._id;
             },
             async getTraining() {
                 const res = await get(`/trainings/${this._id}`);
@@ -184,7 +168,7 @@
         },
         validations: {
             training: {
-                trainingType: {
+                type: {
                     required
                 },
                 amount: {

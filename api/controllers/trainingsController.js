@@ -1,8 +1,6 @@
-import moment from 'moment';
 import Training from '../models/Training';
 import User from '../models/User';
-import trainingType from '../models/TrainingType';
-import trainingHelpers from '../middlewares/helpers/trainings';
+import Type from '../models/Type';
 
 export default {
 	async findOne(req, res) {
@@ -13,9 +11,9 @@ export default {
 	async findAll(req, res) {
 		const user = await User.findOne({_id: req.query.user});
 		const id = (user.coach) ? req.query.user : user.coachId;
-		const types = await trainingType.find({user: id, active: true});
-		req.filters.trainingType = {$in: types};
-		const trainings = await Training.find(req.filters).sort('createdAt').populate('trainingType');
+		const types = await Type.find({user: id, active: true});
+		//req.filters.type = {$in: types};
+		const trainings = await Training.find(req.filters).sort('createdAt').populate('type');
 
 		return res.status(200).json(trainings);
 	},
@@ -36,26 +34,13 @@ export default {
 	},
 	async stats(req, res) {
 		const user = req.query.user;
-		const startWeek = moment(req.query.date).startOf('isoweek');
-		const endWeek = moment(req.query.date).endOf('isoweek');
-		const startMonth = moment(req.query.date).startOf('month');
-		const endMonth = moment(req.query.date).endOf('month');
-
-		const week = trainingHelpers.sum(user, startWeek, endWeek);
-		const weekDone = trainingHelpers.sum(user, startWeek, endWeek, 1);
-		const month = trainingHelpers.sum(user, startMonth, endMonth);
-		const monthDone = trainingHelpers.sum(user, startMonth, endMonth, 1);
 		const plan = Training.count({user: user}).exec();
 		const planDone = Training.count({user: user, done: true}).exec();
 
-		await Promise.all([week, weekDone, month, monthDone, plan, planDone]).then((entity) => {
+		await Promise.all([plan, planDone]).then((entity) => {
 			return res.status(200).json({
-				week: entity[0],
-				weekDone: entity[1],
-				month: entity[2],
-				monthDone: entity[3],
-				plan: entity[4],
-				planDone: entity[5]
+				plan: entity[0],
+				planDone: entity[1]
 			});
 		})		
 	},

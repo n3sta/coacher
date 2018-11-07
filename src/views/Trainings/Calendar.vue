@@ -3,7 +3,7 @@
         <div class="calendar">
             <div class="calendar__week">
                 <div class="calendar__day" v-for="(day, dayIndex) in monthDays"
-                     @click="$router.push({name: 'addTraining', params: {user: calendarUser, createdAt: day.createdAt}})"
+                     @click="$router.push({name: 'addTraining', params: {user: calendar.user, createdAt: day.createdAt}})"
                      :ref="`day${dayIndex}`"
                      :key="dayIndex"
                      :class="{
@@ -17,7 +17,7 @@
                     </div>
                     <div class="calendar__events calendar__sortable" :data-date="day.createdAt">
                         <div class="calendar__event" v-for="(event, eventIndex) in dayEvents(day.createdAt)" :key="eventIndex" :data-date="day.createdAt" :data-id="event._id" @click.stop="$router.push({name: 'editTraining', params: {_id: event._id}})">
-                            <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.trainingType.name }}</v-button>
+                            <v-button :color="event.done === true ? 'green' : 'grey'">{{ event.type.name }}</v-button>
                         </div>
                     </div>
                     <div class="calendar__tooltip">
@@ -54,9 +54,6 @@
             months: {
                 type: Array
             },
-            calendarUser: {
-                type: String
-            }
         },
         data() {
             return {
@@ -64,7 +61,7 @@
                 dragging: false,
             }
         },
-        computed: mapGetters(['user']),
+        computed: mapGetters(['user', 'calendar']),
         created() {
             (this.miniCalendar) ? this.drawMiniCalendar() : this.drawCalendar();
         },

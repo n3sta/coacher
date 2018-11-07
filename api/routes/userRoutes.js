@@ -6,14 +6,6 @@ import verifyToken from '../auth/index';
 
 let api = express.Router();
 
-api.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    res.header("Access-Control-Allow-Methods", '*');
-    res.header("Content-Type", 'application/json');
-    next();
-});
-
 api.patch('/changePassword', verifyToken, getFilters, errorHandler.catchAsync(usersController.changePassword));
 
 api.get('/checkPassword', verifyToken, getFilters, errorHandler.catchAsync(usersController.checkPassword));

@@ -1,17 +1,12 @@
 <template>
 	<div>
+		<v-switch-users v-if="user.coach"></v-switch-users>
 		<div class="row">
-			<div class="col-md-6 col-sm-12">
+			<div class="col-xs-12 col-sm-12">
 				<v-statistic></v-statistic>
-			</div>
-			<div class="col-md-6 col-sm-12">
-				<v-start></v-start>
 			</div>
 		</div>
 		<div class="box">
-			<div class="box__title">
-				<span class="box__title-name">Ostatnie aktywności</span>
-			</div>
 			<div class="box__content">
 				<v-trainings :miniCalendar="1"></v-trainings>
 			</div>
@@ -22,14 +17,14 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import Statistic from './Statistic';
-	import Start from './Start';
 	import Trainings from '../Trainings/Index';
+	import SwitchPupils from './../../components/SwitchPupils';
 
 	export default {
 		components: {
 			'v-statistic': Statistic,
-			'v-start': Start,
-			'v-trainings': Trainings
+			'v-trainings': Trainings,
+			'v-switch-users': SwitchPupils
 		},
 		computed: mapGetters(['user'])
 	}

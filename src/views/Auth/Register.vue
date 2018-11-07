@@ -126,7 +126,7 @@
                     required,
                     email,
                     async correct(value) {
-                        if (value === '') return true;
+                        if (!this.$v.form.email.email) return true;
                         const res = await get('/auth/email', {email: value});
                         return !res.data;
                     }

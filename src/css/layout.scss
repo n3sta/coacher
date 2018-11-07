@@ -35,6 +35,7 @@ body {
 	}
 	&__loader {
 		margin: 32px 0 16px;
+		text-align: center;
 		& .path {
 			stroke: $blue400;
 		}
@@ -127,6 +128,11 @@ body {
 	}
 	& button {
 		white-space: nowrap;
+	}
+	& .select__ul {
+		right: 0;
+		top: -36px;
+		min-width: 200px;
 	}
 }
 
@@ -240,6 +246,10 @@ p {
 	padding: 0 !important;
 }
 
+.no-margin {
+	margin: 0 !important;
+}
+
 .no-shadow {
 	box-shadow: none !important;
 }
@@ -274,6 +284,7 @@ p {
 }
 
 .clearsystem {
+	margin-right: 8px;
 	&--icon {
 		display: none;
 		&:hover {

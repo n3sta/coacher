@@ -17,7 +17,7 @@
         <div v-else class="blank blank--center">
             <p>Nie znaleziono treningów w tym miesiącu.</p>
         </div>
-        <div class="button-float" @click="$router.push({name: 'addTraining', params: {user: calendarUser, createdAt: new Date(currDate)}})">
+        <div class="button-float" @click="$router.push({name: 'addTraining', params: {user: calendar.user, createdAt: calendar.date}})">
             <span class="material-icons" aria-hidden="true">add</span>
         </div>
     </div>
@@ -25,6 +25,7 @@
 
 <script>
     import moment from 'moment';
+    import { mapGetters } from 'vuex';
 
     export default {
         props: {
@@ -41,10 +42,8 @@
             months: {
                 type: Array
             },
-            calendarUser: {
-                type: String
-            }
         },
+        computed: mapGetters(['calendar']),
         methods: {
             monthEvents() {
                 const firstDay = new Date(this.currDate.startOf('month'))

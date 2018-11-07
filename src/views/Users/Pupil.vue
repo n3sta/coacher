@@ -18,7 +18,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <span v-else>Nie znaleziono startów</span>
+                <span v-else>Zawodnik nie odpowiedział na żadne pytanie.</span>
+            </div>
+            <div class="blank" v-if="isLoading">
+                <v-loader></v-loader>
             </div>
         </div>
     </div>
@@ -42,7 +45,8 @@
                     }
                 },
                 headers: ['Pytanie', 'Odpowiedź'],
-                items: []
+                items: [],
+                isLoading: true
             }
         },
         created() {
@@ -57,6 +61,7 @@
             async getAnswers() {
                 const res = await get('/answers', {user: this._id});
                 this.items = res.data;
+                this.isLoading = false;
             },
         },
     }

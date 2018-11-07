@@ -9,16 +9,16 @@
 					<div class="progress__line">
 						<div class="progress__done" :style="`width: ${planPercent}%`"></div>
 					</div>
-					<div class="progress__percent">{{ planDoneAnimated }}%</div>
+					<div class="progress__percent">{{ planPercentAnimated }}%</div>
 				</div>
 				<div class="row">
 					<div class="stats col-sm-6 col-xs-6">
-						<span class="stats__data">{{ weekDoneAnimated }}/{{ stats.week }}</span>
-						<span class="stats__name">Obecny tydzień [km]</span>
+						<span class="stats__data">{{ planDoneAnimated }}</span>
+						<span class="stats__name">Zrealizowane treningi</span>
 					</div>
 					<div class="stats col-sm-6 col-xs-6">
-						<span class="stats__data">{{ monthDoneAnimated }}/{{ stats.month }}</span>
-						<span class="stats__name">Obecny miesiąc [km]</span>
+						<span class="stats__data">{{ planAnimated }}</span>
+						<span class="stats__name">Zlecone treningi</span>
 					</div>
 				</div>
 			</div>
@@ -35,22 +35,20 @@
         data() {
             return {
                 planPercent: 0,
+                planTweened: 0,
                 planDoneTweened: 0
             }
         },
         computed: {
-            ...mapGetters(['user', 'stats']),
-            weekDoneTweened() {
-                return this.stats.weekDone
-            },
+            ...mapGetters(['calendar', 'stats']),
             monthDoneTweened() {
                 return this.stats.monthDone
             },
-            weekDoneAnimated: function() {
-                return this.weekDoneTweened.toFixed(0);
+            planPercentAnimated: function() {
+                return this.planPercent.toFixed(0);
             },
-            monthDoneAnimated: function() {
-                return this.monthDoneTweened.toFixed(0);
+            planAnimated: function() {
+                return this.planTweened.toFixed(0);
             },
             planDoneAnimated: function() {
                 return this.planDoneTweened.toFixed(0);
@@ -58,13 +56,16 @@
         },
         watch: {
             'planPercent': function(value) {
+                TweenLite.to(this.$data, 0.5, { planPercent: value });
+            },
+            'stats.plan': function(value) {
+                TweenLite.to(this.$data, 0.5, { planTweened: value });
+            },
+            'stats.planDone': function(value) {
                 TweenLite.to(this.$data, 0.5, { planDoneTweened: value });
             },
-            'stats.weekDone': function(value) {
-                TweenLite.to(this.$data, 0.5, { weekDoneTweened: value });
-            },
-            'stats.monthDone': function(value) {
-                TweenLite.to(this.$data, 0.5, { monthDoneTweened: value });
+            'calendar.user'() {
+                this.getStatistic();
             }
         },
         created() {
@@ -73,7 +74,7 @@
         methods: {
             ...mapMutations(['setStats']),
             async getStatistic() {
-                const res = await get(`/trainings/stats`, {user: this.user._id, date: new Date()});
+                const res = await get(`/trainings/stats`, {user: this.calendar.user, date: new Date()});
                 this.setStats(res.data);
                 this.planPercent = this.calculate();
             },

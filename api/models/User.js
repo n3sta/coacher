@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema({
     activated: {
         type: Boolean,
         default: false
+    },
+    accepted: {
+        type: Boolean,
+        default: false
     }
 });
 

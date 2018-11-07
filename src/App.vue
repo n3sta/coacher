@@ -17,13 +17,21 @@
                     </button>
                     <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">elanista.pl</router-link></h1>
                 </div>
-                <div v-if="!user.activated" @click="removeSampleData()">
-                    <button type="button" class="button-icon clearsystem--icon"><span class="material-icons text--white">delete_forever</span></button>
-                    <v-button class="clearsystem--button">Wyczyść system</v-button>
+                <div style="display: flex;">
+                    <div class="clearsystem" v-if="!user.activated && user.coach" @click="removeSampleData()">
+                        <button type="button" class="button-icon clearsystem--icon"><span class="material-icons text--white">delete_forever</span></button>
+                        <v-button class="clearsystem--button">Wyczyść system</v-button>
+                    </div>
+                    <v-dropdown v-if="!user.coach">
+                        <ul class="select__ul">
+                            <li @click="$router.push({name: 'account'})" class="select__li"><a>Ustawienia konta</a></li>
+                            <li @click="logout" class="select__li"><a>Wyloguj</a></li>
+                        </ul>
+                    </v-dropdown>
                 </div>
             </header>
             <main class="main">
-                <aside :class="['aside', (showAside) ? 'aside--show' : '']">
+                <aside v-if="user.coach" :class="['aside', (showAside) ? 'aside--show' : '']">
                     <div class="header__inner">
                         <button type="button" class="button-icon aside-toggler" @click="showAside = !showAside">
                             <span class="material-icons" aria-hidden="true">dehaze</span>
@@ -33,12 +41,9 @@
                     <nav class="nav">
                         <ul class="nav__list">
                             <li class="nav__item"><router-link :to="{ name: 'panel' }" exact class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">home</span><span>Panel główny</span></router-link></li>
-                            <li v-if="user.coach" class="nav__item"><router-link :to="{ name: 'pupils' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">group</span><span>Zawodnicy</span></router-link></li>
-                            <li class="nav__item"><router-link :to="{ name: 'admin' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">directions_run</span><span>Treningi</span></router-link></li>
-                            <li class="nav__item"><router-link :to="{ name: 'starts' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Starty</span></router-link></li>
+                            <li class="nav__item"><router-link :to="{ name: 'pupils' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">group</span><span>Zawodnicy</span></router-link></li>
                             <li class="nav__item"><router-link :to="{ name: 'questions' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">contact_support</span><span>Ankieta</span></router-link></li>
-                            <hr v-if="user.coach" class="nav__divider">
-                            <li v-if="user.coach" class="nav__item"><router-link :to="{ name: 'trainingTypes' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Typy treningów</span></router-link></li>
+                            <li class="nav__item"><router-link :to="{ name: 'types' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">list</span><span>Typy treningów</span></router-link></li>
                             <hr class="nav__divider">
                             <li class="nav__item"><router-link :to="{ name: 'account' }" class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">person</span><span>Edytuj profil</span></router-link></li>
                             <li class="nav__item" @click="logout"><a class="nav__link"><span class="material-icons nav__icon" aria-hidden="true">exit_to_app</span><span>Wyloguj</span></a></li>
@@ -46,6 +51,9 @@
                     </nav>
                 </aside>
                 <div class="content">
+                    <div v-if="!user.coach && !user.accepted" class="statement statement--warning">
+                        <p>Twoje konto nie zostało jeszcze zaakceptowane przez trenera. Gdy to nastanie, zostaniesz o tym powiadomiony.</p>
+                    </div>
                     <router-view></router-view>
                 </div>
                 <div :class="['overlay', (showAside) ? 'overlay--show' : '']" @click="showAside = !showAside"></div>

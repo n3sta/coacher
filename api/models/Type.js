@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const trainingTypeSchema = new mongoose.Schema({
+const typeSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -13,6 +13,10 @@ const trainingTypeSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    default: {
+        type: Boolean,
+        default: false
+    }
 });
 
-export default mongoose.model('TrainingType', trainingTypeSchema);
+export default mongoose.model('Type', typeSchema);

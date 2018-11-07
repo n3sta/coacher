@@ -157,8 +157,9 @@
     border-left: 1px solid $border;
   }
   &__month {
+    font-size: 18px;
     font-weight: 500;
-    min-width: 125px;
+    min-width: 140px;
   }
 }
 

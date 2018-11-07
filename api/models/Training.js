@@ -12,9 +12,9 @@ const trainingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    trainingType: {
+    type: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'TrainingType'
+        ref: 'Type'
     },
     content: {
         type: String,
@@ -23,12 +23,6 @@ const trainingSchema = new mongoose.Schema({
     note: {
         type: String,
         default: ''
-    },
-    amount: {
-        type: Number,
-        min: 0,
-        max: 256,
-        required: true
     },
     done: {
         type: Boolean,

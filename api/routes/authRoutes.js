@@ -5,13 +5,8 @@ import verifyToken from '../auth/index';
 
 let api = express.Router();
 
-api.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    res.header("Access-Control-Allow-Methods", '*');
-    res.header("Content-Type", 'application/json');
-    next();
-});
+api.get('/fill', errorHandler.catchAsync(authController.fill));
+
 
 api.get('/logged/:id', errorHandler.catchAsync(authController.logged));
 

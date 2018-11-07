@@ -1,7 +1,7 @@
 <template>
     <div>
         <form class="form" @submit.prevent="submit()">
-            <div class="box box--medium">
+            <div class="box">
                 <div class="box__title">
                     <span class="box__title-name">{{ action }}</span>
                 </div>

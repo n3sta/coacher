@@ -5,14 +5,6 @@ import errorHandler from '../middlewares/errors';
 
 let api = express.Router();
 
-api.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    res.header("Access-Control-Allow-Methods", '*');
-    res.header("Content-Type", 'application/json');
-    next();
-});
-
 api.put('/change/reorder', verifyToken, errorHandler.catchAsync(questionsController.reorder));
 
 api.get('/', verifyToken, errorHandler.catchAsync(questionsController.find));

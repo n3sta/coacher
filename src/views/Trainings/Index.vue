@@ -1,11 +1,9 @@
 <template>
     <div>
-        <div :class="['box', (miniCalendar) ? 'no-shadow' : '']">
-            <div :class="['box__content', (miniCalendar) ? 'no-padding' : '']">
-                <div class="calendar__filters" v-if="!miniCalendar">
-                    <v-dropdown :items="pupils" :id="'calendarUser'" @change="calendarUser = $event"></v-dropdown>
+        <div class="box no-shadow">
+            <div class="box__content box__content--no-padding">
+                <div class="calendar__filters">
                     <div class="calendar__switch-date">
-                        <div class="calendar__divider"></div>
                         <span class="calendar__month">{{ monthsLong[currDate.format('M')-1] }} {{ currDate.format('Y') }}</span>
                         <button type="button" class="button-icon" @click="setPrevMonth()"><span class="material-icons" aria-hidden="true">keyboard_arrow_left</span></button>
                         <button type="button" class="button-icon" @click="setNextMonth()"><span class="material-icons" aria-hidden="true">keyboard_arrow_right</span></button>
@@ -22,27 +20,21 @@
                     </div>
                     <v-datepicker v-model="currDate" :value="currDate" type="month" format="YYYY-MM" @change="currDate = $event" lang="pl"></v-datepicker>
                 </div>
-                <v-calendar v-if="!showList" ref="calendar" :events="events" :currDate="currDate" :daysNames="daysNames" :months="months" @getEvents="getEvents" :miniCalendar="miniCalendar" :calendarUser="calendarUser"></v-calendar>
-                <v-list v-else :events="events" :currDate="currDate" :daysNames="daysNames" :months="months" :calendarUser="calendarUser"></v-list>
+                <v-calendar v-if="!showList" ref="calendar" :events="events" :currDate="currDate" :daysNames="daysNames" :months="months" @getEvents="getEvents"></v-calendar>
+                <v-list v-else :events="events" :currDate="currDate" :daysNames="daysNames" :months="months"></v-list>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
     import moment from 'moment';
+    import { mapGetters } from 'vuex';
     import { get } from '../../helpers/api';
     import Calendar from './Calendar';
     import List from './List';
 
     export default {
-        props: {
-            miniCalendar: {
-                type: Number,
-                default: 0
-            },
-        },
         data() {
             return {
                 daysNames: ['nd', 'pon', 'wt', 'śr', 'czw', 'pt', 'sb'],
@@ -51,21 +43,19 @@
                 events: [],
                 currDate: moment(),
                 showList: JSON.parse(localStorage.getItem('showList')),
-                calendarUser: this.$store.state.user._id,
             }
         },
-        computed: mapGetters(['user', 'pupils']),
+        computed: mapGetters(['user', 'calendar']),
         components: {
             'v-calendar': Calendar,
             'v-list': List
         },
         watch: {
-            calendarUser() {
+            'calendar.user'() {
                 this.getEvents();
             }
         },
         created() {            
-            if (this.miniCalendar) this.showList = false; 
             window.addEventListener('resize', this.checkWidth);
             this.getEvents();
             this.checkWidth();
@@ -80,7 +70,7 @@
                 const firstCalendarDay = moment(firstMonthDay).startOf('isoWeek');
                 const lastCalendarDay = moment(lastMonthDay).endOf('isoWeek');
                 const params = {
-                    user: this.calendarUser,
+                    user: this.calendar.user,
                     createdAt: {
                         $gte: new Date(firstCalendarDay),
                         $lte: new Date(lastCalendarDay)

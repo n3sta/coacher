@@ -186,6 +186,7 @@
         max-height: 188px;
     }
     &__li {
+        white-space: nowrap;
         line-height: 35px;
         padding: 6px 9px;
         cursor: pointer;
@@ -195,6 +196,12 @@
         }
         &--active {
             color: $blue400;
+        }
+        & a {
+            color: $text__black;
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 }
@@ -380,13 +387,15 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 6px 9px;
+    padding: 6px 9px 6px 0;
+    margin-bottom: 16px;
     font-size: 14px;
     color: $text__black;
     cursor: pointer;
     transition: $transition;
     border-radius: 2px;
     font-weight: 500;
+    max-width: 250px;
     min-width: 250px;
     position: relative;
     &:hover {
@@ -648,5 +657,15 @@
         margin-top: 1px;
         font-size: 18px;
         color: #F54D41;
+    }
+}
+
+.statement {
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid $border;
+    &--warning {
+        color: $red;;
+        border-color: $red;
     }
 }
