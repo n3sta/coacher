@@ -9,10 +9,6 @@ export default {
 		return res.status(200).json(training);
 	},
 	async findAll(req, res) {
-		const user = await User.findOne({_id: req.query.user});
-		const id = (user.coach) ? req.query.user : user.coachId;
-		const types = await Type.find({user: id, active: true});
-		//req.filters.type = {$in: types};
 		const trainings = await Training.find(req.filters).sort('createdAt').populate('type');
 
 		return res.status(200).json(trainings);

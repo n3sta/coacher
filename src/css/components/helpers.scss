@@ -387,7 +387,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 6px 9px 6px 0;
+    padding: 6px 9px 6px 3px;
     margin-bottom: 16px;
     font-size: 14px;
     color: $text__black;
@@ -399,7 +399,7 @@
     min-width: 250px;
     position: relative;
     &:hover {
-        background-color: $background;
+        background-color: $background__hover;
     }
     &__caret {
         padding-left: 16px;

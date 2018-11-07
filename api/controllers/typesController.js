@@ -23,9 +23,11 @@ export default {
 		return res.status(200).json(type);
 	},
 	async delete(req, res) {
-		const type = await Type.findOne({_id: req.params.id})
+		const type = await Type.findOne({_id: req.params.id});
+		if (type._default) res.status(400).json({message: 'Nie można usunąć domyślnego typu'});
+
 		const defaultType = await Type.findOne({user: req.userId, default: true});
-		const trainings = await Training.update(
+		await Training.update(
 			{type: type._id},
 			{type: defaultType._id},
 			{multi: true}
