@@ -86,8 +86,7 @@ const fillAnswers = async (id) => {
     try {
         const questions = await Question.find({user: id}).exec();
         const pupils = await User.find({coachId: id}).exec();
-       console.log(questions.length);
-       console.log(pupils.length);
+        
         for (const question of questions) {
             for (const pupil of pupils) {
                 const a = await new Answer({

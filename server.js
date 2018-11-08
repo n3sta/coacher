@@ -8,6 +8,7 @@ import trainingRoutes from "./api/routes/trainingRoutes";
 import types from "./api/routes/typesRoutes";
 import questionsRoutes from "./api/routes/questionsRoutes";
 import answersRoutes from "./api/routes/answersRoutes";
+import notificationRoutes from "./api/routes/notificationRoutes";
 
 const hostname = 'localhost';
 const port = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use('/api/trainings', trainingRoutes);
 app.use('/api/types', types);
 app.use('/api/questions', questionsRoutes);
 app.use('/api/answers', answersRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.listen(port, hostname, () => {
     console.log('Server running at http://'+ hostname + ':' + port + '/');
 });

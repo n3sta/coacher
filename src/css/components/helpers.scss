@@ -381,6 +381,11 @@
     &:hover {
         background-color: $background;
     }
+    &--on-blue {
+        &:hover {
+            background-color: $blue200;
+        }
+    }
 }
 
 .dropdown {
@@ -400,6 +405,9 @@
     position: relative;
     &:hover {
         background-color: $background__hover;
+    }
+    &--disabled {
+        pointer-events: none;
     }
     &__caret {
         padding-left: 16px;
@@ -476,6 +484,9 @@
           & span {
               line-height: 30px;
           }
+        }
+        &--inactive {
+            background-color: $border__gray__light;
         }
     }
     &__avatar {
@@ -667,5 +678,25 @@
     &--warning {
         color: $red;;
         border-color: $red;
+    }
+}
+
+.notifications {
+    position: relative;
+    &__button {
+        margin-right: 16px;
+        position: relative;
+    }
+    &__number {
+        font-size: 13px;
+        min-width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        background-color: red;
+        color: white;
+        line-height: 20px;
+        position: absolute;
+        top: -7px;
+        right: -7px;
     }
 }

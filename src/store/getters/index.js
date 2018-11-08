@@ -7,7 +7,8 @@ const getters = {
     pupils: state => state.pupils,
     types: state => state.types,
     loading: state => state.loading,
-    calendar: state => state.calendar
+    calendar: state => state.calendar,
+    notifications: state => state.notifications
 }
 
 export default getters

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="dropdown" @click="active = !active" ref="dropdown">
+        <div :class="['dropdown', (disabled) ? 'dropdown--disabled' : '']" @click="active = !active" ref="dropdown">
             <span class="dropdown__avatar">{{ initials }}</span>
             <span class="dropdown__active">{{ name }}</span>
             <span class="material-icons dropdown__caret" aria-hidden="true">keyboard_arrow_down</span>
@@ -25,6 +25,12 @@
     import { get } from './../helpers/api';
 
     export default {
+        props: {
+            disabled: {
+                type: Boolean,
+                default: false
+            }
+        },
         data() {
             return {
                 value: this.$store.state.user._id,
@@ -63,6 +69,7 @@
                 }
             },
             change(id) {
+                if (this.disabled) return true;
                 this.active = false;
                 this.value = id;
                 this.setCalendar({user: id, date: this.calendar.date})

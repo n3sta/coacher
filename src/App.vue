@@ -17,7 +17,13 @@
                     </button>
                     <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">elanista.pl</router-link></h1>
                 </div>
-                <div style="display: flex;">
+                <div class="header__content">
+                    <div class="notifications">
+                        <button type="button" @click="$router.push({name: 'notifications'})" class="button-icon button-icon--on-blue notifications__button">
+                            <span class="material-icons text--white" aria-hidden="true">notifications</span>
+                            <span class="notifications__number" v-if="notificationAmount">{{ notificationAmount }}</span>
+                        </button>
+                    </div>
                     <div class="clearsystem" v-if="!user.activated && user.coach" @click="removeSampleData()">
                         <button type="button" class="button-icon clearsystem--icon"><span class="material-icons text--white">delete_forever</span></button>
                         <v-button class="clearsystem--button">Wyczyść system</v-button>
@@ -64,16 +70,17 @@
 
 <script>
     import { mapGetters, mapMutations, mapActions } from 'vuex';
-    import { del } from './helpers/api';
+    import { get, del } from './helpers/api';
 
     export default {
         data() {
             return {
-                showAside: false
+                showAside: false,
             }
         },
         created() {
             this.getUser();
+            this.getNotifications();
             if (localStorage.getItem('firstLogin')) {
                 this.openAlert({
                     title: 'Witaj!',
@@ -98,10 +105,20 @@
                 }
             }
         },
-        computed: mapGetters(['loading', 'user']),
+        computed: {
+            ...mapGetters(['loading', 'user', 'notifications']),
+            notificationAmount() {
+                const amount = this.notifications.filter(item => !item.status).length
+                return (amount < 10) ? amount : '9+';
+            }
+        },
         methods: {
             ...mapActions(['getUser', 'openAlert']),
-            ...mapMutations(['logout']),
+            ...mapMutations(['logout', 'setNotifications']),
+            async getNotifications() {
+                const res = await get('/notifications', {notifier: this.user._id});
+                this.setNotifications(res.data);
+            },
             removeSampleData() {
                 this.openAlert({
                     title: 'Czy jesteś pewny?',

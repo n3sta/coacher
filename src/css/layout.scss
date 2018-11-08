@@ -115,6 +115,9 @@ body {
 		display: flex;
 		align-items: center;
 	}
+	&__content {
+		display: flex;
+	}
 	&__logo {
 		font-size: 24px;
 		width: 270px;
@@ -236,6 +239,10 @@ p {
 
 .text--bold {
 	font-weight: 500;
+}
+
+.text--white {
+	color: $white;
 }
 
 .hint {
