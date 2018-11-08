@@ -133,6 +133,11 @@ export default new Router({
                     beforeEnter: (to, from, next) => {
                         coach(to, from, next);
                     }
+                },
+                {
+                    path: '/notifications',
+                    name: 'notifications',
+                    component: () => import('./components/Notifications')
                 }
             ],
             beforeEnter: (to, from, next) => {

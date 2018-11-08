@@ -12,7 +12,7 @@ api.get('/:id', verifyToken, errorHandler.catchAsync(trainingsController.findOne
 
 api.get('/', verifyToken, getFilters, errorHandler.catchAsync(trainingsController.findAll));
 
-api.post('/', errorHandler.catchAsync(trainingsController.create));
+api.post('/', verifyToken, errorHandler.catchAsync(trainingsController.create));
 
 api.put('/:id', verifyToken, errorHandler.catchAsync(trainingsController.update));
 

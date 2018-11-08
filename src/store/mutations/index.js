@@ -49,6 +49,10 @@ const mutations = {
     },
     setCalendar(state, data) {
         state.calendar = data;
+        console.log(data);
+    },
+    setNotifications(state, data) {
+        state.notifications = data;
     }
 }
 

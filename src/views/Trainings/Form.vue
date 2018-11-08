@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-switch-users v-if="user.coach"></v-switch-users>
+        <v-switch-users v-if="user.coach" :disabled="Boolean(_id)"></v-switch-users>
         <form class="form" @submit.prevent="submit()">
             <div class="box">
                 <div class="box__title">
@@ -79,7 +79,6 @@
                     type: '',
                     content: '',
                     note: '',
-                    amount: '',
                     done: false,
                     createdAt: this.$route.params.createdAt
                 }
@@ -108,7 +107,7 @@
             }
         },
         methods: {
-            ...mapMutations(['setSnackbar']),
+            ...mapMutations(['setSnackbar', 'setCalendar']),
             ...mapActions(['openAlert']),
             async getTypes() {
                 const user = (this.user.coach) ? this.user._id : this.user.coachId;
@@ -119,6 +118,7 @@
             async getTraining() {
                 const res = await get(`/trainings/${this._id}`);
                 this.training = res.data;
+                this.setCalendar({user: res.data.user, date: this.calendar.date});
             },
             async submit() {
                 this.$v.$touch();
@@ -170,11 +170,6 @@
             training: {
                 type: {
                     required
-                },
-                amount: {
-                    required,
-                    numeric,
-                    maxValue: maxValue(256)
                 },
                 content: {
                     required,

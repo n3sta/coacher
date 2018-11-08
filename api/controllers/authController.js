@@ -4,6 +4,7 @@ import Training from "../models/Training";
 import Question from '../models/Question';
 import userHelpers from '../middlewares/helpers/users';
 import { fillRegisterData, fillSampleData } from '../utils/fillRegisterData';
+import Type from '../models/Type';
 
 export default {
 	async register(req, res) {
@@ -60,6 +61,7 @@ export default {
             await User.remove({coachId: req.userId});
             await Training.remove({user: req.userId});
             await Question.remove({user: req.userId});
+            await Type.remove({user: req.userId});
             await User.findOneAndUpdate({_id: req.userId}, {activated: true});
             return res.status(200).json({message: 'Przykładowe dane zostały usunięte.'});
         } catch(e) {

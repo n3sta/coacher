@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        notifications: [],
         loading: true,
         token: localStorage.getItem('token'),
         user: {
