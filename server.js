@@ -11,7 +11,7 @@ import answersRoutes from "./api/routes/answersRoutes";
 import notificationRoutes from "./api/routes/notificationRoutes";
 
 const hostname = 'localhost';
-const port = process.env.PORT || 3000;
+const port = 8082;
 const app = express();
 const mongoDB = 'mongodb://localhost:27017/app';
 
