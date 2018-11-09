@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="box box--medium">
+        <div class="box">
             <div class="box__title">
                 <div class="box__title-name">{{ user.name.firstName }} {{ user.name.lastName }}</div>
             </div>

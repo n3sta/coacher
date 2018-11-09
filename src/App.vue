@@ -12,7 +12,7 @@
         <div v-else>
             <header class="header">
                 <div class="header__inner">
-                    <button type="button" class="button-icon aside-toggler" @click="showAside = !showAside">
+                    <button v-if="user.coach" type="button" class="button-icon aside-toggler" @click="showAside = !showAside">
                         <span class="material-icons" aria-hidden="true">dehaze</span>
                     </button>
                     <h1 class="header__logo"><router-link :to="{name: 'panel'}" class="header__link">elanista.pl</router-link></h1>
@@ -56,7 +56,7 @@
                         </ul>
                     </nav>
                 </aside>
-                <div class="content">
+                <div :class="['content', (!user.coach) ? 'content--small' : '']">
                     <div v-if="!user.coach && !user.accepted" class="statement statement--warning">
                         <p>Twoje konto nie zostało jeszcze zaakceptowane przez trenera. Gdy to nastanie, zostaniesz o tym powiadomiony.</p>
                     </div>

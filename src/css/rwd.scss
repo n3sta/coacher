@@ -10,6 +10,7 @@
 		}
 	}
 	.aside {
+		background: $background;
 		min-width: 280px;
 		position: fixed;
 	    top: 0;
@@ -49,7 +50,6 @@
 	}
 	.box {
 		width: 100%;
-		padding: 8px;
 	}
 	.changeView {
 		display: none;
@@ -97,11 +97,7 @@
 		flex-direction: column;
 		align-items: flex-start;
 		& .mx-datepicker.month {
-			max-width: 120px;
-			margin: 12px 8px 4px;
-		}
-		& .dropdown {
-			min-width: auto;
+			margin: 0;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="box box--medium">
+        <div class="box box--medium" v-if="!isLoading">
             <div class="box__title">
                 <div class="box__title-name">Profilowanie zawodnika</div>
             </div>
@@ -45,6 +45,9 @@
                 </form>
             </div>
         </div>
+        <div class="blank" v-else>
+            <v-loader></v-loader>
+        </div>
     </div>
 </template>
 
@@ -56,10 +59,12 @@
     export default {
         data() {
             return {
+                isLoading: true,
                 answers: [],
                 questions: [],
                 step: 0,
                 form: [],
+                _id: null
             }
         },
         computed: {
@@ -72,24 +77,32 @@
             }
         },
         created() {
+            this._id = (this.user.coach) ? this.user._id : this.user.coachId;
             this.getQuestions();
-            this.getAnswers();
-            this.openAlert({
-                title: 'Chcę Cię lepiej poznać.',
-                body: 'Wypełnij proszę ten formularz. Pomoże mi to w ułożeniu dla Ciebie planu treningowego.',
-                type: 'statement'
-            });
         },
         methods: {
             ...mapActions(['openAlert']),
             async getQuestions() {
-                const res = await get(`/questions`, {user: this.user._id});
+                const res = await get(`/questions`, {user: this._id});
                 this.questions = res.data;
                 this.form = this.questions.map(() => {return ''})
+                if (!this.questions.length) {
+                    this.$router.push({name: 'admin'});
+                    return true;
+                }
+                this.getAnswers();
             },
             async getAnswers() {
-                const res = await get(`/answers`, {user: this.user._id});
+                const res = await get(`/answers`, {user: this._id});
                 this.answers = res.data;
+                this.isLoading = false;
+                if (this.user.coachId) {
+                    this.openAlert({
+                        title: 'Chcę Cię lepiej poznać.',
+                        body: 'Wypełnij proszę ten formularz. Pomoże mi to w ułożeniu dla Ciebie planu treningowego.',
+                        type: 'statement'
+                    });
+                }
             },
             async submit() {
                 !this.$v.form.$each.$iter[this.step].$touch();
@@ -113,8 +126,9 @@
                     if (this.user.coachId) {
                         localStorage.setItem('firstLogin', true);
                         this.$router.push({name: 'admin'})
+                        return true;
                     }
-                    this.$router.push({name: 'questions'})
+                    this.$router.push({name: 'questions'});
                 }
             },
             prev() {
