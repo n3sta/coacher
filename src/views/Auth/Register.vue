@@ -12,7 +12,7 @@
                                 <v-input v-model="form.name.firstName" :value="form.name.firstName" :id="'firstName'" @input="form.name.firstName = $event" @keyup="$v.form.name.firstName.$touch()">Imię</v-input>
                                 <div v-if="$v.form.name.firstName.$error">
                                     <div class="form__error" v-if="!$v.form.name.firstName.required">To pole jest wymagane.</div>
-                                    <div class="form__error" v-if="!$v.form.name.firstName.minLength">To pole musi mieć co najmniej {{ $v.firstName.$params.minLength.min }} znaki</div>
+                                    <div class="form__error" v-if="!$v.form.name.firstName.minLength">To pole musi mieć co najmniej {{ $v.form.name.firstName.$params.minLength.min }} znaki</div>
                                 </div>
                             </div>
                         </div>

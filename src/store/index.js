@@ -42,9 +42,7 @@ export default new Vuex.Store({
         types: [
             {name: 'Pole tekstowe', _id: 1},
             {name: 'Długie pole tekstowe', _id: 2},
-            {name: 'Lista rozwijalna', _id: 3},
-            {name: 'Checkbox', _id: 4},
-            {name: 'Data', _id: 5},
+            {name: 'Lista rozwijalna', _id: 3}
         ],
         modal: false,
         calendar: {

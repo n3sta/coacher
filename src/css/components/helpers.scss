@@ -47,7 +47,7 @@
     &__content {
         padding: 16px;
         &--no-padding {
-            padding: 0;
+            padding: 0 !important;
         }
         &--minheight {
             min-height: 100px;
@@ -611,6 +611,17 @@
         vertical-align: bottom;
         border-bottom: 1px solid rgba(0,0,0,.12);
         color: $text__gray;
+    }
+    & tbody td {
+        vertical-align: middle;
+        height: 50px;
+        padding: 0 1em;
+    }
+    & tbody tr {
+        transition: $transition;
+        &:hover td {
+            background-color: $border__gray__light;
+        }
     }
 }
 

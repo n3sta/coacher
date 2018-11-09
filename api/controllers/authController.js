@@ -24,6 +24,13 @@ export default {
             if (user.coach) {
                 fillRegisterData(user._id);
                 fillSampleData(user._id);
+            } else {
+                setNotification({
+                    entityType: 1,
+                    entityId: training._id,
+                    notifier: (forCoach) ? req.userId : training.user,
+                    actor: (forCoach) ? training.user : req.userId
+                })
             }
             return res.status(200).json({
                 user: user,

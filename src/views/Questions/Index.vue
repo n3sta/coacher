@@ -13,21 +13,31 @@
             <div class="box__content">
                 <p>Ułóż pytania do ankiety. Rejestrujący się zawodnik odpowie na Twoje pytania dzięki czemu uzyskasz na jego temat istotne informacje. Przeciągając za <span class="material-icons" aria-hidden="true" style="position: relative; top: 7px; line-height: 0;">dehaze</span> możesz zmieniać kolejność pytań.</p>
             </div>
-            <div class="box__content box__content--no-padding" v-if="questions.length">
-                <div class="list" id="list">
-                    <div class="list__item" v-for="item in questions" :key="item._id">
-                        <div class="list__item-content" :id="item._id">
-                            <button type="button" class="button-icon list__item-drag"><span class="material-icons" aria-hidden="true">dehaze</span></button>
-                            <a @click="$router.push({name: 'editQuestion', params: {_id: item._id}})" class="list__name">{{ item.question }} ({{ getTypeName(item.type) }})</a>
-                        </div>
-                        <div class="list__buttons">
-                            <button class="button-icon" @click="deleteQuestion(item._id)"><span class="material-icons text--red cursor" aria-hidden="true">delete</span></button>
-                        </div>
-                    </div>
+            <div class="box__content box__content--no-padding">
+                <table class="table" v-if="questions.length">
+                    <thead>
+                        <tr>
+                            <th v-for="(item, index) in headers" :key="index">{{ item }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list">
+                        <tr v-for="item in questions" :key="item._id" class="tr__item">
+                            <td>                            
+                                <button type="button" class="button-icon tr__item-drag"><span class="material-icons" aria-hidden="true">dehaze</span></button>
+                            </td>
+                            <td>
+                                <router-link :to="{name: 'editQuestion', params: {_id: item._id}}" class="list__name">{{ item.question }}</router-link>
+                            </td>
+                            <td>{{ getTypeName(item.type) }}</td>
+                            <td>
+                                <button class="button-icon" @click="deleteQuestion(item._id)"><span class="material-icons text--red cursor" aria-hidden="true">delete</span></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div v-else class="blank">
+                    <span>Nie znaleziono dodanych pytań.</span>
                 </div>
-            </div>
-            <div class="blank" v-else>
-                <span>Nie znaleziono żadnych pytań</span>
             </div>
         </div>
     </div>
@@ -41,6 +51,7 @@
     export default {
         data() {
             return {
+                headers: ['Pozycja', 'Pytanie', 'Typ', 'Usuń'],
                 questions: [0],
                 old: null
             }
@@ -52,8 +63,8 @@
         mounted() {
             this.$nextTick(() => {
                 new Sortable(document.getElementById('list'), {
-                    draggable: '.list__item',
-                    handle: '.list__item-drag',
+                    draggable: '.tr__item',
+                    handle: '.tr__item-drag',
                     onEnd: this.reorder,
                     onStart: this.startOrder
                 });

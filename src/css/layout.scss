@@ -145,7 +145,6 @@ body {
 	overflow-y: auto;
 	overflow-x: hidden;
 	min-height: calc(100vh - 60px);
-	background-color: $background;
 	&__logo {
 		display: none;
 		font-size: 24px;
@@ -195,7 +194,10 @@ body {
 .content {
 	flex: 1 1 calc(100% - 255px);
 	padding: 32px;
-	background-color: $background;
+	&--small {
+		max-width: 1170px;
+		margin: 0 auto;
+	}
 }
 
 .spacer {

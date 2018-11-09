@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-switch-users v-if="user.coach"></v-switch-users>
-		<div class="row">
+		<div class="row" style="display: none;">
 			<div class="col-xs-12 col-sm-12">
 				<v-statistic></v-statistic>
 			</div>

@@ -17,7 +17,6 @@ export default {
 		const training = await new Training(req.body).save();
 
 		const forCoach = req.userId === training.user;
-		console.log(forCoach);
 		setNotification({
 			entityType: 1,
 			entityId: training._id,
