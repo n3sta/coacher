@@ -81,7 +81,7 @@
             this.getQuestions();
         },
         methods: {
-            ...mapActions(['openAlert']),
+            ...mapActions(['setAlert']),
             async getQuestions() {
                 const res = await get(`/questions`, {user: this._id});
                 this.questions = res.data;
@@ -97,7 +97,7 @@
                 this.answers = res.data;
                 this.isLoading = false;
                 if (this.user.coachId) {
-                    this.openAlert({
+                    this.setAlert({
                         title: 'Chcę Cię lepiej poznać.',
                         body: 'Wypełnij proszę ten formularz. Pomoże mi to w ułożeniu dla Ciebie planu treningowego.',
                         type: 'statement'

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import { mapMutations, mapActions } from 'vuex';
+    import { mapActions } from 'vuex';
     import { required, email } from 'vuelidate/lib/validators'
     import { post } from '../../helpers/api'
 
@@ -46,8 +46,7 @@
             }
         },
         methods: {
-            ...mapActions(['setUser']),
-            ...mapMutations(['setSnackbar']),
+            ...mapActions(['setUser', 'setSnackbar']),
             async submit() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {

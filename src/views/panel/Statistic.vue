@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 	import { get } from '../../helpers/api';
     import { TweenLite } from "gsap/TweenLite";
 
@@ -72,7 +72,7 @@
             this.getStatistic();
         },
         methods: {
-            ...mapMutations(['setStats']),
+            ...mapActions(['setStats']),
             async getStatistic() {
                 const res = await get(`/trainings/stats`, {user: this.calendar.user, date: new Date()});
                 this.setStats(res.data);

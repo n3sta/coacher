@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { get, patch } from './../helpers/api';
 
     export default {
@@ -52,7 +52,7 @@
             this.isLoading = !this.notifications;
         },
         methods: {
-            ...mapMutations(['setNotifications']),
+            ...mapActions(['setNotifications']),
             async changeActive(_id, status) {
                 await patch(`/users/${_id}`, {status: !status});
                 this.notifications.filter(item => item._id === _id)[0].status = !status;

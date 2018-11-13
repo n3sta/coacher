@@ -58,14 +58,14 @@
         },
         computed: mapGetters(['user']),
         methods: {
-            ...mapActions(['openAlert']),
+            ...mapActions(['setAlert']),
             async getTypes() {
                 const res = await get(`/types`, {user: this.user._id});
                 this.types = res.data;
                 this.isLoading = false;
             },
             deleteType(_id) {
-                this.openAlert({
+                this.setAlert({
                     title: 'Czy jesteś pewny?',
                     body: 'Wszystkie treningi z przypisanym tym typem otrzymają domyślny typ',
                     type: 'question'
