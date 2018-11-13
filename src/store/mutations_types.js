@@ -1,0 +1,11 @@
+export const SET_LOADING = 'SET_LOADING';
+export const SET_USER = 'SET_USER';
+export const LOGOUT = 'LOGOUT';
+export const GET_PUPILS = 'GET_PUPILS';
+export const SET_SNACKBAR = 'SET_SNACKBAR';
+export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
+export const SET_ALERT = 'SET_ALERT';
+export const CLOSE_ALERT = 'CLOSE_ALERT';
+export const SET_CALENDAR = 'SET_CALENDAR';
+export const SET_STATS = 'SET_STATS';
+export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';

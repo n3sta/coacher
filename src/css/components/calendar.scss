@@ -106,7 +106,7 @@
   }
   &__day {
     width: 14.28571429%;
-    border: 0.5px solid $border__gray;
+    border: 1px solid $border__gray;
     position: relative;
     &::before{
       content: '';

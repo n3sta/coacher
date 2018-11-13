@@ -77,7 +77,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
     import { get, put, patch } from '../../helpers/api'
 
@@ -101,8 +101,7 @@
             },
         },
         methods: {
-            ...mapActions(['getUser']),
-            ...mapMutations(['setSnackbar']),
+            ...mapActions(['getUser', 'setSnackbar']),
             async submitUserData() {
                 this.$v.user.$touch();
                 if (this.$v.user.$invalid) {

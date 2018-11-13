@@ -69,7 +69,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { get, del } from './helpers/api';
 
     export default {
@@ -82,7 +82,7 @@
             this.getUser();
             this.getNotifications();
             if (localStorage.getItem('firstLogin')) {
-                this.openAlert({
+                this.setAlert({
                     title: 'Witaj!',
                     body: 'Wypełniliśmy dla Ciebie system przykładowymi danymi w celu sprawdzenia jego możliwości. Gdy będziesz chciał zacząć pracę kliknij przycisk w prawym górym rogu ekranu.',
                     type: 'statement'
@@ -113,14 +113,13 @@
             }
         },
         methods: {
-            ...mapActions(['getUser', 'openAlert']),
-            ...mapMutations(['logout', 'setNotifications']),
+            ...mapActions(['getUser', 'setAlert', 'logout', 'setNotifications']),
             async getNotifications() {
                 const res = await get('/notifications', {notifier: this.user._id});
                 this.setNotifications(res.data);
             },
             removeSampleData() {
-                this.openAlert({
+                this.setAlert({
                     title: 'Czy jesteś pewny?',
                     body: 'System zostanie wyczyszczony z wszystkich przykładowych danych i bedzie gotowy do rozpoczęcia pracy.',
                     type: 'question'

@@ -37,12 +37,12 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         computed: mapGetters(['alert', 'snackbar']),
         methods: {
-            ...mapMutations(['closeSnackbar', 'closeAlert']),
+            ...mapActions(['closeSnackbar', 'closeAlert']),
             cancel() {
                 this.$store.state.alert.resolve(false);
                 this.closeAlert();

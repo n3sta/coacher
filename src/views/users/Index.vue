@@ -54,7 +54,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { required, email } from 'vuelidate/lib/validators';
     import { get, patch } from '../../helpers/api';
 
@@ -76,8 +76,7 @@
             this.getPupils();
         },
         methods: {
-            ...mapMutations(['setSnackbar']),
-            ...mapActions(['openAlert']),
+            ...mapActions(['setAlert', 'setSnackbar']),
             async getPupils() {
                 const res = await get(`/users`, {coachId: this.user._id});
                 this.pupils = res.data.filter(item => item.accepted);
@@ -85,7 +84,7 @@
                 this.isLoading = false;
             },
             async deletePupil(_id) {
-                this.openAlert({
+                this.setAlert({
                     title: 'Czy jesteś pewien?',
                     body: 'Użytkownik przestanie być Twoim trenerem. Tej operacji nie można już cofnąć.',
                     type: 'question'

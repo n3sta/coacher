@@ -7,27 +7,27 @@ import './css/layout.scss';
 import Index from './Index.vue'
 import router from './router'
 
-import Loader from './components/Loader';
-import Select from './components/Select'
-import SelectSimple from './components/SelectSimple'
-import Button from './components/Button'
-import Checkbox from './components/Checkbox'
-import Datepicker from './components/Datepicker'
-import Dropdown from './components/Dropdown'
-import Input from './components/Input'
-import Modal from './components/Modal'
-import Textarea from './components/Textarea'
+import BaseLoader from './components/BaseLoader';
+import BaseSelect from './components/BaseSelect'
+import BaseSelectSimple from './components/BaseSelectSimple'
+import BaseButton from './components/BaseButton'
+import BaseCheckbox from './components/BaseCheckbox'
+import BaseDatepicker from './components/BaseDatepicker'
+import BaseDropdown from './components/BaseDropdown'
+import BaseInput from './components/BaseInput'
+import BaseModal from './components/BaseModal'
+import BaseTextarea from './components/BaseTextarea'
 
-Vue.component('v-loader', Loader);
-Vue.component('v-datepicker', Datepicker);
-Vue.component('v-dropdown', Dropdown);
-Vue.component('v-button', Button);
-Vue.component('v-select', Select);
-Vue.component('v-select-simple', SelectSimple);
-Vue.component('v-checkbox', Checkbox);
-Vue.component('v-input', Input);
-Vue.component('v-modal', Modal);
-Vue.component('v-textarea', Textarea);
+Vue.component('v-loader', BaseLoader);
+Vue.component('v-datepicker', BaseDatepicker);
+Vue.component('v-dropdown', BaseDropdown);
+Vue.component('v-button', BaseButton);
+Vue.component('v-select', BaseSelect);
+Vue.component('v-select-simple', BaseSelectSimple);
+Vue.component('v-checkbox', BaseCheckbox);
+Vue.component('v-input', BaseInput);
+Vue.component('v-modal', BaseModal);
+Vue.component('v-textarea', BaseTextarea);
 
 Vue.use(Vuex);
 Vue.use(Vuelidate);

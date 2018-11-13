@@ -17,7 +17,7 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import Statistic from './Statistic';
-	import Trainings from '../Trainings/Index';
+	import Trainings from '../trainings/Index';
 	import SwitchPupils from './../../components/SwitchPupils';
 
 	export default {

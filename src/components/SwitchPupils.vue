@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { get } from './../helpers/api';
 
     export default {
@@ -57,7 +57,7 @@
             document.removeEventListener('click', this.documentClick);
         },
         methods: {
-            ...mapMutations(['setCalendar']),
+            ...mapActions(['setCalendar']),
             async getPupils() {
                 const res = await get(`/users`, {coachId: this.user._id});
                 this.pupils = res.data;

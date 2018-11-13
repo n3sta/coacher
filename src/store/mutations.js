@@ -1,57 +1,55 @@
-import router from '../../router'
+import router from '../router'
+import { SET_LOADING, SET_USER, LOGOUT, GET_PUPILS, SET_SNACKBAR, CLOSE_SNACKBAR, SET_ALERT, CLOSE_ALERT, SET_STATS, SET_CALENDAR, SET_NOTIFICATIONS } from './mutations_types';
+
 
 const mutations = {
-    setLoading(state) {
-        state.loading = false
+    [SET_LOADING] (state) {
+        state.loading = false;
     },
-    setUser(state, data) {
+    [SET_USER] (state, data) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('_id', data.user._id);
         state.user = data.user;
         state.token = data.token;
-        if (!data.token) {
-            router.push({name: 'login'});
-        }
+        if (!data.token) router.push({name: 'login'});
     },
-    logout(state) {
+    [LOGOUT] (state) {
         localStorage.removeItem('token');
         localStorage.removeItem('_id');
         state.user = {};
         state.token = null;
         router.push({name: 'login'});
     },
-    getPupils (state, data) {
-        state.pupils = data || [];
+    [GET_PUPILS] (state, data) {
+        state = {...state, pupils: data || []}
     },
-    setSnackbar (state, data) {
-        state.snackbar.class = data.class;
-        state.snackbar.text = data.text;
-        state.snackbar.show = true;
+    [SET_SNACKBAR] (state, data) {
         clearTimeout(state.snackbar.timeout);
         delete state.snackbar.timeout;
+        state.snackbar.class = data.class;
+        state.snackbar.text = data.text;
         state.snackbar.timeout = setTimeout(() => {
-            state.snackbar.show = false;
+            state = {...state, show: false}
         }, 5000);
     },
-    closeSnackbar (state) {
+    [CLOSE_SNACKBAR] (state) {
         state.snackbar.show = false;
         clearTimeout(state.snackbar.timeout);
         delete state.snackbar.timeout;
     },
-    openAlert (state, data) {
-        Object.assign(state.alert, data)
+    [SET_ALERT] (state, data) {
+        state.alert = data;
     },
-    closeAlert (state) {
+    [CLOSE_ALERT] (state) {
         state.alert.show = false;
     },
-    setStats (state, data) {
+    [SET_STATS] (state, data) {
         state.stats = data;
     },
-    setCalendar(state, data) {
+    [SET_CALENDAR] (state, data) {
         state.calendar = data;
-        console.log(data);
     },
-    setNotifications(state, data) {
+    [SET_NOTIFICATIONS] (state, data) {
         state.notifications = data;
     }
 }

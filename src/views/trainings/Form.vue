@@ -54,7 +54,7 @@
 <script>
     import moment from 'moment';
     import SwitchPupils from './../../components/SwitchPupils'
-    import { mapGetters, mapMutations, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import { required, minLength, numeric, maxValue } from 'vuelidate/lib/validators'
     import { get,post,del,put } from '../../helpers/api'
 
@@ -107,8 +107,7 @@
             }
         },
         methods: {
-            ...mapMutations(['setSnackbar', 'setCalendar']),
-            ...mapActions(['openAlert']),
+            ...mapActions(['setAlert', 'setSnackbar', 'setCalendar']),
             async getTypes() {
                 const user = (this.user.coach) ? this.user._id : this.user.coachId;
                 const res = await get(`/types`, {user: user, active: true});
@@ -145,7 +144,7 @@
                 }
             },
             remove() {
-                this.openAlert({
+                this.setAlert({
                     title: 'Czy jesteś pewny?',
                     body: 'Usuniętego treningu nie można już przywrócić.',
                     type: 'question'
