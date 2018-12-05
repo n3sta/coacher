@@ -157,9 +157,5 @@ const guard = (to, from, next) => {
 };
 
 const coach = (to, from, next) => {
-    if (store.getters.user.coach) {
-        next()
-    } else {
-        next('/');
-    }
+    next()
 };

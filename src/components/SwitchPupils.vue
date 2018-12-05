@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="ib">
         <div :class="['dropdown', (disabled) ? 'dropdown--disabled' : '']" @click="active = !active" ref="dropdown">
             <span class="dropdown__avatar">{{ initials }}</span>
             <span class="dropdown__active">{{ name }}</span>
@@ -33,7 +33,7 @@
         },
         data() {
             return {
-                value: this.$store.state.user._id,
+                value: null,
                 active: false,
                 pupils: []
             }
@@ -50,6 +50,7 @@
             }
         },
         created() {
+            this.value = this.$store.state.calendar.user;
             this.getPupils();
             document.addEventListener('click', this.documentClick);
         },

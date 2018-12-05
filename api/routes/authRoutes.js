@@ -5,9 +5,6 @@ import verifyToken from '../auth/index';
 
 let api = express.Router();
 
-api.get('/fill', errorHandler.catchAsync(authController.fill));
-
-
 api.get('/logged/:id', errorHandler.catchAsync(authController.logged));
 
 api.get('/email', errorHandler.catchAsync(authController.email));

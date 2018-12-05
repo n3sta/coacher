@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="box no-shadow">
+        <div class="box no-shadow no-margin">
             <div class="box__content box__content--no-padding">
                 <div class="calendar__filters">
                     <div class="calendar__switch-date">

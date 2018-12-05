@@ -2,7 +2,7 @@ import Question from '../models/Question';
 
 export default {
     async find(req, res) {
-        const questions = await Question.find({user: req.userId}).sort({order: 1});
+        const questions = await Question.find({user: req.query.user}).sort({order: 1});
 
         return res.status(200).json(questions);
     },
@@ -39,21 +39,20 @@ export default {
 
         if (oldIndex > newIndex) {
             await Question.update(
-                {userId: req.userId, order: {$lte: oldIndex, $gte: newIndex}},
+                {user: req.userId, order: {$lte: oldIndex, $gte: newIndex}},
                 {$inc: {order: 1}},
                 {multi: true}
             ).exec();
             order = oldIndex + 1;
         } else if (oldIndex < newIndex) {
             await Question.update(
-                {userId: req.userId, order: {$lte: newIndex, $gte: oldIndex}},
+                {user: req.userId, order: {$lte: newIndex, $gte: oldIndex}},
                 {$inc: {order: -1}},
                 {multi: true}
             ).exec();
             order = oldIndex - 1;
         }
-
-        await Question.findOneAndUpdate({userId: req.userId, order: order}, {order: newIndex});
+        await Question.findOneAndUpdate({user: req.userId, order: order}, {order: newIndex});
 
         return res.status(200).json(true);
     }

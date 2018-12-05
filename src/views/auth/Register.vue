@@ -5,7 +5,7 @@
                 <div class="box__title-name">Rejestracja</div>
             </div>
             <div class="box__content">
-                <form @submit.prevent="submit()">
+                <form @submit.prevent="submit()" id="registerForm">
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
                             <div class="form__box">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form__buttons">
                         <div class="spacer"></div>
-                        <v-button type="submit" :color="'blue'" :disabled="isProcessing" :loading="isProcessing">Zarejestruj</v-button>
+                        <v-button type="submit" id="register" :color="'blue'" :disabled="isProcessing" :loading="isProcessing">Zarejestruj</v-button>
                     </div>
                 </form>
             </div>

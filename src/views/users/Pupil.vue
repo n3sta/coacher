@@ -4,7 +4,7 @@
             <div class="box__title">
                 <div class="box__title-name">{{ user.name.firstName }} {{ user.name.lastName }}</div>
             </div>
-            <div class="box__content">
+            <div class="box__content no-padding">
                 <table class="table" v-if="items.length">
                     <thead>
                         <tr>

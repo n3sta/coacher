@@ -6,7 +6,7 @@
 
 .calendar {
   width: 100%;
-  padding-top: 15px;
+  padding: 15px;
   &__switch-date {
     display: flex;
     align-items: center;
@@ -151,6 +151,7 @@
   &__filters {
     display: flex;
     align-items: center;
+    padding: 15px 15px 0 15px;
   }
   &__divider {
     height: 35px;
