@@ -28,6 +28,7 @@ const mutations = {
         delete state.snackbar.timeout;
         state.snackbar.class = data.class;
         state.snackbar.text = data.text;
+        state.snackbar.show = !state.snackbar.show;
         state.snackbar.timeout = setTimeout(() => {
             state = {...state, show: false}
         }, 5000);

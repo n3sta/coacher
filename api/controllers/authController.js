@@ -24,13 +24,6 @@ export default {
             if (user.coach) {
                 fillRegisterData(user._id);
                 fillSampleData(user._id);
-            } else {
-                setNotification({
-                    entityType: 1,
-                    entityId: training._id,
-                    notifier: (forCoach) ? req.userId : training.user,
-                    actor: (forCoach) ? training.user : req.userId
-                })
             }
             return res.status(200).json({
                 user: user,
@@ -79,9 +72,5 @@ export default {
         const user = await User.findOne({email: req.query.email});
 
         return res.status(200).json(user);
-    },
-    async fill(req, res) {
-        fillRegisterData('5be31dd320becd02314bc0d6');
-        return res.status(200).json(fillSampleData('5be31dd320becd02314bc0d6'));
     }
 }

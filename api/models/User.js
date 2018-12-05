@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const validateEmail = function(email) {
-    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,30})+$/;
     return re.test(email)
 };
 
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         required: true,
         unique: true,
-        //validate: [validateEmail, 'Wypełnij adres e-mail.']
+        validate: [validateEmail, 'Nieprawidłowy format adresu e-mail.']
     },
     password: {
         type: String,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     },
     coach: {
         type: Boolean,
-        default: null
+        default: true
     },
     coachId: {
         type: String,

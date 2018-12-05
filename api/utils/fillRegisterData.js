@@ -179,12 +179,12 @@ const uniqueEmail = () => {
 }
 
 const generateEmail = () => {
-    const e1 = Math.random().toString(36);
-    const e2 = Math.random().toString(36);
-    const e3 = Math.random().toString(36);
+    const e1 = Math.random().toString(36).replace('.', '');
+    const e2 = Math.random().toString(36).replace('.', '');
+    const e3 = Math.random().toString(36).replace('.', '');
     const e4 = Math.random().toString(36).replace(/[^a-z]+/g, '');
-    return `${e1}.${e2}@${e3}.${e1}`;
-}
+    return `${e1}.${e2}@${e3}.${e4}`;
+  }
 
 const checkUser = async (email) => {
     const res = await User.find({email: email});

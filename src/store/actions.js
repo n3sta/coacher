@@ -36,6 +36,9 @@ const actions = {
     setSnackbar({ commit }, data) {
         commit('SET_SNACKBAR', data);
     },
+    closeSnackbar({ commit }) {
+        commit('CLOSE_SNACKBAR');
+    },
     setStats({ commit }, data) {
         commit('SET_STATS', data);
     },

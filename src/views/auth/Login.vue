@@ -58,8 +58,9 @@
                     this.setUser(res.data);
                     this.$router.push({name: 'panel'})
                 } catch(e) {
+                    console.log(e.data.message);
                     this.isProcessing = false;
-                    this.setSnackbar({class: 'error', text: e.message});
+                    this.setSnackbar({class: 'error', text: e.data.message});
                 }
             }
         },

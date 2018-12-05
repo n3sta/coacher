@@ -7,7 +7,7 @@
 			</div>
 		</div>
 		<div class="box">
-			<div class="box__content">
+			<div class="box__content no-padding">
 				<v-trainings :miniCalendar="1"></v-trainings>
 			</div>
 		</div>

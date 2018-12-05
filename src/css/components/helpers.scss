@@ -400,8 +400,7 @@
     transition: $transition;
     border-radius: 2px;
     font-weight: 500;
-    max-width: 250px;
-    min-width: 250px;
+    min-width: 150px;
     position: relative;
     &:hover {
         background-color: $background__hover;
@@ -416,7 +415,7 @@
     &__avatar {
         display: block;
         height: 35px;
-        width: 35px;
+        min-width: 35px;
         border-radius: 35px;
         line-height: 35px;
         margin-right: 8px;
@@ -611,11 +610,21 @@
         vertical-align: bottom;
         border-bottom: 1px solid rgba(0,0,0,.12);
         color: $text__gray;
+        &:last-child {
+            text-align: right
+        }
     }
     & tbody td {
         vertical-align: middle;
         height: 50px;
         padding: 0 1em;
+        &:last-child {
+            text-align: right;
+            & > * {
+                float: right;
+                margin: 0;
+            }
+        }
     }
     & tbody tr {
         transition: $transition;

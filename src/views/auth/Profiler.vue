@@ -87,7 +87,7 @@
                 this.questions = res.data;
                 this.form = this.questions.map(() => {return ''})
                 if (!this.questions.length) {
-                    this.$router.push({name: 'admin'});
+                    this.$router.push({name: 'panel'});
                     return true;
                 }
                 this.getAnswers();
