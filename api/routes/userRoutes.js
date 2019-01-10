@@ -10,7 +10,7 @@ api.patch('/changePassword', verifyToken, getFilters, errorHandler.catchAsync(us
 
 api.get('/checkPassword', verifyToken, getFilters, errorHandler.catchAsync(usersController.checkPassword));
 
-api.get('/', verifyToken, getFilters, errorHandler.catchAsync(usersController.find));
+api.get('/', getFilters, errorHandler.catchAsync(usersController.find));
 
 api.get('/:id', verifyToken, getFilters, errorHandler.catchAsync(usersController.findOne));
 

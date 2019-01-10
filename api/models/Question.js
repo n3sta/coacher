@@ -7,19 +7,19 @@ const questionSchema = new mongoose.Schema({
         required: true
     },
     question: {
-        type: 'String',
+        type: String,
         required: true,
     },
     order: {
-        type: 'Number',
+        type: Number,
         default: 0
     },
     type: {
-        type: 'Number',
+        type: Number,
         required: true
     },
     options: [{
-        type: 'String',
+        type: String,
         default: ''
     }]
 });

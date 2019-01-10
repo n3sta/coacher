@@ -55,7 +55,7 @@
     import moment from 'moment';
     import SwitchPupils from './../../components/SwitchPupils'
     import { mapGetters, mapActions } from 'vuex';
-    import { required, minLength, numeric, maxValue } from 'vuelidate/lib/validators'
+    import { required, minLength } from 'vuelidate/lib/validators'
     import { get,post,del,put } from '../../helpers/api'
 
     export default {
