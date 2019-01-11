@@ -8,7 +8,8 @@ const getters = {
     types: state => state.types,
     loading: state => state.loading,
     calendar: state => state.calendar,
-    notifications: state => state.notifications
+    notifications: state => state.notifications,
+    disciplines: state => state.disciplines
 }
 
 export default getters

@@ -17,6 +17,7 @@ import BaseDropdown from './components/BaseDropdown'
 import BaseInput from './components/BaseInput'
 import BaseModal from './components/BaseModal'
 import BaseTextarea from './components/BaseTextarea'
+import wysiwyg from "vue-wysiwyg";
 
 Vue.component('v-loader', BaseLoader);
 Vue.component('v-datepicker', BaseDatepicker);
@@ -29,6 +30,7 @@ Vue.component('v-input', BaseInput);
 Vue.component('v-modal', BaseModal);
 Vue.component('v-textarea', BaseTextarea);
 
+Vue.use(wysiwyg, {});
 Vue.use(Vuex);
 Vue.use(Vuelidate);
 

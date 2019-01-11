@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="select" ref="select">
-            <label class="form__label" :data-filled="Boolean(value)">{{ label }}</label>
+            <label class="form__label" :data-filled="Boolean(currValue)">{{ label }}</label>
             <button type="button" class="select__button" :id="id" @click="active = true">{{ selected }}</button>
             <span class="material-icons select__caret" aria-hidden="true">unfold_more</span>
             <transition name="fadeIn">
                 <ul class="select__ul" v-if="active">
-                    <li :class="['select__li', (value === item._id) ? 'select__li--active' : '']" v-for="(item, index) in items" :key="index" @click="change(item)">{{ item }}</li>
+                    <li :class="['select__li', (currValue === item._id) ? 'select__li--active' : '']" v-for="(item, index) in items" :key="index" @click="change(item)">{{ item }}</li>
                 </ul>
             </transition>
         </div>
@@ -32,15 +32,17 @@
         data() {
             return {
                 active: false,
+                currValue: null
             }
         },
         computed: {
             selected() {
-                const selected = this.items.filter(item => item === this.value)[0];
+                const selected = this.items.filter(item => item === this.currValue)[0];
                 return (selected) ? selected : '';
             }
         },
         created() {
+            this.currValue = this.value;
             document.addEventListener('click', this.documentClick);
         },
         destroyed() {
@@ -49,7 +51,7 @@
         methods: {
             change(item) {
                 this.active = false;
-                this.value = item;
+                this.currValue = item;
                 this.$emit('input', item);
                 this.$emit('change');
             },

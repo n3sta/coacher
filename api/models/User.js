@@ -60,6 +60,28 @@ const userSchema = new mongoose.Schema({
     accepted: {
         type: Boolean,
         default: false
+    },
+    city: {
+        type: String,
+        default: null
+    },
+    discipline: {
+        type: String,
+        default: null
+    },
+    price: {
+        hour: {
+            type: Number,
+            default: 0
+        },
+        month: {
+            type: Number,
+            default: 0
+        }
+    },
+    description: {
+        type: String,
+        default: null
     }
 });
 

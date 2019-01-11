@@ -44,6 +44,7 @@ export default new Vuex.Store({
             {name: 'Długie pole tekstowe', _id: 2},
             {name: 'Lista rozwijalna', _id: 3}
         ],
+        disciplines: ['Piłka nożna', 'Lekkoatletyka', 'Siatkówka', 'Koszykówka', 'Tenis'],
         modal: false,
         calendar: {
             user: null,
