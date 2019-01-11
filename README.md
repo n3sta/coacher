@@ -9,6 +9,6 @@ Arrange interactive training plans. Keep up to date with your pupils' actions, k
   - Own CSS styles
   - Configured VPS nginx from ovh.net
 
-  Live: [https://elanista.pl](https://elanista.pl) Landing page
+  Landing page: [https://elanista.pl](https://elanista.pl) 
   
-  Live: [https://app.elanista.pl](https://app.elanista.pl) Application
+  Application: [https://app.elanista.pl](https://app.elanista.pl) 
