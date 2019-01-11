@@ -10,4 +10,5 @@ Arrange interactive training plans. Keep up to date with your pupils' actions, k
   - Configured VPS nginx from ovh.net
 
   Live: [https://elanista.pl](https://elanista.pl) Landing page
+  
   Live: [https://app.elanista.pl](https://app.elanista.pl) Application
